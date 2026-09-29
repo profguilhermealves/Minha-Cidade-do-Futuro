@@ -112,8 +112,15 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
   .shell-fade { animation: shell-fade 400ms ease both; }
   @keyframes shell-fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 }
+/* ===== PAINEL DE RESUMO E CURIOSIDADES REMOVIDO ===== */
+#hudIcon, #hudPhaseName, #cardPhaseNum, #cardBiomeName, #cardBiomeDesc,
+#statClima, #statArea, #statFauna, #statFlora, #badgeTopic,
+#factsGrid, #quizQuestion, #quizOptions, #quizFeedback, #phasePills {
+  display: none !important;
+}
 
-</style>
+  
+  </style>
   
   <style>
     /* === CELESTE PIXEL ART THEME & DESIGN TOKENS === */
