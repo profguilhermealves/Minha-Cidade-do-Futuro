@@ -425,6 +425,31 @@ setTimeout(function () {
     }
   }
 }, 2500);
+  // ===== INTEGRAÇÃO: abrir fase direto pelo mapa =====
+(function () {
+  function normalizar(s) {
+    return s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase().trim();
+  }
+
+  function abrirFasePeloMapa() {
+    var params = new URLSearchParams(window.location.search);
+    var fase = params.get('fase');
+    if (!fase) return; // sem parâmetro → menu normal
+
+    var alvo = normalizar(fase);
+    var idx = BIOMES_DATA.findIndex(function (b) {
+      // Aceita ?fase=1 (número) ou ?fase=GUANACES (nome do index)
+      return String(b.id) === fase || normalizar(b.name) === alvo;
+    });
+    if (idx >= 0) goToLevel(idx, 0);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', abrirFasePeloMapa);
+  } else {
+    abrirFasePeloMapa();
+  }
+})();
 </script>
 </body>
 </html>
