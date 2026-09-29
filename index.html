@@ -111,7 +111,6 @@
     </div>
   </div>
 </main>
-
 <div id="modal-levels" class="modal">
   <div class="modal-box">
     <h2 id="levels-title">Escolha o nível</h2>
@@ -130,6 +129,10 @@
 <script>
 "use strict";
 
+/* ===== ARQUIVO DO JOGO ===== */
+/* Se você NÃO renomear o jogo, troque por: "jogo funcionando.html" */
+var GAME_FILE = "jogo.html";
+
 /* ===== DADOS DOS LOCAIS ===== */
 var GROUPS = {
   praias: { nome: "Praias", cor: "#2E86DE" },
@@ -138,16 +141,16 @@ var GROUPS = {
 };
 
 var LOCATIONS = [
-  { id: 0, nome: "Balbino", grupo: "praias", x: 25, y: 5, desc: "Praia de Balbino" },
-  { id: 1, nome: "Caponga", grupo: "praias", x: 40, y: 8, desc: "Praia da Caponga" },
-  { id: 2, nome: "Águas Belas", grupo: "praias", x: 60, y: 8, desc: "Praia de Águas Belas" },
-  { id: 3, nome: "Barra Nova", grupo: "praias", x: 75, y: 15, desc: "Praia de Barra Nova" },
-  { id: 4, nome: "Igreja Matriz", grupo: "centro", x: 50, y: 15, desc: "Igreja Matriz" },
-  { id: 5, nome: "Estátua da N. Sra. do Ó", grupo: "centro", x: 50, y: 22, desc: "Estátua da padroeira" },
-  { id: 6, nome: "Feira de São Bento", grupo: "centro", x: 60, y: 22, desc: "Feira de São Bento" },
-  { id: 7, nome: "Guanacés", grupo: "distritos", x: 35, y: 35, desc: "Distrito de Guanacés" },
-  { id: 8, nome: "Pitombeiras", grupo: "distritos", x: 45, y: 55, desc: "Distrito de Pitombeiras" },
-  { id: 9, nome: "Cristais", grupo: "distritos", x: 50, y: 80, desc: "Distrito de Cristais" }
+  { id: 0, nome: "Balbino", fase: "BALBINO", grupo: "praias", x: 25, y: 5, desc: "Praia de Balbino" },
+  { id: 1, nome: "Caponga", fase: "CAPONGA", grupo: "praias", x: 40, y: 8, desc: "Praia da Caponga" },
+  { id: 2, nome: "Águas Belas", fase: "AGUAS BELAS", grupo: "praias", x: 60, y: 8, desc: "Praia de Águas Belas" },
+  { id: 3, nome: "Barra Nova", fase: "BARRA NOVA", grupo: "praias", x: 75, y: 15, desc: "Praia de Barra Nova" },
+  { id: 4, nome: "Igreja Matriz", fase: "IGREJA MATRIZ", grupo: "centro", x: 50, y: 15, desc: "Igreja Matriz" },
+  { id: 5, nome: "Estátua da N. Sra. do Ó", fase: "NOSSA SENHORA DO O", grupo: "centro", x: 50, y: 22, desc: "Estátua da padroeira" },
+  { id: 6, nome: "Feira de São Bento", fase: "FEIRA DE SÃO BENTO", grupo: "centro", x: 60, y: 22, desc: "Feira de São Bento" },
+  { id: 7, nome: "Guanacés", fase: "GUANACES", grupo: "distritos", x: 35, y: 35, desc: "Distrito de Guanacés" },
+  { id: 8, nome: "Pitombeiras", fase: "PITOMBEIRA", grupo: "distritos", x: 45, y: 55, desc: "Distrito de Pitombeiras" },
+  { id: 9, nome: "Cristais", fase: "CRISTAIS", grupo: "distritos", x: 50, y: 80, desc: "Distrito de Cristais" }
 ];
 
 var TOTAL_LEVELS = 10;
@@ -385,10 +388,12 @@ function openLevels(loc) {
   modalLevels.classList.add("active");
 }
 
+/* ===== SAIR DO MAPA E IR PARA O JOGO ===== */
 function selectLevel(lvl) {
   modalLevels.classList.remove("active");
-  confirmMsg.textContent = currentLoc.nome + " — NÍVEL " + lvl + " selecionado!";
-  modalConfirm.classList.add("active");
+  // Monta o endereço: jogo.html?fase=NOME&nivel=N
+  var destino = GAME_FILE + "?fase=" + encodeURIComponent(currentLoc.fase) + "&nivel=" + lvl;
+  window.location.href = destino;
 }
 
 /* ===== LISTENERS (registrados primeiro) ===== */
@@ -411,7 +416,6 @@ document.addEventListener("keydown", function (e) {
 screenStart.addEventListener("click", function () {
   if (screenStart.classList.contains("active")) goToMap();
 });
-
 /* ===== INICIALIZAÇÃO ===== */
 try { loadState(); } catch (e) {}
 try { loadMapCascade(); } catch (e) { applyFallbackMap(); }
@@ -425,31 +429,6 @@ setTimeout(function () {
     }
   }
 }, 2500);
-  // ===== INTEGRAÇÃO: abrir fase direto pelo mapa =====
-(function () {
-  function normalizar(s) {
-    return s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase().trim();
-  }
-
-  function abrirFasePeloMapa() {
-    var params = new URLSearchParams(window.location.search);
-    var fase = params.get('fase');
-    if (!fase) return; // sem parâmetro → menu normal
-
-    var alvo = normalizar(fase);
-    var idx = BIOMES_DATA.findIndex(function (b) {
-      // Aceita ?fase=1 (número) ou ?fase=GUANACES (nome do index)
-      return String(b.id) === fase || normalizar(b.name) === alvo;
-    });
-    if (idx >= 0) goToLevel(idx, 0);
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', abrirFasePeloMapa);
-  } else {
-    abrirFasePeloMapa();
-  }
-})();
-</script>
+ </script>
 </body>
 </html>
