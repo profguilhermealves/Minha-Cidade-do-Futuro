@@ -7290,7 +7290,19 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
   window.skipShell = { fmt: fmt };
   window.skipChart = { bar: bar, line: line, donut: donut };
 })();
+// ===== INTEGRAÇÃO: abrir fase direto pelo mapa =====
+(function () {
+  var params = new URLSearchParams(window.location.search);
+  var fase = params.get("fase");
+  if (!fase) return; // sem parâmetro → comportamento normal
 
+  var biome = BIOMES_DATA.find(function (b) {
+    return b.name.toLowerCase() === fase.toLowerCase();
+  });
+  if (!biome) return;
+
+  carregarBioma(biome.id); // ← troque "carregarBioma" pelo nome real (ver abaixo)
+})();
 </script>
 </body>
 </html>
