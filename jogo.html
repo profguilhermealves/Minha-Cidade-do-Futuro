@@ -7528,5 +7528,80 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
   }
 })();
 </script>
+<!-- ===== BOTÃO VOLTAR AO MAPA (jogo → index.html) ===== -->
+<style>
+  #btnBackMap{
+    position:fixed;left:50%;bottom:14px;transform:translateX(-50%);
+    z-index:50000;display:none;align-items:center;gap:6px;
+    font-family:"Courier New",monospace;font-weight:bold;font-size:13px;color:#fff;
+    background:rgba(15,23,42,.74);border:2px solid rgba(255,255,255,.85);border-radius:20px;
+    padding:8px 18px;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.5);
+    user-select:none;-webkit-user-select:none;touch-action:manipulation;
+    transition:transform .1s, background .1s;
+  }
+  #btnBackMap:hover{background:rgba(30,41,59,.9);}
+  #btnBackMap:active{transform:translateX(-50%) scale(.94);}
+</style>
+<button id="btnBackMap" aria-label="Voltar ao mapa">🗺️ ← MAPA</button>
+<script>
+(function () {
+  "use strict";
+
+  // Segurança: só roda se estiver no arquivo do jogo
+  if (!document.getElementById('celesteCanvas')) return;
+
+  var btn = document.getElementById('btnBackMap');
+  var btnPrevPressed = false;
+
+  function voltarAoMapa() {
+    try { playTone(520, 'sine', 0.1, 0.04); } catch (e) {}
+    // Caminho relativo fixo: funciona de file:// e do GitHub Pages
+    // (os dois arquivos precisam estar na MESMA pasta)
+    window.location.href = 'index.html';
+  }
+
+  if (btn) {
+    btn.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      voltarAoMapa();
+    });
+  }
+
+  // Tecla Esc volta para o mapa (fora do menu inicial)
+  document.addEventListener('keydown', function (e) {
+    if ((e.key === 'Escape' || e.key === 'Esc') &&
+        (typeof gameState === 'undefined' || gameState !== 'menu')) {
+      voltarAoMapa();
+    }
+  });
+
+  // Controle Xbox: botão VIEW/Back (índice 8) volta para o mapa
+  function pollBackButton() {
+    var pads = [];
+    try { pads = navigator.getGamepads ? navigator.getGamepads() : []; } catch (err) { pads = []; }
+
+    var pressed = false;
+    for (var i = 0; i < pads.length; i++) {
+      if (pads[i] && pads[i].connected && pads[i].buttons && pads[i].buttons[8] && pads[i].buttons[8].pressed) {
+        pressed = true;
+        break;
+      }
+    }
+    if (pressed && !btnPrevPressed) voltarAoMapa();
+    btnPrevPressed = pressed;
+
+    // Mostra o botão durante o jogo; esconde no menu inicial
+    if (btn) {
+      var inGame = (typeof gameState !== 'undefined') && gameState !== 'menu';
+      btn.style.display = inGame ? 'flex' : 'none';
+    }
+
+    requestAnimationFrame(pollBackButton);
+  }
+
+  requestAnimationFrame(pollBackButton);
+})();
+</script>
 </body>
 </html>
