@@ -1471,7 +1471,7 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
     const BIOMES_DATA = [
       {
         id: 1,
-        name: "Balbino",
+        name: "GUANACES",
         phaseTitle: "Fase 1: A praia intocada",
         icon: "🦜",
         shortDesc: "A maior floresta tropical úmida do planeta, caracterizada por árvores monumentais de até 50 metros, dossel denso e a mais vasta bacia hidrográfica do globo terrestre.",
@@ -1493,7 +1493,7 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
       },
       {
         id: 2,
-        name: "Cerrado",
+        name: "PITOMBEIRAS",
         phaseTitle: "Fase 2: A Savana Dourada",
         icon: "🌾",
         shortDesc: "A savana brasileira com seus troncos retorcidos, raízes profundas que buscam lençóis freáticos e o ipê-amarelo que floresce reluzente sob o sol da estação seca.",
@@ -1515,7 +1515,7 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
       },
       {
         id: 3,
-        name: "Caatinga",
+        name: "CRISTAIS",
         phaseTitle: "Fase 3: O Sertão Encantado",
         icon: "🌵",
         shortDesc: "O único bioma genuinamente 100% brasileiro. Resistente e exuberante, transforma-se rapidamente ao toque das primeiras gotas de chuva após longos meses de estiagem.",
@@ -1537,7 +1537,7 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
       },
       {
         id: 4,
-        name: "Mata Atlântica",
+        name: "BALBINOS",
         phaseTitle: "Fase 4: A Floresta das Nuvens",
         icon: "🐒",
         shortDesc: "Floresta exuberante ao longo da costa brasileira com serras cobertas por névoa, cachoeiras límpidas e rica tapeçaria de orquídeas, bromélias e o icônico mico-leão-dourado.",
@@ -1559,7 +1559,7 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
       },
       {
         id: 5,
-        name: "Pampa",
+        name: "AGUAS BELAS",
         phaseTitle: "Fase 5: As Coxilhas do Sul",
         icon: "🐎",
         shortDesc: "Vastas planícies e suaves colinas onduladas (coxilhas) sob os ventos frescos do Sul, cobertas por um tapete infinito de gramíneas naturais onde pastam animais e canta o quero-quero.",
@@ -1581,7 +1581,7 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
       },
       {
         id: 6,
-        name: "Pantanal",
+        name: "NOSSA SENHORA DO O",
         phaseTitle: "Fase 6: O Reino das Águas",
         icon: "🐊",
         shortDesc: "A maior planície de inundação contínua do planeta Terra. Um espetáculo da natureza onde terra e água se fundem, abrigando tuiuiús altivos, jacarés e grupos alegres de capivaras.",
@@ -1603,7 +1603,7 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
       },
       {
         id: 7,
-        name: "Manguezal",
+        name: "BARRA NOVA",
         phaseTitle: "Fase 7: O Berçário Marinho",
         icon: "🦀",
         shortDesc: "Onde o rio abraça o mar. Vegetação com raízes aéreas adaptadas à lama salgada e à maré, servindo de refúgio e maternidade crucial para inúmeras espécies marinhas.",
@@ -1625,7 +1625,7 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
       },
       {
         id: 8,
-        name: "Restinga e Dunas",
+        name: "CAPONGA",
         phaseTitle: "Fase 8: As Dunas e o Oceano",
         icon: "🌊",
         shortDesc: "Faixas litorâneas de areia branca, vegetação rasteira fixadora e dunas moldadas pela brisa marinha. Um escudo essencial contra a força das marés e das ressacas do mar aberto.",
@@ -1647,7 +1647,7 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
       },
       {
         id: 9,
-        name: "Mata de Cocais",
+        name: "FEIRA DE SÃO BENTO",
         phaseTitle: "Fase 9: A Floresta das Palmeiras",
         icon: "🌴",
         shortDesc: "Fascinante faixa de transição entre a Amazônia, o Cerrado e a Caatinga (Maranhão e Piauí). Marcada pela majestade dos babaçuais e buritizais que sustentam gerações humanas e aves coloridas.",
@@ -1669,7 +1669,7 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
       },
       {
         id: 10,
-        name: "Mata de Araucárias",
+        name: "IGREJA MATRIZ",
         phaseTitle: "Fase 10: O Pinheiral Sagrado",
         icon: "🌲",
         shortDesc: "Floresta com clima subtropical frio, neblinas matinais e majestosas araucárias em forma de taça ou candelabro. A sábia gralha-azul atua como jardineira natural ao plantar pinhões na terra fresca.",
@@ -7292,16 +7292,28 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
 })();
 // ===== INTEGRAÇÃO: abrir fase direto pelo mapa =====
 (function () {
-  var params = new URLSearchParams(window.location.search);
-  var fase = params.get("fase");
-  if (!fase) return; // sem parâmetro → comportamento normal
+  function normalizar(s) {
+    return s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase().trim();
+  }
 
-  var biome = BIOMES_DATA.find(function (b) {
-    return b.name.toLowerCase() === fase.toLowerCase();
-  });
-  if (!biome) return;
+  function abrirFasePeloMapa() {
+    var params = new URLSearchParams(window.location.search);
+    var fase = params.get('fase');
+    if (!fase) return; // sem parâmetro → menu normal
 
-  carregarBioma(biome.id); // ← troque "carregarBioma" pelo nome real (ver abaixo)
+    var alvo = normalizar(fase);
+    var idx = BIOMES_DATA.findIndex(function (b) {
+      // Aceita ?fase=1 (número) ou ?fase=GUANACES (nome do index)
+      return String(b.id) === fase || normalizar(b.name) === alvo;
+    });
+    if (idx >= 0) goToLevel(idx, 0);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', abrirFasePeloMapa);
+  } else {
+    abrirFasePeloMapa();
+  }
 })();
 </script>
 </body>
