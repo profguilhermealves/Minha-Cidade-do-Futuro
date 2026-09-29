@@ -7329,5 +7329,204 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
   }
 })();
 </script>
+  <!-- ===== CONTROLES: XBOX + BOTÕES NA TELA (celular/tablet) ===== -->
+<style>
+  #touchControls{position:fixed;left:0;right:0;top:0;bottom:0;pointer-events:none;display:none;z-index:99999;-webkit-tap-highlight-color:transparent;}
+  .tc-zone{position:absolute;bottom:20px;}
+  .tc-zone.tc-left{left:14px;}
+  .tc-zone.tc-right{right:14px;}
+  .tc-btn{pointer-events:auto;position:absolute;width:64px;height:64px;border-radius:50%;border:3px solid rgba(255,255,255,.85);
+    background:rgba(15,23,42,.55);color:#fff;font-family:"Courier New",monospace;font-weight:bold;font-size:22px;
+    display:flex;align-items:center;justify-content:center;touch-action:none;user-select:none;-webkit-user-select:none;
+    box-shadow:0 4px 12px rgba(0,0,0,.45);transition:transform .08s, background .08s;}
+  .tc-btn.tc-pressed{background:rgba(90,163,242,.8);transform:scale(.9);}
+  .tc-left-btn{left:0;bottom:0;}
+  .tc-right-btn{left:72px;bottom:0;}
+  .tc-jump-btn{right:0;bottom:0;width:72px;height:72px;font-size:26px;background:rgba(34,197,94,.5);}
+  .tc-shoot-btn{right:82px;bottom:8px;width:56px;height:56px;background:rgba(90,163,242,.55);}
+  @media (pointer:coarse){#touchControls{display:block;}}
+</style>
+<div id="touchControls">
+  <div class="tc-zone tc-left">
+    <button class="tc-btn tc-left-btn" style="left:0;" aria-label="Esquerda">◀</button>
+    <button class="tc-btn tc-right-btn" style="left:72px;" aria-label="Direita">▶</button>
+  </div>
+  <div class="tc-zone tc-right">
+    <button class="tc-btn tc-jump-btn" aria-label="Pular">A</button>
+    <button class="tc-btn tc-shoot-btn" aria-label="Atirar">B</button>
+  </div>
+</div>
+<script>
+(function () {
+  "use strict";
+
+  /* Segurança: só roda se estiver no arquivo do jogo */
+  if (!document.getElementById('celesteCanvas')) {
+    console.warn('Bloco de controles: canvas do jogo não encontrado. Verifique se colou no arquivo certo.');
+    return;
+  }
+
+  /* ============ PULO VIA TOQUE/GAMEPAD (mesma lógica do teclado) ============ */
+  function triggerJumpFromTouch() {
+    if (keys.jump) return; // já está pulando (evita disparo duplo com teclado)
+    keys.jump = true;
+    keys.jumpHold = true;
+    if (player.isGrounded) {
+      player.vy = -3.8;
+      player.isGrounded = false;
+      player.canDoubleJump = true;
+      sfxJump(false);
+      var biome = BIOMES_DATA[currentBiomeIdx] || BIOMES_DATA[0];
+      spawnDust(player.x + 1, player.y + player.height, biome.dustColor || "#ffffff", -0.5, -0.4);
+      spawnDust(player.x + 5, player.y + player.height, biome.dustColor || "#ffffff", 0.5, -0.4);
+    } else if (player.canDoubleJump) {
+      player.vy = -3.5;
+      player.canDoubleJump = false;
+      sfxJump(true);
+      for (var d = 0; d < 4; d++) {
+        spawnDust(player.x + 4, player.y + player.height, "#5aa3f2", (Math.random() - 0.5) * 1.5, 0.4);
+      }
+    }
+  }
+  function releaseJumpFromTouch() {
+    keys.jump = false;
+    keys.jumpHold = false;
+  }
+
+  /* ============ BOTÕES NA TELA ============ */
+  function attachTouchControls() {
+    var pad = document.getElementById('touchControls');
+    if (!pad) return;
+
+    function holdBtn(el, onPress, onRelease) {
+      if (!el) return;
+      var active = false;
+      function press(e) {
+        if (e.cancelable) e.preventDefault();
+        if (!active) {
+          active = true;
+          el.classList.add('tc-pressed');
+          onPress();
+        }
+      }
+      function release(e) {
+        if (e.cancelable) e.preventDefault();
+        if (active) {
+          active = false;
+          el.classList.remove('tc-pressed');
+          onRelease();
+        }
+      }
+      el.addEventListener('touchstart', press, { passive: false });
+      el.addEventListener('touchend', release, { passive: false });
+      el.addEventListener('touchcancel', release, { passive: false });
+      el.addEventListener('mousedown', press);   // bônus: testar no desktop
+      el.addEventListener('mouseup', release);
+      el.addEventListener('mouseleave', release);
+    }
+
+    holdBtn(pad.querySelector('.tc-left-btn'),  function () { keys.left = true; },  function () { keys.left = false; });
+    holdBtn(pad.querySelector('.tc-right-btn'), function () { keys.right = true; }, function () { keys.right = false; });
+    holdBtn(pad.querySelector('.tc-jump-btn'),  triggerJumpFromTouch,               releaseJumpFromTouch);
+    holdBtn(pad.querySelector('.tc-shoot-btn'), function () { shootProjectile(); }, function () {});
+  }
+
+  /* Mostra os botões só em telas de toque e fora do menu inicial */
+  function updateTouchControlsVisibility() {
+    var el = document.getElementById('touchControls');
+    if (!el) return;
+    var isTouch = (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) || ('ontouchstart' in window);
+    if (!isTouch) { el.style.display = 'none'; return; }
+    el.style.display = (gameState === 'menu') ? 'none' : '';
+  }
+
+  /* ============ CONTROLE XBOX (Gamepad API) ============ */
+  var gamepadPrev = new Map();
+
+  function pollGamepadsOnce() {
+    var pads = [];
+    try { pads = navigator.getGamepads ? navigator.getGamepads() : []; } catch (err) { return; }
+
+    var anyActive = false;
+    for (var i = 0; i < pads.length; i++) {
+      if (pads[i] && pads[i].connected) { anyActive = true; break; }
+    }
+    if (!anyActive) { gamepadPrev.clear(); return; }
+
+    for (var j = 0; j < pads.length; j++) {
+      var gp = pads[j];
+      if (!gp || !gp.connected) continue;
+
+      var prev = gamepadPrev.get(j) || new Uint8Array(16);
+      var cur = new Uint8Array(16);
+      for (var b = 0; b < Math.min(gp.buttons.length, 16); b++) {
+        cur[b] = (gp.buttons[b] && gp.buttons[b].pressed) ? 1 : 0;
+      }
+      var edge = function (idx) { return cur[idx] === 1 && prev[idx] !== 1; };
+
+      // MENU: A (0) ou Start (9) inicia o jogo
+      if (gameState === 'menu') {
+        if (edge(0) || edge(9)) { gamepadPrev.set(j, cur); startGameAction(); return; }
+        gamepadPrev.set(j, cur);
+        continue;
+      }
+
+      // QUIZ: A=alt.1, B=alt.2, X=alt.3, Y=alt.4
+      if (quizActive && !quizLock) {
+        for (var q = 0; q < 4; q++) {
+          if (edge(q)) {
+            var qObj = getQuestionForLevel(currentBiomeIdx, currentLevelIdx);
+            gamepadPrev.set(j, cur);
+            handleQuizAnswer(q, qObj.ans, qObj);
+            return;
+          }
+        }
+        gamepadPrev.set(j, cur);
+        continue;
+      }
+
+      // MOVIMENTO: analógico esquerdo (deadzone 0.4) + D-pad esquerda/direita
+      var ax = (gp.axes && gp.axes.length > 0) ? gp.axes[0] : 0;
+      keys.left = (ax < -0.4 || cur[14] === 1);
+      keys.right = (ax > 0.4 || cur[15] === 1);
+
+      // PULO: A (0) ou D-pad cima (12)
+      var jumpHeld = cur[0] === 1 || cur[12] === 1;
+      var jumpWasHeld = prev[0] === 1 || prev[12] === 1;
+      if (jumpHeld && !jumpWasHeld) triggerJumpFromTouch();
+      if (!jumpHeld && jumpWasHeld) releaseJumpFromTouch();
+
+      // TIRO: X (2) ou RT (7)
+      var shootHeld = cur[2] === 1 || cur[7] === 1;
+      var shootWasHeld = prev[2] === 1 || prev[7] === 1;
+      if (shootHeld && !shootWasHeld) shootProjectile();
+
+      gamepadPrev.set(j, cur);
+    }
+  }
+
+  var inputPollRunning = false;
+  function inputPollLoop() {
+    pollGamepadsOnce();
+    updateTouchControlsVisibility();
+    requestAnimationFrame(inputPollLoop);
+  }
+
+  /* ============ INICIALIZAÇÃO ============ */
+  function boot() {
+    attachTouchControls();
+    if (!inputPollRunning) {
+      inputPollRunning = true;
+      requestAnimationFrame(inputPollLoop);
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
+})();
+</script>
 </body>
 </html>
