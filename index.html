@@ -3,293 +3,356 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Minha Cidade do Futuro — Cascavel/CE</title>
+<title>Minha Cidade do Futuro</title>
 <style>
-:root{--bg:#06121f;--panel:#0e2036;--border:#1e3a5f;--amarelo:#f5b700;--branco:#eaf2ff;}
-*{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--bg);color:var(--branco);font-family:"Courier New",monospace;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:12px;}
-h1{font-size:clamp(16px,4vw,28px);letter-spacing:2px;text-shadow:3px 3px 0 rgba(0,0,0,.6);margin:4px 0 2px;text-align:center;}
-.sub{color:#7fa5cf;font-size:12px;margin-bottom:8px;text-align:center;}
-.screen{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;padding:16px;z-index:5;}
-.screen.active{display:flex;}
-.topbar{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-bottom:8px;}
-.btn{font-family:inherit;font-size:12px;padding:6px 12px;border:2px solid var(--border);background:var(--panel);color:var(--branco);border-radius:6px;cursor:pointer;}
-.btn:hover{background:#1a3354;}
-.btn.green{background:#1f9d55;border-color:#34d07a;color:#fff;}
-.btn-big{font-size:16px;padding:14px 34px;border:3px solid var(--branco);border-radius:10px;cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.4);}
-.info-list{list-style:none;text-align:center;margin-bottom:22px;font-size:13px;line-height:1.9;color:#c7d9f2;}
-.press-hint{position:absolute;bottom:18px;color:#7fa5cf;font-size:12px;animation:blink 1.4s infinite;}
-@keyframes blink{50%{opacity:.3;}}
-.stage{position:relative;width:min(96vw,700px);border:3px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.6);}
-canvas{width:100%;height:auto;display:block;image-rendering:pixelated;background:#7ec8f0;}
-.controls{width:min(96vw,700px);display:flex;justify-content:space-between;margin-top:8px;font-size:11px;color:#7fa5cf;flex-wrap:wrap;gap:4px;}
-.overlay{position:fixed;inset:0;background:rgba(4,8,18,.93);display:none;align-items:center;justify-content:center;z-index:50;padding:16px;text-align:center;overflow:auto;}
-.overlay.active{display:flex;}
-.obox{max-width:460px;width:100%;background:var(--panel);border:2px solid var(--border);border-radius:12px;padding:20px;}
-.obox h2{font-size:17px;margin-bottom:10px;}
-.obox p{font-size:13px;line-height:1.6;margin-bottom:8px;color:#c7d9f2;}
-.instr{text-align:left;font-size:12px;line-height:1.8;color:#a9c4e8;margin:6px 0 12px;}
-.opt{display:block;width:100%;font-family:inherit;font-size:13px;text-align:left;padding:9px 12px;margin:6px 0;border:2px solid var(--border);background:#0a1830;color:var(--branco);border-radius:8px;cursor:pointer;}
-.opt:hover{border-color:#5b7bb8;}
-.opt.good{background:#1f9d55;border-color:#34d07a;}
-.opt.bad{background:#c0392b;border-color:#ff6b6b;}
-.fb{min-height:22px;font-size:13px;margin:6px 0;font-weight:bold;}
-.fb.good{color:#4ef08a;} .fb.bad{color:#ff7b7b;}
-.scoreline{font-size:22px;letter-spacing:4px;color:var(--amarelo);margin:8px 0;}
-.row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:10px;}
-.footer{margin-top:10px;font-size:11px;color:#4f6f8f;text-align:center;max-width:640px;}
-.map-wrap{position:relative;width:min(94vw,520px);border:3px solid var(--border);border-radius:12px;overflow:visible;box-shadow:0 10px 30px rgba(0,0,0,.6);}
-.map-inner{position:relative;display:inline-block;line-height:0;border-radius:10px;overflow:visible;}
-.map-image{width:100%;display:block;object-fit:contain;image-rendering:auto;border-radius:10px;}
-.map-canvas{width:100%;display:none;image-rendering:pixelated;border-radius:10px;}
-#pins-layer{position:absolute;inset:0;}
-.map-notice{display:none;position:absolute;top:8px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.75);color:#fbbf24;font-size:11px;padding:6px 10px;border-radius:6px;z-index:20;text-align:center;}
-.legend{position:absolute;bottom:10px;left:10px;background:rgba(8,14,28,.85);border:2px solid var(--border);border-radius:8px;padding:8px 10px;font-size:11px;z-index:20;text-align:left;}
-.legend b{font-size:10px;color:#7fa5cf;}
-.legend div{display:flex;align-items:center;gap:5px;margin-top:2px;}
-.sw{width:10px;height:10px;border-radius:2px;display:inline-block;}
-.pin{position:absolute;transform:translate(-50%,-100%);width:34px;height:34px;background:none;border:none;cursor:pointer;z-index:30;}
-.pin .pi{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:#f5b700;border:3px solid #fff;font-size:15px;box-shadow:0 3px 8px rgba(0,0,0,.5);}
-.pin .pi span{transform:rotate(45deg);}
-.pin.locked .pi{background:#64748b;filter:grayscale(.7);}
-.pin:hover .pi{transform:rotate(-45deg) scale(1.2);}
-.pin-tip{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);background:#0b1020;border:2px solid #2c3350;border-radius:8px;padding:5px 8px;font-size:11px;color:#eaf2ff;white-space:nowrap;display:none;z-index:40;font-family:"Courier New",monospace;}
-.pin:hover .pin-tip{display:block;}
-.lvls{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:12px 0;}
-.lvl{font-family:inherit;font-size:15px;padding:10px 0;border:2px solid var(--border);border-radius:8px;background:#0a1830;color:var(--branco);cursor:pointer;}
-.lvl.lock{opacity:.35;cursor:not-allowed;}
-.lvl:not(.lock):hover{background:#1a3354;}
+  :root{
+    --font-pixel: "Courier New", monospace;
+    --bg:#0f172a; --panel:#1e293b; --border:#334155;
+    --azul:#2E86DE; --amarelo:#F5B700; --verde:#2ECC71;
+    --branco:#f8fafc; --cinza:#94a3b8;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--branco);font-family:var(--font-pixel);overflow:hidden;height:100vh;}
+  .game-screen{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;padding:16px;}
+  .game-screen.active{display:flex;}
+  h1{font-size:clamp(20px,5vw,40px);text-align:center;text-shadow:3px 3px 0 rgba(0,0,0,.5);margin-bottom:8px;}
+  .subtitle{color:var(--cinza);font-size:clamp(11px,2.2vw,16px);text-align:center;margin-bottom:24px;}
+  .info-list{list-style:none;text-align:center;margin-bottom:28px;font-size:clamp(11px,2vw,14px);line-height:1.9;}
+  .btn{font-family:var(--font-pixel);font-size:clamp(14px,3vw,20px);padding:14px 34px;border:3px solid var(--branco);border-radius:8px;cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.4);transition:transform .1s;}
+  .btn:active{transform:translateY(3px);}
+  .btn-green{background:#22c55e;color:#052e16;}
+  .press-start-hint{position:absolute;bottom:18px;color:var(--cinza);font-size:12px;animation:blink 1.4s infinite;}
+  @keyframes blink{50%{opacity:.3;}}
+  .map-header{width:100%;max-width:900px;display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+  .map-header h1{font-size:clamp(16px,3.5vw,26px);margin:0;}
+  .map-controls{display:flex;gap:8px;}
+  .btn-sm{font-size:12px;padding:8px 14px;border:2px solid var(--border);background:var(--panel);color:var(--branco);border-radius:6px;cursor:pointer;}
+  .map-wrap{position:relative;width:min(94vw,78vh);background:#0b1220;border:3px solid var(--border);border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.6);overflow:visible;}
+  .map-inner{position:relative;display:inline-block;line-height:0;border-radius:10px;overflow:visible;}
+  .map-image{width:100%;display:block;object-fit:contain;image-rendering:auto;}
+  .map-canvas{width:100%;height:auto;display:none;image-rendering:pixelated;}
+  .map-fallback-notice{display:none;position:absolute;top:8px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.75);color:#fbbf24;font-size:11px;padding:6px 10px;border-radius:6px;z-index:20;text-align:center;}
+  .pin{position:absolute;transform:translate(-50%,-100%);width:30px;height:30px;cursor:pointer;z-index:10;transition:transform .15s;}
+  .pin:hover{transform:translate(-50%,-100%) scale(1.25);z-index:30;}
+  .pin .head{position:absolute;inset:0;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:3px solid var(--branco);box-shadow:0 3px 6px rgba(0,0,0,.5);}
+  .pin .dot{position:absolute;top:9px;left:9px;width:12px;height:12px;border-radius:50%;background:var(--branco);}
+  .pin.locked{opacity:.55;filter:grayscale(.6);}
+  .pin.locked .lock{position:absolute;top:-6px;left:50%;transform:translateX(-50%);font-size:14px;}
+  .pin.done .check{position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-size:16px;color:#22c55e;text-shadow:0 0 4px #000;}
+  .pin.next .head{animation:pulse 1.2s infinite;}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,.7);}50%{box-shadow:0 0 0 10px rgba(255,255,255,0);}}
+  .pin-tooltip{position:absolute;bottom:34px;left:50%;transform:translateX(-50%);background:rgba(15,23,42,.95);border:2px solid var(--border);border-radius:8px;padding:8px 10px;font-size:11px;white-space:nowrap;display:none;z-index:40;text-align:center;}
+  .pin:hover .pin-tooltip{display:block;}
+  .pin-tooltip .t-name{font-weight:bold;font-size:12px;color:var(--branco);}
+  .pin-tooltip .t-group{color:var(--cinza);}
+  .pin-tooltip .t-prog{color:#fbbf24;}
+  .legend{position:absolute;bottom:10px;left:10px;background:rgba(15,23,42,.85);border:2px solid var(--border);border-radius:8px;padding:8px 10px;font-size:11px;z-index:20;}
+  .legend-title{color:var(--cinza);margin-bottom:5px;text-transform:uppercase;font-size:10px;}
+  .legend-item{display:flex;align-items:center;gap:6px;margin-bottom:3px;}
+  .legend-item .sw{width:10px;height:10px;border-radius:2px;display:inline-block;}
+  .map-source{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.6);color:var(--cinza);font-size:10px;padding:3px 6px;border-radius:4px;z-index:20;}
+  .modal{position:fixed;inset:0;background:rgba(0,0,0,.75);display:none;align-items:center;justify-content:center;z-index:100;padding:16px;}
+  .modal.active{display:flex;}
+  .modal-box{background:var(--panel);border:3px solid var(--border);border-radius:12px;padding:20px;max-width:440px;width:100%;text-align:center;}
+  .modal-box h2{font-size:clamp(15px,3vw,22px);margin-bottom:16px;}
+  .levels{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:16px;}
+  .lvl{font-family:var(--font-pixel);font-size:16px;padding:12px 0;border:2px solid var(--border);border-radius:8px;background:#0f172a;color:var(--branco);cursor:pointer;}
+  .lvl.locked{opacity:.4;cursor:not-allowed;}
+  .lvl:not(.locked):hover{background:#334155;}
+  .btn-close{margin-top:8px;}
+  .confirm-msg{font-size:clamp(14px,2.6vw,18px);margin-bottom:18px;line-height:1.6;}
+  .loading{position:fixed;inset:0;background:var(--bg);display:none;align-items:center;justify-content:center;flex-direction:column;gap:14px;z-index:200;}
+  .loading.active{display:flex;}
+  .loading .spinner{width:40px;height:40px;border:4px solid var(--border);border-top-color:var(--azul);border-radius:50%;animation:spin 1s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
 </style>
 </head>
 <body>
 
-<main id="screen-start" class="screen active">
-  <h1>🏖️ MINHA CIDADE DO FUTURO</h1>
-  <p class="sub">Cascavel/CE • 10 lugares • 100 desafios ecológicos e de cidades sustentáveis</p>
+<div id="loading" class="loading">
+  <div class="spinner"></div>
+  <div>Carregando mapa...</div>
+</div>
+
+<main id="screen-start" class="game-screen active">
+  <h1>MINHA CIDADE DO FUTURO</h1>
+  <p class="subtitle">Aventura pela cidade inteligente e sustentável • Cascavel/CE</p>
   <ul class="info-list">
-    <li>🗺️ Escolha o lugar no mapa • 10 níveis em cada fase</li>
-    <li>▶ ⬅➡ / A D: andar • ESPAÇO / W: pular (2x = duplo)</li>
-    <li>▶ X / J: atirar • Chegue à bandeira FIM e responda a pergunta!</li>
-    <li>❤️ 3 vidas • Acertou +200 pts • Errou perde 1 coração</li>
+    <li>🎮 Objetivo: conhecer os 10 polos ecológicos da região</li>
+    <li>🧠 100 questões: sustentabilidade, meio ambiente e tecnologia</li>
+    <li>🗺️ 3 zonas: Litoral, Centro Urbano e Sertão</li>
+    <li>⚡ Controles: clique, toque ou pressione [ENTER]</li>
   </ul>
-  <button id="btnStart" class="btn btn-big" style="background:#22c55e;color:#052e16;">▶ JOGAR</button>
-  <div class="press-hint">Pressione [ENTER] ou clique para iniciar</div>
+  <button id="btn-play" class="btn btn-green">JOGAR</button>
+  <div class="press-start-hint">Pressione [ENTER] ou clique para iniciar</div>
 </main>
 
-<main id="screen-map" class="screen">
-  <h1>🗺️ MAPA DA CIDADE</h1>
-  <div class="topbar">
-    <button id="btnBack" class="btn">🏠 Início</button>
-    <button id="btnReset" class="btn">🔄 Zerar Progresso</button>
-    <button id="btnSoundMap" class="btn">🔊 Som: Ligado</button>
-  </div>
-  <div class="map-wrap">
-    <div class="map-inner">
-      <img id="map-img" class="map-image" alt="Mapa de Cascavel/CE">
+<main id="screen-map" class="game-screen">
+  <header class="map-header">
+    <h1>📍 MAPA DA CIDADE</h1>
+    <div class="map-controls">
+      <button id="btn-back" class="btn-sm">VOLTAR</button>
+      <button id="btn-reset" class="btn-sm">Reiniciar</button>
+    </div>
+  </header>
+  <div id="map-wrap" class="map-wrap">
+    <div id="map-inner" class="map-inner">
+      <img id="map-img" class="map-image" alt="Mapa da Cidade de Cascavel/CE">
       <canvas id="map-canvas" class="map-canvas"></canvas>
-      <div id="pins-layer"></div>
+      <div id="pins-layer" style="position:absolute;inset:0;"></div>
     </div>
-    <div id="map-notice" class="map-notice">Mapa padrão ativo — coloque o MAPA_INICIAL.png na mesma pasta para usar o mapa real.</div>
+    <div id="map-fallback-notice" class="map-fallback-notice">Mapa padrão ativo — coloque o arquivo MAPA_INICIAL.png na mesma pasta do jogo para usar o mapa real.</div>
+    <div id="map-source" class="map-source">Mapa: padrão</div>
     <div class="legend">
-      <b>REGIÕES</b>
-      <div><span class="sw" style="background:#2E86DE"></span> Praias (1–4)</div>
-      <div><span class="sw" style="background:#F5B700"></span> Centro Urbano (5–7)</div>
-      <div><span class="sw" style="background:#2ECC71"></span> Distritos (8–10)</div>
+      <div class="legend-title">Zonas</div>
+      <div class="legend-item"><span class="sw" style="background:var(--azul)"></span> Praias</div>
+      <div class="legend-item"><span class="sw" style="background:var(--amarelo)"></span> Centro urbano</div>
+      <div class="legend-item"><span class="sw" style="background:var(--verde)"></span> Distritos</div>
     </div>
-  </div>
-  <div class="controls" style="width:min(94vw,520px);">Clique no pin para escolher a fase • 🔒 libera ao concluir a anterior</div>
-</main>
-
-<main id="screen-game" class="screen">
-  <div class="stage">
-    <canvas id="game" width="1000" height="1000"></canvas>
-    <div class="overlay" id="ovLevels">
-      <div class="obox">
-        <h2 id="lvTitle">Escolha o nível</h2>
-        <div class="lvls" id="lvGrid"></div>
-        <button class="btn" id="btnLvClose">FECHAR</button>
-      </div>
-    </div>
-    <div class="overlay" id="ovQuiz">
-      <div class="obox">
-        <h2 id="qTitle">Pergunta</h2>
-        <p id="qText" style="font-size:14px;"></p>
-        <div id="qOpts"></div>
-        <div class="fb" id="qFb"></div>
-        <button class="btn green" id="btnContinue" style="display:none;">CONTINUAR</button>
-      </div>
-    </div>
-    <div class="overlay" id="ovComplete">
-      <div class="obox">
-        <h2>🏆 NÍVEL CONCLUÍDO!</h2>
-        <p id="cLoc"></p>
-        <div class="scoreline" id="cScore">000000</div>
-        <div class="row">
-          <button class="btn green" id="btnNext">PRÓXIMO NÍVEL ▶</button>
-          <button class="btn" id="btnReplay">🔄 REJOGAR</button>
-          <button class="btn" id="btnMapGo">🗺️ MAPA</button>
-        </div>
-      </div>
-    </div>
-    <div class="overlay" id="ovCert">
-      <div class="obox">
-        <h2>🎖️ CERTIFICADO DE CONQUISTA</h2>
-        <p>Parabéns, explorador(a)! Você completou as <b>10 fases</b> e dominou as perguntas sobre a Cidade do Futuro!</p>
-        <p>Pontuação Total</p>
-        <div class="scoreline" id="certScore">000000</div>
-        <button class="btn green" id="btnAgain">🔄 JOGAR NOVAMENTE</button>
-      </div>
-    </div>
-    <div class="overlay" id="ovOver">
-      <div class="obox">
-        <h2>💀 GAME OVER</h2>
-        <p id="ovMsg">Você perdeu todas as vidas!</p>
-        <button class="btn green" id="btnRestart">🔄 TENTAR DE NOVO</button>
-      </div>
-    </div>
-  </div>
-  <div class="controls">
-    <span>⬅➡ / A D: andar • ESPAÇO: pular (duplo) • X / J: atirar</span>
-    <span>P: pausar • <span id="hudPhaseTxt">Fase 1: Balbino</span></span>
   </div>
 </main>
 
-<div class="footer">Minha Cidade do Futuro • Feira do Conhecimento • BNCC (Ciências / Geografia). 100% offline.</div>
+<div id="modal-levels" class="modal">
+  <div class="modal-box">
+    <h2 id="levels-title">Escolha o nível</h2>
+    <div id="levels-grid" class="levels"></div>
+    <button id="btn-close-levels" class="btn btn-sm btn-close">FECHAR</button>
+  </div>
+</div>
+
+<div id="modal-confirm" class="modal">
+  <div class="modal-box">
+    <p id="confirm-msg" class="confirm-msg"></p>
+    <button id="btn-confirm-back" class="btn btn-green">VOLTAR AO MAPA</button>
+  </div>
+</div>
 
 <script>
 "use strict";
 
-var NATIVE_W=1000,NATIVE_H=1000;
-var canvas=document.getElementById("game"),ctx=canvas.getContext("2d");
-var gY=820;
-var keys={},paused=false,soundOn=true,autoCam=true;
-var screenStart=document.getElementById("screen-start");
-var screenMap=document.getElementById("screen-map");
-var screenGame=document.getElementById("screen-game");
-var state="start";
+/* ===== DADOS DOS LOCAIS ===== */
+var GROUPS = {
+  praias: { nome: "Praias", cor: "#2E86DE" },
+  centro: { nome: "Centro urbano", cor: "#F5B700" },
+  distritos: { nome: "Distritos", cor: "#2ECC71" }
+};
 
-var GROUPS={praias:{nome:"Praias",cor:"#2E86DE"},centro:{nome:"Centro Urbano",cor:"#F5B700"},distritos:{nome:"Distritos",cor:"#2ECC71"}};
-var LOCATIONS=[
-{id:0,nome:"Balbino",grupo:"praias",x:25,y:5,icon:"🏖️"},
-{id:1,nome:"Caponga",grupo:"praias",x:40,y:8,icon:"🏖️"},
-{id:2,nome:"Águas Belas",grupo:"praias",x:60,y:8,icon:"🏖️"},
-{id:3,nome:"Barra Nova",grupo:"praias",x:75,y:15,icon:"🏖️"},
-{id:4,nome:"Igreja Matriz",grupo:"centro",x:50,y:15,icon:"⛪"},
-{id:5,nome:"Nossa Senhora do Ó",grupo:"centro",x:50,y:22,icon:"🗽"},
-{id:6,nome:"Feira de São Bento",grupo:"centro",x:60,y:22,icon:"🏛️"},
-{id:7,nome:"Guanacés",grupo:"distritos",x:35,y:35,icon:"🌾"},
-{id:8,nome:"Pitombeiras",grupo:"distritos",x:45,y:55,icon:"🌾"},
-{id:9,nome:"Cristais",grupo:"distritos",x:50,y:80,icon:"🌾"}
-];
-var TOTAL_LEVELS=10,STORAGE_KEY="minhaCidadeFuturoProgresso";
-
-var state2={completed:{}};
-function loadSave(){try{var r=localStorage.getItem(STORAGE_KEY);if(r)state2=JSON.parse(r);if(!state2.completed)state2.completed={};}catch(e){state2={completed:{}};}}
-function save(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state2));}catch(e){}}
-function isUnlocked(i){if(i===0)return true;return isComplete(i-1);}
-function isComplete(i){var l=LOCATIONS[i];if(!l)return false;var d=0;for(var k=1;k<=TOTAL_LEVELS;k++){if(state2.completed[l.id+"-"+k])d++;}return d===TOTAL_LEVELS;}
-function locProgress(i){var l=LOCATIONS[i];if(!l)return 0;var d=0;for(var k=1;k<=TOTAL_LEVELS;k++){if(state2.completed[l.id+"-"+k])d++;}return d;}
-
-var Q=[
-{p:"Qual é a principal fonte de energia limpa usada nas praias inteligentes?",o:["Energia solar","Carvão","Diesel","Nuclear"],c:0},
-{p:"O que as lixeiras inteligentes fazem com o lixo?",o:["Queimam tudo","Separam e reciclam","Jogam no mar","Guardam tudo junto"],c:1},
-{p:"Para que servem as placas de trânsito futuristas?",o:["Informar e dar segurança em tempo real","Enfeitar a praia","Atrasar o trânsito","Mostrar propaganda"],c:0},
-{p:"Qual atitude ajuda a proteger a areia de Balbino?",o:["Enterrar o lixo","Queimar embalagens","Reciclar e usar as lixeiras certas","Jogar lixo no mar"],c:2},
-{p:"O que são os manguezais?",o:["Montanhas de pedra","Plantações de coco","Ecossistemas cheios de vida na beira do mar","Estacionamentos"],c:2},
-{p:"Por que os coqueiros protegem a praia?",o:["Seguram a areia e dão sombra","Atraem tubarões","Poluem o mar","Bloqueiam o vento sempre"],c:0},
-{p:"O que significa sustentabilidade?",o:["Gastar tudo rápido","Poluir mais","Desmatar áreas","Usar os recursos sem destruir o futuro"],c:3},
-{p:"Qual destes materiais é reciclável?",o:["Vidro","Óleo usado","Pilha","Isopor sujo"],c:0},
-{p:"A energia eólica aproveita o quê?",o:["O carvão","O vento","A gasolina","O plástico"],c:1},
-{p:"Por que proteger as praias é importante?",o:["Para construir mais prédios","Para poluir","Para os animais e o turismo da região","Para nada"],c:2}
+var LOCATIONS = [
+  { id: 0, nome: "Balbino", grupo: "praias", x: 25, y: 5, desc: "Praia de Balbino" },
+  { id: 1, nome: "Caponga", grupo: "praias", x: 40, y: 8, desc: "Praia da Caponga" },
+  { id: 2, nome: "Águas Belas", grupo: "praias", x: 60, y: 8, desc: "Praia de Águas Belas" },
+  { id: 3, nome: "Barra Nova", grupo: "praias", x: 75, y: 15, desc: "Praia de Barra Nova" },
+  { id: 4, nome: "Igreja Matriz", grupo: "centro", x: 50, y: 15, desc: "Igreja Matriz" },
+  { id: 5, nome: "Estátua da N. Sra. do Ó", grupo: "centro", x: 50, y: 22, desc: "Estátua da padroeira" },
+  { id: 6, nome: "Feira de São Bento", grupo: "centro", x: 60, y: 22, desc: "Feira de São Bento" },
+  { id: 7, nome: "Guanacés", grupo: "distritos", x: 35, y: 35, desc: "Distrito de Guanacés" },
+  { id: 8, nome: "Pitombeiras", grupo: "distritos", x: 45, y: 55, desc: "Distrito de Pitombeiras" },
+  { id: 9, nome: "Cristais", grupo: "distritos", x: 50, y: 80, desc: "Distrito de Cristais" }
 ];
 
-var AC=null;
-function ac(){if(!AC){try{AC=new (window.AudioContext||window.webkitAudioContext)();}catch(e){}}return AC;}
-function beep(f,d,type,vol){if(!soundOn)return;var a=ac();if(!a)return;var o=a.createOscillator(),g=a.createGain();o.type=type||"square";o.frequency.value=f;g.gain.value=vol||0.05;o.connect(g);g.connect(a.destination);var t=a.currentTime;g.gain.setValueAtTime(vol||0.05,t);g.gain.exponentialRampToValueAtTime(0.001,t+d);o.start(t);o.stop(t+d);}
-function sfxShoot(){beep(880,0.08,"square",0.05);}
-function sfxStomp(){beep(220,0.12,"square",0.08);beep(110,0.15,"square",0.06);}
-function sfxHurt(){beep(160,0.25,"sawtooth",0.08);}
-function sfxStar(){beep(990,0.06,"square",0.05);beep(1320,0.08,"square",0.05);}
-function sfxGood(){beep(660,0.1,"square",0.06);beep(880,0.12,"square",0.06);beep(1320,0.16,"square",0.06);}
-function sfxBad(){beep(300,0.2,"sawtooth",0.07);beep(200,0.25,"sawtooth",0.07);}
-var musicTimer=0,musicNote=0;
-var MELODY=[220,262,294,330,392,330,294,262,220,262,330,392,440,392,330,262,294,330,392,440,523,440,392,330];
-var BASS=[110,110,131,131,147,147,175,175,98,98,110,110,131,131,147,147];
-function musicTick(){
-  if(!soundOn)return;
-  musicTimer++;
-  if(musicTimer<16)return;
-  musicTimer=0;
-  var a=ac();if(!a)return;
-  var o=a.createOscillator(),g=a.createGain();
-  o.type="triangle";o.frequency.value=MELODY[musicNote%MELODY.length];
-  g.gain.value=0.028;o.connect(g);g.connect(a.destination);
-  var t=a.currentTime;g.gain.setValueAtTime(0.028,t);g.gain.exponentialRampToValueAtTime(0.001,t+0.4);o.start(t);o.stop(t+0.4);
-  var b=a.createOscillator(),gb=a.createGain();
-  b.type="square";b.frequency.value=BASS[Math.floor(musicNote/2)%BASS.length];
-  gb.gain.value=0.018;b.connect(gb);gb.connect(a.destination);
-  var t2=a.currentTime;gb.gain.setValueAtTime(0.018,t2);gb.gain.exponentialRampToValueAtTime(0.001,t2+0.5);b.start(t2);b.stop(t2+0.5);
-  musicNote++;
-}
+var TOTAL_LEVELS = 10;
+var STORAGE_KEY = "minhaCidadeFuturoProgresso";
 
-function showScreen(s){screenStart.classList.remove("active");screenMap.classList.remove("active");screenGame.classList.remove("active");document.getElementById(s).classList.add("active");}
-function goStart(){state="start";showScreen("screen-start");}
-function goMap(){state="map";showScreen("screen-map");renderPins();}
-function goGame(){state="playing";showScreen("screen-game");}
-function hideAllOverlays(){var ovs=document.querySelectorAll(".overlay");for(var i=0;i<ovs.length;i++)ovs[i].classList.remove("active");}
-function showOv(id){document.getElementById(id).classList.add("active");}
+/* ===== ELEMENTOS ===== */
+var screenStart = document.getElementById("screen-start");
+var screenMap = document.getElementById("screen-map");
+var loading = document.getElementById("loading");
+var mapImg = document.getElementById("map-img");
+var mapCanvas = document.getElementById("map-canvas");
+var mapNotice = document.getElementById("map-fallback-notice");
+var mapSource = document.getElementById("map-source");
+var pinsLayer = document.getElementById("pins-layer");
+var btnPlay = document.getElementById("btn-play");
+var btnBack = document.getElementById("btn-back");
+var btnReset = document.getElementById("btn-reset");
+var modalLevels = document.getElementById("modal-levels");
+var levelsTitle = document.getElementById("levels-title");
+var levelsGrid = document.getElementById("levels-grid");
+var btnCloseLevels = document.getElementById("btn-close-levels");
+var modalConfirm = document.getElementById("modal-confirm");
+var confirmMsg = document.getElementById("confirm-msg");
+var btnConfirmBack = document.getElementById("btn-confirm-back");
 
-var mapImg=document.getElementById("map-img"),mapCanvas=document.getElementById("map-canvas"),pinsLayer=document.getElementById("pins-layer"),mapNotice=document.getElementById("map-notice");
-var mapLoaded=false;
-function drawFallbackMap(){
-  var c=mapCanvas.getContext("2d");
-  mapCanvas.width=600;mapCanvas.height=800;
-  var g=c.createLinearGradient(0,0,0,220);g.addColorStop(0,"#0ea5e9");g.addColorStop(1,"#7dd3fc");
-  c.fillStyle=g;c.fillRect(0,0,600,220);
-  c.fillStyle="#fef3c7";c.fillRect(0,180,600,60);
-  c.fillStyle="#16a34a";c.fillRect(0,240,600,250);
-  c.fillStyle="#a8a29e";c.fillRect(0,300,600,40);
-  var s=c.createLinearGradient(0,490,0,800);s.addColorStop(0,"#d97706");s.addColorStop(1,"#92400e");
-  c.fillStyle=s;c.fillRect(0,490,600,310);
-  c.fillStyle="#fff";c.font="bold 14px monospace";c.textAlign="center";
-  c.fillText("PRAIAS",300,120);
-  c.fillText("CENTRO / MATA",300,300);
-  c.fillText("SERTÃO",300,650);
-}
-function loadMapCascade(){
-  var tried=["MAPA_INICIAL.png","mapa_inicial.png","Mapa_Inicial.png","MAPA INICIAL.png","mapa_inicial.PNG"];
-  var i=0;
-  function next(){
-    if(i>=tried.length){showFallback();return;}
-    var img=new Image();
-    img.onload=function(){mapImg.src=tried[i];mapImg.style.display="block";mapCanvas.style.display="none";mapNotice.style.display="none";mapLoaded=true;};
-    img.onerror=function(){i++;next();};
-    img.src=tried[i];
+/* ===== ESTADO ===== */
+var state = { completed: {} };
+
+function loadState() {
+  try {
+    var raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) state = JSON.parse(raw);
+    if (!state.completed) state.completed = {};
+  } catch (e) {
+    state = { completed: {} };
   }
-  next();
 }
-function showFallback(){
-  mapImg.style.display="none";
-  mapCanvas.style.display="block";
-  mapNotice.style.display="block";
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+}
+function resetState() {
+  state = { completed: {} };
+  saveState();
+  renderPins();
+}
+
+function isLocationUnlocked(idx) {
+  if (idx === 0) return true;
+  return isLocationComplete(idx - 1);
+}
+function isLocationComplete(idx) {
+  var loc = LOCATIONS[idx];
+  if (!loc) return false;
+  var done = 0;
+  for (var i = 1; i <= TOTAL_LEVELS; i++) {
+    if (state.completed[loc.id + "-" + i]) done++;
+  }
+  return done === TOTAL_LEVELS;
+}
+function locationProgress(idx) {
+  var loc = LOCATIONS[idx];
+  if (!loc) return 0;
+  var done = 0;
+  for (var i = 1; i <= TOTAL_LEVELS; i++) {
+    if (state.completed[loc.id + "-" + i]) done++;
+  }
+  return done;
+}
+
+/* ===== NAVEGAÇÃO ===== */
+function goToMap() {
+  screenStart.classList.remove("active");
+  screenMap.classList.add("active");
+  renderPins();
+}
+function goToStart() {
+  screenMap.classList.remove("active");
+  screenStart.classList.add("active");
+}
+
+/* ===== CARGA DA IMAGEM DO MAPA ===== */
+var mapLoaded = false;
+
+function showMapImage(src) {
+  mapImg.onload = function () {
+    mapImg.style.display = "block";
+    mapCanvas.style.display = "none";
+    mapNotice.style.display = "none";
+    mapLoaded = true;
+  };
+  mapImg.src = src;
+}
+
+function loadMapCascade() {
+  var tried = ["MAPA_INICIAL.png", "mapa_inicial.png", "Mapa_Inicial.png", "MAPA INICIAL.png", "mapa_inicial.PNG", "Mapa-Inicial.png", "mapa-inicial.png"];
+  var i = 0;
+  function tryNext() {
+    if (i >= tried.length) {
+      applyFallbackMap();
+      return;
+    }
+    var img = new Image();
+    img.onload = function () {
+      mapSource.textContent = "Mapa: imagem local";
+      showMapImage(tried[i]);
+    };
+    img.onerror = function () {
+      i++;
+      tryNext();
+    };
+    img.src = tried[i];
+  }
+  tryNext();
+}
+
+function applyFallbackMap() {
+  mapImg.style.display = "none";
+  mapCanvas.style.display = "block";
+  mapNotice.style.display = "block";
+  mapSource.textContent = "Mapa: padrão";
   drawFallbackMap();
 }
-function renderPins(){
-  pinsLayer.innerHTML="";
-  LOCATIONS.forEach(function(loc){
-    var unlocked=isUnlocked(loc.id),complete=isComplete(loc.id),prog=locProgress(loc.id),group=GROUPS[loc.grupo];
-    var pin=document.createElement("button");
-    pin.className="pin";pin.style.left=loc.x+"%";pin.style.top=loc.y+"%";
-    pin.type="button";
-    if(!unlocked)pin.classList.add("locked");
-    var pi=document.createElement("span");pi.className="pi";pi.style.background=group.cor;
-    pi.innerHTML="<span>"+(unlocked?(complete?"✓":loc.icon):"🔒")+"</span>";
-    pin.appendChild(pi);
-    var tip=document.createElement("span");tip.className="pin-tip";tip.textContent=loc.nome+" • "+prog+"/10";
+
+function drawFallbackMap() {
+  var ctx = mapCanvas.getContext("2d");
+  mapCanvas.width = 600;
+  mapCanvas.height = 800;
+  ctx.clearRect(0, 0, 600, 800);
+  var grad = ctx.createLinearGradient(0, 0, 0, 220);
+  grad.addColorStop(0, "#0ea5e9");
+  grad.addColorStop(1, "#7dd3fc");
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, 600, 220);
+  ctx.fillStyle = "#fef3c7";
+  ctx.fillRect(0, 180, 600, 60);
+  ctx.fillStyle = "#16a34a";
+  ctx.fillRect(0, 240, 600, 250);
+  ctx.fillStyle = "#a8a29e";
+  ctx.fillRect(0, 300, 600, 40);
+  ctx.fillStyle = "#92400e";
+  ctx.fillRect(250, 260, 40, 60);
+  var sgrad = ctx.createLinearGradient(0, 490, 0, 800);
+  sgrad.addColorStop(0, "#d97706");
+  sgrad.addColorStop(1, "#92400e");
+  ctx.fillStyle = sgrad;
+  ctx.fillRect(0, 490, 600, 310);
+}
+
+/* ===== PINS ===== */
+function renderPins() {
+  pinsLayer.innerHTML = "";
+  LOCATIONS.forEach(function (loc) {
+    var unlocked = isLocationUnlocked(loc.id);
+    var complete = isLocationComplete(loc.id);
+    var prog = locationProgress(loc.id);
+    var group = GROUPS[loc.grupo];
+
+    var pin = document.createElement("div");
+    pin.className = "pin";
+    pin.style.left = loc.x + "%";
+    pin.style.top = loc.y + "%";
+    if (!unlocked) pin.classList.add("locked");
+    if (complete) pin.classList.add("done");
+    if (unlocked && !complete) pin.classList.add("next");
+
+    var head = document.createElement("div");
+    head.className = "head";
+    head.style.background = group.cor;
+    pin.appendChild(head);
+
+    var dot = document.createElement("div");
+    dot.className = "dot";
+    pin.appendChild(dot);
+
+    if (!unlocked) {
+      var lock = document.createElement("div");
+      lock.className = "lock";
+      lock.textContent = "🔒";
+      pin.appendChild(lock);
+    }
+    if (complete) {
+      var check = document.createElement("div");
+      check.className = "check";
+      check.textContent = "✓";
+      pin.appendChild(check);
+    }
+
+    var tip = document.createElement("div");
+    tip.className = "pin-tooltip";
+    var tName = document.createElement("div");
+    tName.className = "t-name";
+    tName.textContent = loc.nome;
+    var tGroup = document.createElement("div");
+    tGroup.className = "t-group";
+    tGroup.textContent = group.nome;
+    var tProg = document.createElement("div");
+    tProg.className = "t-prog";
+    tProg.textContent = prog + "/" + TOTAL_LEVELS + " níveis";
+    tip.appendChild(tName);
+    tip.appendChild(tGroup);
+    tip.appendChild(tProg);
     pin.appendChild(tip);
-    if(unlocked){
-      pin.addEventListener("click",function(ev){
-        ev.preventDefault();ev.stopPropagation();
+
+    if (unlocked) {
+      pin.addEventListener("click", function () {
         openLevels(loc);
       });
     }
@@ -297,249 +360,71 @@ function renderPins(){
   });
 }
 
-var currentLoc=null,currentLevel=1;
-function openLevels(loc){
-  currentLoc=loc;
-  document.getElementById("lvTitle").textContent=loc.icon+" "+loc.nome+" — Escolha o nível";
-  var grid=document.getElementById("lvGrid");grid.innerHTML="";
-  for(var i=1;i<=TOTAL_LEVELS;i++){
-    var b=document.createElement("button");b.className="lvl";b.textContent=i;
-    var unlocked=i===1||state2.completed[loc.id+"-"+(i-1)];
-    if(!unlocked){b.classList.add("lock");b.disabled=true;}
-    else{(function(l){b.addEventListener("click",function(){currentLevel=l;document.getElementById("ovLevels").classList.remove("active");startGame();});})(i);}
-    grid.appendChild(b);
+/* ===== NÍVEIS ===== */
+var currentLoc = null;
+
+function openLevels(loc) {
+  currentLoc = loc;
+  levelsTitle.textContent = loc.nome + " — Escolha o nível";
+  levelsGrid.innerHTML = "";
+  for (var i = 1; i <= TOTAL_LEVELS; i++) {
+    var b = document.createElement("button");
+    b.className = "lvl";
+    b.textContent = i;
+    var unlocked = i === 1 || state.completed[loc.id + "-" + (i - 1)];
+    if (!unlocked) {
+      b.classList.add("locked");
+      b.disabled = true;
+    } else {
+      b.addEventListener("click", function () {
+        selectLevel(i);
+      });
+    }
+    levelsGrid.appendChild(b);
   }
-  showOv("ovLevels");
+  modalLevels.classList.add("active");
 }
 
-var level=1,hearts=3,ammo=3,ammoT=0,score=0,totalScore=0;
-var monstersKilled=0,monstersTotal=0;
-var worldW=2600,camX=0,time=0,idleT=0;
-var player={x:60,y:500,vx:0,vy:0,w:24,h:36,facing:1,onGround:false,jumps:0,inv:0,knock:0,walkT:0,shootCd:0};
-var platforms=[],enemies=[],stars=[],projectiles=[],particles=[],deco=[];
-var gameWin=false,gameOver=false;
-
-function getWorldWidth(){return 2600+level*260;}
-function buildLevel(){
-  worldW=getWorldWidth();
-  platforms=[];enemies=[];stars=[];projectiles=[];particles=[];deco=[];
-  monstersKilled=0;monstersTotal=0;ammo=3;ammoT=0;score=0;gameWin=false;gameOver=false;
-  var n=5+Math.floor(level/2);
-  for(var i=0;i<n;i++){
-    var px=160+i*(240+(level%3)*40)+(i%2)*60;
-    var py=gY-(50+((i*53+level*17)%130));
-    platforms.push({x:px,y:py,w:150+(i%4)*20,h:16});
-  }
-  for(var s=0;s<platforms.length;s++){stars.push({x:platforms[s].x+platforms[s].w/2-8,y:platforms[s].y-22,taken:false});}
-  stars.push({x:150,y:gY-28,taken:false});
-  stars.push({x:worldW-110,y:gY-28,taken:false});
-  var count=3+Math.min(level,7);
-  var spacing=Math.max(240,(worldW-240)/count);
-  var radius=210+level*15;
-  var base=2.2+level*0.12;
-  for(var e=0;e<count;e++){
-    var ex=140+e*spacing+((e*17)%80);
-    var type=e%4;
-    var bw=type===0?30:type===1?38:type===2?42:50;
-    var bh=type===0?30:type===1?49:type===2?28:36;
-    enemies.push({type:type,x:ex,y:gY-bh,w:bw,h:bh,dir:(e%2===0)?1:-1,speed:(type===0?1.5:type===1?0.85:type===2?1.25:1.7)*base,t:Math.floor(Math.random()*50),state:type>=2?"chase":"patrol",alive:true,onGround:false,vy:0,radius:radius});
-    monstersTotal++;
-  }
-  var dt=["coqueiro","lixeiraFut","mangue","placaFut","guardaSol","toco","mangue","coqueiro","lixeiraFut","placaFut","guardaSol","mangue","coqueiro","lixeiraFut","toco","placaFut"];
-  var decoCount=Math.min(16,Math.floor(worldW/240));
-  for(var d=0;d<decoCount;d++){var dx=200+d*((worldW-400)/(decoCount-1));deco.push({type:dt[d%dt.length],x:dx});}
-}
-function startGame(){
-  level=currentLevel;hearts=3;ammo=3;paused=false;
-  player.x=60;player.y=500;player.vx=0;player.vy=0;player.inv=0;player.knock=0;player.jumps=0;
-  camX=0;idleT=0;buildLevel();goGame();
-  document.getElementById("hudPhaseTxt").textContent=currentLoc.icon+" Fase "+(currentLoc.id+1)+": "+currentLoc.nome;
+function selectLevel(lvl) {
+  modalLevels.classList.remove("active");
+  confirmMsg.textContent = currentLoc.nome + " — NÍVEL " + lvl + " selecionado!";
+  modalConfirm.classList.add("active");
 }
 
-function updatePlayer(){
-  var left=keys.ArrowLeft||keys.a||keys.A;
-  var right=keys.ArrowRight||keys.d||keys.D;
-  var jump=keys.Space||keys.ArrowUp||keys.w||keys.W;
-  player.vx=left?-1:right?1:0;
-  if(left)player.facing=-1;if(right)player.facing=1;
-  if(player.knock!==0){player.vx+=player.knock;player.knock*=0.85;if(Math.abs(player.knock)<0.1)player.knock=0;}
-  player.walkT++;
-  player.vy+=1.5;if(player.vy>20)player.vy=20;
-  if(jump&&player.vy>-0.3&&!player.jumped){
-    if(player.onGround){player.vy=-14.5;player.onGround=false;player.jumps=1;}
-    else if(player.jumps<2){player.vy=-12;player.jumps=2;sfxStomp();}
-    player.jumped=true;
+/* ===== LISTENERS (registrados primeiro) ===== */
+btnPlay.addEventListener("click", goToMap);
+btnBack.addEventListener("click", goToStart);
+btnReset.addEventListener("click", function () {
+  if (confirm("Deseja reiniciar seu progresso no mapa?")) resetState();
+});
+btnCloseLevels.addEventListener("click", function () {
+  modalLevels.classList.remove("active");
+});
+btnConfirmBack.addEventListener("click", function () {
+  modalConfirm.classList.remove("active");
+});
+document.addEventListener("keydown", function (e) {
+  if (e.key === "Enter" && screenStart.classList.contains("active")) {
+    goToMap();
   }
-  if(!jump)player.jumped=false;
-  if(!jump&&player.vy<-4.5)player.vy=-4.5;
-  player.x+=player.vx*3.5;
-  player.y+=player.vy;
-  player.onGround=false;
-  if(player.x<12)player.x=12;
-  if(player.x>worldW-36)player.x=worldW-36;
-  if(player.y+player.h>gY){player.y=gY-player.h;player.vy=0;player.onGround=true;player.jumps=0;}
-  for(var i=0;i<platforms.length;i++){
-    var p=platforms[i];
-    if(player.x+player.w>p.x&&player.x<p.x+p.w){
-      if(player.vy>=0&&player.y+player.h>=p.y&&player.y+player.h<=p.y+p.h+12){player.y=p.y-player.h;player.vy=0;player.onGround=true;player.jumps=0;}
+});
+screenStart.addEventListener("click", function () {
+  if (screenStart.classList.contains("active")) goToMap();
+});
+
+/* ===== INICIALIZAÇÃO ===== */
+try { loadState(); } catch (e) {}
+try { loadMapCascade(); } catch (e) { applyFallbackMap(); }
+try { renderPins(); } catch (e) {}
+
+setTimeout(function () {
+  loading.classList.remove("active");
+  if (!mapLoaded) {
+    if (mapImg.style.display !== "block") {
+      applyFallbackMap();
     }
   }
-  if(player.inv>0)player.inv--;
-  if(player.shootCd>0)player.shootCd--;
-  if((keys.x||keys.X||keys.j||keys.J||keys.z||keys.Z)&&player.shootCd<=0&&ammo>0){
-    player.shootCd=16;ammo--;
-    var bx=player.facing>0?player.x+player.w:player.x-10;
-    projectiles.push({x:bx,y:player.y+12,vx:player.facing*9.5,life:80});sfxShoot();
-  }
-  if(ammo<3){ammoT++;if(ammoT>=70){ammoT=0;ammo++;}}
-  var target=player.x-420;
-  if(target>camX)camX+=Math.min(6,target-camX);
-  if(target<camX-120)camX-=Math.min(6,camX-120-target);
-  if(autoCam&&player.onGround&&!left&&!right){idleT++;if(idleT>120){camX+=0.8;}}
-  else idleT=0;
-  if(camX<0)camX=0;
-  if(camX>worldW-NATIVE_W)camX=worldW-NATIVE_W;
-}
-
-function updateEnemies(){
-  for(var i=0;i<enemies.length;i++){
-    var e=enemies[i];if(!e.alive)continue;
-    e.t++;
-    var dx=player.x-e.x;
-    var near=Math.abs(dx)<e.radius;
-    if(e.type===2||e.type===3){e.state=near?"chase":"patrol";}
-    if(e.state==="chase")e.dir=(dx>0)?1:-1;
-    e.x+=e.dir*e.speed;
-    if(e.x<40){e.x=40;e.dir=1;}
-    if(e.x>worldW-40){e.x=worldW-40;e.dir=-1;}
-    if(e.type===1&&e.onGround&&(e.t%80===0)){e.vy=-8;e.onGround=false;}
-    e.vy+=1.2;if(e.vy>12)e.vy=12;
-    e.y+=e.vy;
-    e.onGround=false;
-    if(e.y+e.h>gY){e.y=gY-e.h;e.vy=0;e.onGround=true;}
-    if(player.inv<=0&&rectsOverlap(player.x,player.y,player.w,player.h,e.x,e.y,e.w,e.h)){
-      if(player.vy>0&&player.y+player.h-e.y<14){defeatEnemy(i,"stomp");player.vy=-10;sfxStomp();}
-      else hurtPlayer(e.x>player.x?1:-1);
-    }
-  }
-}
-function rectsOverlap(ax,ay,aw,ah,bx,by,bw,bh){return ax<bx+bw&&ax+aw>bx&&ay<by+bh&&ay+ah>by;}
-function hurtPlayer(dir){
-  if(player.inv>0)return;
-  hearts--;player.inv=75;player.knock=dir*7;sfxHurt();
-  spawnParts(player.x+player.w/2,player.y+player.h/2,"#ff6b6b",10);
-  if(hearts<=0){gameOver=true;document.getElementById("ovMsg").textContent="Você perdeu todas as vidas em "+currentLoc.nome+"!";showOv("ovOver");}
-}
-function defeatEnemy(idx,src){
-  var e=enemies[idx];if(!e.alive)return;
-  e.alive=false;monstersKilled++;
-  score+=src==="stomp"?150:100;
-  spawnParts(e.x+e.w/2,e.y+e.h/2,src==="stomp"?"#ffd75e":"#7CFC9A",12);
-  if(monstersKilled%4===0){for(var i=0;i<enemies.length;i++){if(enemies[i].alive)enemies[i].speed*=1.1;}}
-}
-
-function updateProjectiles(){
-  for(var i=projectiles.length-1;i>=0;i--){
-    var pr=projectiles[i];pr.x+=pr.vx;pr.life--;
-    var hit=-1;
-    for(var j=0;j<enemies.length;j++){var e=enemies[j];if(!e.alive)continue;if(pr.x>e.x&&pr.x<e.x+e.w&&pr.y>e.y&&pr.y<e.y+e.h){hit=j;break;}}
-    if(hit>=0){defeatEnemy(hit,"shot");projectiles.splice(i,1);continue;}
-    if(pr.life<=0||pr.x<camX-30||pr.x>camX+NATIVE_W+30){projectiles.splice(i,1);}
-  }
-}
-function updateStars(){
-  for(var i=0;i<stars.length;i++){
-    var s=stars[i];if(s.taken)continue;
-    if(rectsOverlap(player.x,player.y,player.w,player.h,s.x,s.y,16,16)){s.taken=true;score+=50;sfxStar();spawnParts(s.x+8,s.y+8,"#ffe66d",8);}
-  }
-}
-function spawnParts(x,y,col,n){for(var i=0;i<n;i++){particles.push({x:x,y:y,vx:(Math.random()-0.5)*6,vy:-Math.random()*6-1,life:32,col:col});}}
-function updateParticles(){for(var i=particles.length-1;i>=0;i--){var p=particles[i];p.x+=p.vx;p.y+=p.vy;p.vy+=0.5;p.life--;if(p.life<=0)particles.splice(i,1);}}
-
-function reachFlag(){
-  state="quiz";
-  var q=Q[level-1];
-  document.getElementById("qTitle").textContent=currentLoc.icon+" "+currentLoc.nome+" — Nível "+level+"/10";
-  document.getElementById("qText").textContent=q.p;
-  var box=document.getElementById("qOpts");box.innerHTML="";
-  var fb=document.getElementById("qFb");fb.textContent="";fb.className="fb";
-  document.getElementById("btnContinue").style.display="none";
-  for(var i=0;i<q.o.length;i++){
-    (function(idx){
-      var b=document.createElement("button");b.className="opt";
-      b.textContent=(idx===0?"A) ":idx===1?"B) ":idx===2?"C) ":") ")+" "+q.o[idx];
-      b.onclick=function(){
-        if(box.dataset.done)return;box.dataset.done="1";
-        var opts=box.children;for(var k=0;k<opts.length;k++){opts[k].disabled=true;}
-        if(idx===q.c){b.classList.add("good");fb.textContent="✅ Correto! +200 pontos";fb.className="fb good";score+=200;totalScore+=200;sfxGood();save();}
-        else{b.classList.add("bad");opts[q.c].classList.add("good");fb.textContent="❌ Errado! Você perdeu 1 coração.";fb.className="fb bad";hearts--;sfxBad();if(hearts<=0){document.getElementById("qFb").textContent+=" (fim das vidas!)";document.getElementById("btnContinue").textContent="FINALIZAR";}}
-        document.getElementById("btnContinue").style.display="inline-block";
-      };
-      box.appendChild(b);
-    })(i);
-  }
-  showOv("ovQuiz");save();
-}
-function continueAfterQuiz(){
-  hideAllOverlays();
-  if(hearts<=0){gameOver=true;document.getElementById("ovMsg").textContent="As vidas acabaram ao responder a pergunta do nível "+level+".";showOv("ovOver");return;}
-  state2.completed[currentLoc.id+"-"+level]=true;save();
-  document.getElementById("cLoc").textContent=currentLoc.icon+" "+currentLoc.nome+" — Nível "+level+" concluído!";
-  document.getElementById("cScore").textContent=pad6(score);
-  var allDone=0;for(var i=0;i<10;i++){if(isComplete(i))allDone++;}
-  if(allDone>=10){document.getElementById("certScore").textContent=pad6(totalScore);showOv("ovCert");}
-  else showOv("ovComplete");
-  renderPins();
-}
-function pad6(n){var s=""+Math.max(0,n);while(s.length<6)s="0"+s;return s;}
-
-function drawHud(){
-  ctx.fillStyle="rgba(6,12,24,0.85)";ctx.fillRect(0,0,NATIVE_W,34);
-  for(var i=0;i<3;i++){drawHeart(10+i*30,11,i<hearts);}
-  ctx.fillStyle="#9fb3d8";ctx.font="bold 14px 'Courier New', monospace";ctx.textAlign="left";
-  ctx.fillText("AMMO",112,20);
-  for(var a=0;a<ammo;a++){ctx.fillStyle="#7CFC9A";ctx.fillRect(172+a*14,8,10,14);}
-  ctx.fillStyle="#ff8585";ctx.fillText("☠ "+monstersKilled+"/"+monstersTotal,245,20);
-  var bx=360,bw=NATIVE_W-480;
-  ctx.fillStyle="rgba(255,255,255,0.12)";ctx.fillRect(bx,22,bw,8);
-  ctx.fillStyle="#f5b700";ctx.fillRect(bx+1,23,Math.max(3,(bw-2)*(Math.min(1,player.x/worldW))),6);
-  ctx.fillStyle="#f5b700";ctx.textAlign="right";ctx.font="bold 15px 'Courier New', monospace";
-  ctx.fillText("⭐ "+pad6(score),NATIVE_W-12,22);
-}
-function drawHeart(x,y,filled){
-  var col=filled?"#ff5c7a":"#3b2a3a";
-  ctx.fillStyle=col;
-  ctx.fillRect(x,y+5,14,8);ctx.fillRect(x+2,y+3,10,4);ctx.fillRect(x+4,y+1,6,4);ctx.fillRect(x+2,y+10,2,4);ctx.fillRect(x+10,y+10,2,4);
-}
-
-function drawPixel(x,y,w,h,col){ctx.fillStyle=col;ctx.fillRect(Math.round(x),Math.round(y),Math.round(w),Math.round(h));}
-function renderScene(){
-  drawSky();drawSun();drawClouds();drawBirds();drawSea();drawJangadasBack();drawLighthouse();drawVillageFar();drawDunesFar();drawMangroveFar();drawPalmsBack();drawBeachTransition();drawGround();drawDecor();drawSignBalbino();drawPlatforms();drawStars();drawFlag();drawEnemies();drawProjectiles();drawParticles();drawPlayer();drawForeground();
-}
-function drawSky(){var bands=["#1d5bb8","#2a6bca","#3a7cd8","#4d90e4","#63a5ee","#7cbaf5","#9ad0fa","#c2e5fd"];for(var i=0;i<8;i++){ctx.fillStyle=bands[i];ctx.fillRect(0,i*54,NATIVE_W,55);}}
-function drawSun(){var sx=NATIVE_W-140,sy=70;ctx.fillStyle="rgba(255,236,140,0.16)";ctx.beginPath();ctx.arc(sx+40,sy+40,72,0,7);ctx.fill();ctx.fillStyle="rgba(255,236,140,0.26)";ctx.beginPath();ctx.arc(sx+40,sy+40,54,0,7);ctx.fill();ctx.fillStyle="#ffe66d";ctx.fillRect(sx+16,sy+16,48,48);ctx.fillStyle="#ffd75e";ctx.fillRect(sx+24,sy+24,24,24);}
-function drawClouds(){for(var i=0;i<6;i++){var cx=((camX*0.12+i*190)%(NATIVE_W+260))-130;var cy=40+((i*37)%150);ctx.fillStyle="rgba(255,255,255,0.5)";ctx.fillRect(cx,cy,56,10);ctx.fillRect(cx+14,cy-6,30,6);}for(var j=0;j<4;j++){var px2=((camX*0.22+j*300)%(NATIVE_W+360))-180;var py2=70+((j*53)%130);ctx.fillStyle="rgba(255,255,255,0.8)";ctx.fillRect(px2,py2,76,12);ctx.fillRect(px2+18,py2-8,40,8);}}
-function drawBirds(){ctx.strokeStyle="rgba(35,55,85,0.75)";ctx.lineWidth=2;for(var i=0;i<3;i++){var bx=((camX*0.18+i*260+time*0.3)%(NATIVE_W+240))-120;var by=90+(i*42)%140;ctx.beginPath();ctx.moveTo(bx,by);ctx.quadraticCurveTo(bx+5,by-6,bx+10,by);ctx.quadraticCurveTo(bx+15,by-6,bx+20,by);ctx.stroke();}}
-function drawSea(){ctx.fillStyle="#0e6a9e";ctx.fillRect(0,432,NATIVE_W,388);ctx.fillStyle="#1276ad";ctx.fillRect(0,466,NATIVE_W,150);ctx.fillStyle="#1790c4";ctx.fillRect(0,616,NATIVE_W,120);ctx.fillStyle="rgba(255,236,140,0.3)";ctx.fillRect(NATIVE_W-150,470,24,220);for(var i=0;i<14;i++){var ox=((camX*0.35+i*64+Math.sin((time+i*11)*0.12)*14)%(NATIVE_W+80))-40;var oy=468+(i%5)*52;ctx.fillStyle=i%2?"rgba(255,255,255,0.5)":"rgba(140,220,245,0.7)";ctx.fillRect(ox,oy,44,4);}}
-function drawJangada(x,y){ctx.fillStyle="#7c4a12";ctx.fillRect(x,y,80,14);ctx.fillStyle="#4b3410";ctx.fillRect(x+26,y-58,5,58);ctx.fillStyle="#f8fafc";ctx.fillRect(x+31,y-52,34,34);ctx.fillStyle="#fcd34d";ctx.fillRect(x+58,y-10,8,9);ctx.fillStyle="#16a34a";ctx.fillRect(x+56,y,12,12);}
-function drawJangadasBack(){for(var i=0;i<3;i++){var x=((camX*0.3+i*400)%(NATIVE_W+500))-250;var y=520+(i%2)*80+Math.sin(time*0.05+i)*4;drawJangada(x,y);}}
-function drawLighthouse(){var fx=((camX*0.24)%(NATIVE_W+340))-170;ctx.fillStyle="#f3f4f6";ctx.fillRect(fx,610,22,90);ctx.fillStyle="#dc2626";ctx.fillRect(fx+2,610,18,16);ctx.fillStyle="#f3f4f6";ctx.fillRect(fx+2,626,18,16);ctx.fillStyle="#dc2626";ctx.fillRect(fx+2,642,18,16);ctx.fillStyle="#fde047";ctx.fillRect(fx+8,604,8,8);}
-function drawVillageFar(){for(var i=0;i<3;i++){var hx=((camX*0.28+i*340)%(NATIVE_W+420))-210;ctx.fillStyle="#e7d3b0";ctx.fillRect(hx,674,34,26);ctx.fillStyle="#b45309";ctx.fillRect(hx-4,666,42,10);}}
-function drawDunesFar(){ctx.fillStyle="#eccb97";for(var i=0;i<6;i++){var dx=((camX*0.25+i*220)%(NATIVE_W+280))-140;ctx.beginPath();ctx.arc(dx,700,80,Math.PI,0);ctx.fill();}}
-function drawMangroveFar(){for(var i=0;i<5;i++){var mx=((camX*0.22+i*260)%(NATIVE_W+340))-170;var h=70+(i%3)*24;ctx.fillStyle="#1a5a38";ctx.fillRect(mx+4,720-h,8,h);ctx.fillStyle="#2f8a55";ctx.fillRect(mx-12,720-h-14,42,16);}}
-function drawPalmTree(px,base,sc){var h=90*sc;ctx.fillStyle="#8a5a2b";ctx.fillRect(px+6*sc,base-h,6*sc,h);var sway=Math.sin(time*0.04+px)*3*sc;ctx.fillStyle="#1f9d55";ctx.fillRect(px-16*sc+sway,base-h-4*sc,44*sc,8*sc);ctx.fillStyle="#2fbf71";ctx.fillRect(px-10*sc+sway,base-h-9*sc,34*sc,6*sc);}
-function drawPalmsBack(){for(var i=0;i<4;i++){var px=((camX*0.4+i*300)%(NATIVE_W+360))-180;drawPalmTree(px,742,0.75);}}
-function drawBeachTransition(){ctx.fillStyle="#eef7fb";for(var i=0;i<16;i++){var fx2=((camX*0.55+i*48+Math.sin(time*0.1+i)*8)%(NATIVE_W+60))-30;ctx.fillRect(fx2,808+(i%3)*3,30,5);}ctx.fillStyle="#e0bd85";ctx.fillRect(0,766,NATIVE_W,40);ctx.fillStyle="#d8b078";ctx.fillRect(0,806,NATIVE_W,16);}
-function drawGround(){ctx.fillStyle="#ecca90";ctx.fillRect(0,gY,NATIVE_W,NATIVE_H-gY);for(var i=0;i<110;i++){var sx2=((i*73)%NATIVE_W);var sy2=gY+10+((i*41)%(NATIVE_H-gY-16));ctx.fillStyle=(i%3===0)?"#e3bc7c":"#f3d7a4";ctx.fillRect(sx2,sy2,3,3);}ctx.fillStyle="#d9b078";ctx.fillRect(0,gY,NATIVE_W,4);}
-function drawMangroveTree(x,y){var h=96;ctx.fillStyle="#5b3410";ctx.fillRect(x+8,y-h,10,h);ctx.fillStyle="#1f8f4e";ctx.fillRect(x-14,y-h-16,54,18);ctx.fillStyle="#2faf62";ctx.fillRect(x-8,y-h-22,40,10);ctx.fillStyle="#4a2a10";ctx.fillRect(x+2,y-16,4,16);ctx.fillRect(x+16,y-10,4,10);}
-function drawFutTrash(x,y){ctx.fillStyle="#52606d";ctx.fillRect(x+4,y-40,30,40);ctx.fillStyle="#37434e";ctx.fillRect(x+2,y-44,34,6);ctx.fillStyle="#22c55e";ctx.fillRect(x+15,y-30,10,10);ctx.fillStyle="#0ea5e9";ctx.fillRect(x+10,y-56,20,8);}
-function drawFutSign(x,y){ctx.fillStyle="#8a9bb0";ctx.fillRect(x+12,y-52,5,52);ctx.fillStyle="#0c4a6e";ctx.fillRect(x-14,y-74,58,24);ctx.fillStyle="#0ea5e9";ctx.fillRect(x-12,y-72,54,20);ctx.fillStyle="#7dd3fc";ctx.fillRect(x-14,y-74,58,4);ctx.fillStyle="#f8fafc";ctx.fillRect(x+2,y-66,16,10);ctx.fillStyle="#22c55e";ctx.fillRect(x+6,y-62,8,4);}
-function drawUmbrella(x,y){ctx.fillStyle="#c0392b";ctx.fillRect(x,y-44,3,44);ctx.fillStyle="#dc2626";ctx.fillRect(x-22,y-56,47,10);ctx.fillStyle="#f8fafc";ctx.fillRect(x-16,y-56,8,10);ctx.fillRect(x,y-56,8,10);ctx.fillRect(x+14,y-56,6,10);}
-function drawStump(x,y){ctx.fillStyle="#8a5a2b";ctx.fillRect(x,y-20,26,20);ctx.fillStyle="#a97b42";ctx.fillRect(x+4,y-26,18,8);}
-function drawDecor(){for(var i=0;i<deco.length;i++){var d=deco[i];var sx=d.x-camX;if(sx<-120||sx>NATIVE_W+120)continue;if(d.type==="coqueiro")drawPalmTree(sx,gY,1.15);else if(d.type==="mangue")drawMangroveTree(sx,gY);else if(d.type==="lixeiraFut")drawFutTrash(sx,gY);else if(d.type==="placaFut")drawFutSign(sx,gY);else if(d.type==="guardaSol")drawUmbrella(sx,gY);else if(d.type==="toco")drawStump(sx,gY);}}
-function drawSignBalbino(){var x=Math.floor(worldW/2)-camX;if(x<-220||x>NATIVE_W+220)return;var y=gY-40;drawPixel(x-90,y,10,gY-y,"#8a5a2b");drawPixel(x+80,y,10,gY-y,"#8a5a2b");ctx.fillStyle="#0b2e59";ctx.fillRect(x-190,y-110,380,80);ctx.fillStyle="#0ea5e9";ctx.fillRect(x-186,y-106,372,72);ctx.fillStyle="#7dd3fc";ctx.fillRect(x-190,y-110,380,6);ctx.fillStyle="#ffffff";ctx.font="bold 44px 'Courier New', monospace";ctx.textAlign="center";ctx.fillText(currentLoc.nome.toUpperCase(),x,y-58);ctx.fillStyle="#fde047";ctx.fillRect(x-180,y-60,10,10);ctx.fillRect(x+170,y-60,10,10);}
-function drawPlatforms(){for(var i=0;i<platforms.length;i++){var p=platforms[i];var sx=p.x-camX;if(sx+p.w<0||sx>NATIVE_W)continue;ctx.fillStyle="#8a5a2b";ctx.fillRect(sx,p.y,p.w,p.h);ctx.fillStyle="#a06b36";ctx.fillRect(sx,p.y,p.w,3);ctx.fillStyle="#6b4320";ctx.fillRect(sx,p.y+p.h-4,p.w,4);ctx.fillStyle="#44403c";ctx.fillRect(sx+6,p.y-3,5,6);ctx.fillRect(sx+p.w-11,p.y-3,5,6);}}
-function drawStars(){for(var i=0;i<stars.length;i++){var s=stars[i];if(s.taken)continue;var sx=s.x-camX;if(sx<-18||sx>NATIVE_W+18)continue;ctx.fillStyle="#ffe66d";ctx.fillRect(sx+2,s.y-6,4,16);ctx.fillRect(sx-6,s.y+2,16,4);ctx.fillRect(sx,s.y,5,5);}}
-function drawFlag(){var fx=worldW-70-camX;if(fx<-60||fx>NATIVE_W+60)return;ctx.fillStyle="#9aa3af";ctx.fillRect(fx+2,gY-120,7,120);var wav=Math.sin(time*0.1)*4;ctx.fillStyle="#22c55e";ctx.fillRect(fx+9,gY-118,54,26);ctx.fillStyle="#16a34a";ctx.fillRect(fx+9,gY-118,54,8);ctx.fillStyle="#ffffff";ctx.font="bold 16px 'Courier New', monospace";ctx.textAlign="left";ctx.fillText("FIM",fx+14+wav,gY-100);}
-function drawEnemies(){for(var i=0;i<enemies.length;i++){var e=enemies[i];if(!e.alive)continue;var sx=e.x-camX;if(sx<-60||sx>NATIVE_W+60)continue;if(e.type===0)drawBola(sx,e.y,e.t);else if(e.type===1)drawLixeira(sx,e.y,e.t);else if(e.type===2)drawCaranguejo(sx,e.y,e.t);else drawMoreia(sx,e.y,e.t);}}
-function drawBola(sx,y,t){ctx.fillStyle="#7b8288";ctx.fillRect(sx+1,y+2,28,26);ctx.fillStyle="#9aa1a6";ctx.fillRect(sx+2,y+2,12,4);ctx.fillStyle="#c0c8d0";ctx.fillRect(sx+8,y+8,6,6);ctx.fillStyle="#e11d48";ctx.fillRect(sx+9,y+9,4,2);ctx.fillStyle="#f
+}, 2500);
+</script>
+</body>
+</html>
