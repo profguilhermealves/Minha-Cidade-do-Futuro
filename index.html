@@ -247,28 +247,68 @@ function hideAllOverlays(){var ovs=document.querySelectorAll(".overlay");for(var
 function showOv(id){document.getElementById(id).classList.add("active");}
 
 /* ===== MAPA E PINS ===== */
+/* ===== MAPA E PINS (VERSÃO CORRIGIDA) ===== */
 var mapImg=document.getElementById("map-img"),mapCanvas=document.getElementById("map-canvas"),pinsLayer=document.getElementById("pins-layer"),mapNotice=document.getElementById("map-notice");
 var mapLoaded=false;
+
+function drawFallbackMap(){
+  var c=mapCanvas.getContext("2d");
+  mapCanvas.width=600;mapCanvas.height=800;
+  var g=c.createLinearGradient(0,0,0,220);g.addColorStop(0,"#0ea5e9");g.addColorStop(1,"#7dd3fc");
+  c.fillStyle=g;c.fillRect(0,0,600,220);
+  c.fillStyle="#fef3c7";c.fillRect(0,180,600,60);
+  c.fillStyle="#16a34a";c.fillRect(0,240,600,250);
+  c.fillStyle="#a8a29e";c.fillRect(0,300,600,40);
+  var s=c.createLinearGradient(0,490,0,800);s.addColorStop(0,"#d97706");s.addColorStop(1,"#92400e");
+  c.fillStyle=s;c.fillRect(0,490,600,310);
+  c.fillStyle="#fff";c.font="bold 14px monospace";c.textAlign="center";
+  c.fillText("PRAIAS",300,120);
+  c.fillText("CENTRO / MATA",300,300);
+  c.fillText("SERTÃO",300,650);
+}
+
 function loadMapCascade(){
-  var tried=["MAPA_INICIAL.png","mapa_inicial.png","Mapa_Inicial.png","MAPA INICIAL.png"];
+  var tried=["MAPA_INICIAL.png","mapa_inicial.png","Mapa_Inicial.png","MAPA INICIAL.png","mapa_inicial.PNG"];
   var i=0;
-  function next(){if(i>=tried.length){applyFallback();return;}var img=new Image();img.onload=function(){mapImg.style.display="block";mapCanvas.style.display="none";mapNotice.style.display="none";mapLoaded=true;};img.onerror=function(){i++;next();};img.src=tried[i];}
+  function next(){
+    if(i>=tried.length){showFallback();return;}
+    var img=new Image();
+    img.onload=function(){mapImg.src=tried[i];mapImg.style.display="block";mapCanvas.style.display="none";mapNotice.style.display="none";mapLoaded=true;};
+    img.onerror=function(){i++;next();};
+    img.src=tried[i];
+  }
   next();
+}
+function showFallback(){
+  mapImg.style.display="none";
+  mapCanvas.style.display="block";
+  mapNotice.style.display="block";
+  drawFallbackMap();
+}
 }
 function applyFallback(){mapImg.style.display="none";mapCanvas.style.display="block";mapNotice.style.display="block";var c=mapCanvas.getContext("2d");mapCanvas.width=600;mapCanvas.height=800;var g=c.createLinearGradient(0,0,0,220);g.addColorStop(0,"#0ea5e9");g.addColorStop(1,"#7dd3fc");c.fillStyle=g;c.fillRect(0,0,600,220);c.fillStyle="#fef3c7";c.fillRect(0,180,600,60);c.fillStyle="#16a34a";c.fillRect(0,240,600,250);c.fillStyle="#a8a29e";c.fillRect(0,300,600,40);var s=c.createLinearGradient(0,490,0,800);s.addColorStop(0,"#d97706");s.addColorStop(1,"#92400e");c.fillStyle=s;c.fillRect(0,490,600,310);}
 function renderPins(){
   pinsLayer.innerHTML="";
   LOCATIONS.forEach(function(loc){
     var unlocked=isUnlocked(loc.id),complete=isComplete(loc.id),prog=locProgress(loc.id),group=GROUPS[loc.grupo];
-    var pin=document.createElement("button");pin.className="pin";pin.style.left=loc.x+"%";pin.style.top=loc.y+"%";
+    var pin=document.createElement("button");
+    pin.className="pin";pin.style.left=loc.x+"%";pin.style.top=loc.y+"%";
+    pin.type="button";
     if(!unlocked)pin.classList.add("locked");
     var pi=document.createElement("span");pi.className="pi";pi.style.background=group.cor;
     pi.innerHTML="<span>"+(unlocked?(complete?"✓":loc.icon):"🔒")+"</span>";
     pin.appendChild(pi);
     var tip=document.createElement("span");tip.className="pin-tip";tip.textContent=loc.nome+" • "+prog+"/10";
     pin.appendChild(tip);
-    if(unlocked){pin.addEventListener("click",function(){openLevels(loc);});}
+    if(unlocked){
+      pin.addEventListener("click",function(ev){
+        ev.preventDefault();ev.stopPropagation();
+        openLevels(loc);
+      });
+    }
     pinsLayer.appendChild(pin);
+  });
+}
   });
 }
 
