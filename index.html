@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Minha Cidade do Futuro</title>
+  <title>Biomas do Brasil: Jogo em 10 Fases</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/basecoat-css@1.0.2/dist/basecoat.cdn.min.css">
   <style>
 /* Skip artifact shell — fixed styles served beside every artifact.
@@ -112,23 +112,7 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
   .shell-fade { animation: shell-fade 400ms ease both; }
   @keyframes shell-fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 }
-/* ===== MAPA DE SELEÇÃO DE FASES ===== */
-.map-overlay{position:fixed;inset:0;background:rgba(6,10,22,.94);display:none;align-items:center;justify-content:center;z-index:999;padding:16px;}
-.map-overlay.active{display:flex;}
-.map-box{background:#141a2e;border:3px solid #2c3350;border-radius:14px;padding:18px;max-width:720px;width:100%;text-align:center;}
-.map-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
-.map-head h2{font-size:18px;letter-spacing:2px;color:#f5b700;}
-.map-wrap{position:relative;width:100%;border:3px solid #2c3350;border-radius:10px;overflow:visible;}
-.map-wrap img{width:100%;display:block;border-radius:8px;}
-#mapPins{position:absolute;inset:0;}
-.pin{position:absolute;transform:translate(-50%,-100%);width:34px;height:34px;background:none;border:none;cursor:pointer;z-index:10;}
-.pin .pin-icon{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:#f5b700;border:3px solid #fff;font-size:16px;box-shadow:0 3px 8px rgba(0,0,0,.5);}
-.pin .pin-icon span{transform:rotate(45deg);}
-.pin.locked .pin-icon{background:#64748b;filter:grayscale(.7);cursor:not-allowed;}
-.pin:hover .pin-icon{transform:rotate(-45deg) scale(1.2);}
-.pin-tip{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);background:#0b1020;border:2px solid #2c3350;border-radius:8px;padding:6px 8px;font-size:11px;color:#eaf2ff;white-space:nowrap;display:none;z-index:20;font-family:"Courier New",monospace;}
-.pin:hover .pin-tip{display:block;}
-.map-hint{margin-top:10px;font-size:12px;color:#8fa3c8;}
+
 </style>
   
   <style>
@@ -1254,15 +1238,14 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
   <header class="game-header">
     <div class="header-inner">
       <div class="game-title-group">
-        <h1>🌱 Minha Cidade do Futuro</h1>
-        <p>Feira do Conhecimento Colégio Cascavelense</p>
+        <h1>🌱 Biomas do Brasil: Jogo em 10 Fases</h1>
+        <p>Feira do Conhecimento Escolar • Cenários Animados com Efeito Parallax</p>
       </div>
       <div class="header-controls">
         <button id="btnStartScreen" class="tool-btn" title="Voltar para a Tela de Início">
           <span>🏠</span> <span>Início</span>
         </button>
-        <button id="btnCertPill" class="tool-btn cert-pill-btn" title="Ver Certificado de Conquista dos 10 Pins">
-          <button id="btnMap" class="tool-btn" title="Selecionar fase no mapa">🗺️ <span>Mapa</span></button>
+        <button id="btnCertPill" class="tool-btn cert-pill-btn" title="Ver Certificado de Conquista dos 10 Biomas">
           <span id="certPillIcon">🏆</span> <span id="certPillText">0/10</span>
         </button>
         <button id="btnSound" class="tool-btn" title="Ligar/Silenciar música e efeitos sonoros">
@@ -1275,8 +1258,8 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
     </div>
   </header>
 
-  <!-- Seletor em Dois Níveis: Lugares e Níveis -->
-  <nav class="phases-bar-wrapper" aria-label="Seleção de Lugares e níveis">
+  <!-- Seletor em Dois Níveis: Biomas e Níveis -->
+  <nav class="phases-bar-wrapper" aria-label="Seleção de biomas e níveis">
     <div class="phases-scroll" id="biomePills"></div>
     <div class="levels-scroll" id="levelPills"></div>
   </nav>
@@ -1308,7 +1291,7 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
       <!-- TELA DE INÍCIO (SISTEMA 2 OVERLAY) -->
       <div class="pixel-modal-overlay" id="startScreenOverlay">
         <div class="pixel-modal-box">
-          <h2>Lugares de Cascavel-Ce</h2>
+          <h2>BIOMAS DO BRASIL</h2>
           <p class="sub-heading">Minha Cidade do Futuro • 5º ano • 100 questões</p>
 
           <!-- Arte pixelada com ícones dos biomas -->
@@ -1321,7 +1304,7 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
             <li><span class="bullet">▶</span> <span><strong>ESPAÇO / W</strong>: pular (2x = pulo duplo)</span></li>
             <li><span class="bullet">▶</span> <span><strong>X ou J</strong>: atirar projéteis</span></li>
             <li><span class="bullet">▶</span> <span>Chegue à bandeira FIM e responda a pergunta do nível!</span></li>
-            <li><span class="bullet">▶</span> <span>10 lugares × 10 níveis = 100 desafios ecológicos e de cidades sustentáveis!</span></li>
+            <li><span class="bullet">▶</span> <span>10 biomas × 10 níveis = 100 desafios ecológicos e de cidades sustentáveis!</span></li>
           </ul>
           <div style="display: flex; gap: 0.6rem; justify-content: center; flex-wrap: wrap; width: 100%;">
             <button class="pixel-big-btn" id="btnStartGame">▶ JOGAR</button>
@@ -1352,20 +1335,7 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
           </div>
         </div>
       </div>
-<!-- TELA DE SELEÇÃO DE FASES NO MAPA -->
-<div class="map-overlay" id="mapOverlay">
-  <div class="map-box">
-    <div class="map-head">
-      <h2>🗺️ ESCOLHA A FASE</h2>
-      <button id="btnMapClose" class="tool-btn">✕ Fechar</button>
-    </div>
-    <div class="map-wrap">
-      <img id="mapImg" src="MAPA_INICIAL.png" alt="Mapa de Cascavel/CE">
-      <div id="mapPins"></div>
-    </div>
-    <p class="map-hint">Clique em um pin para jogar a fase • 🔒 abre ao concluir a anterior</p>
-  </div>
-</div>
+
       <!-- Legenda inferior -->
       <div class="stage-footnote" id="stageFootnote">
         🎮 ⬅➡ / A D para andar • ESPAÇO para pular (duplo no ar) • X / J para atirar
@@ -1374,14 +1344,14 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
       <!-- TELA DE CERTIFICADO DE CONQUISTA (MUDANÇA 3) -->
       <div class="cert-overlay" id="certOverlay" style="display: none;">
         <div class="cert-frame">
-          <div class="cert-header-badge">★ CIDADÃO DO FUTURO ★</div>
+          <div class="cert-header-badge">★ REPÚBLICA DOS BIOMAS ★</div>
           <h2 class="cert-title">CERTIFICADO DE CONQUISTA</h2>
-          <div class="cert-sub">Expedição Científica</div>
+          <div class="cert-sub">Expedição Científica e Matemática do Brasil</div>
           
           <div class="cert-body-text">
             Certificamos solenemente que o(a) explorador(a)
             <input type="text" id="certPlayerName" class="cert-name-input" placeholder="DIGITE SEU NOME" maxlength="28" value="EXPLORADOR(A)">
-            completou com maestria todos os <strong>100 níveis de aventura</strong> e dominou os conceitos de Sustentabilidade ao longo dos 10 lugares de Cascavel!
+            completou com maestria todos os <strong>100 níveis de aventura</strong> e dominou os conceitos de Matemática ao longo dos 10 biomas do Brasil!
           </div>
 
           <div class="cert-stats-row">
@@ -1470,7 +1440,7 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
   <!-- Rodapé Educativo -->
   <footer class="game-footer">
     <p>
-      <strong>Minha Cidade do Futuro: Jogo em 10 Fases</strong> • Criado para a Feira do Conhecimento e Educação Ambiental.
+      <strong>Biomas do Brasil: Jogo em 10 Fases</strong> • Criado para a Feira do Conhecimento e Educação Ambiental.
     </p>
     <p>
       Conteúdo pedagógico alinhado à BNCC para Ciências e Geografia (Ensino Fundamental). 100% autossuficiente e offline.
@@ -1501,8 +1471,8 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
     const BIOMES_DATA = [
       {
         id: 1,
-        name: "Balbino",
-        phaseTitle: "Fase 1: A praia intocada",
+        name: "Amazônia",
+        phaseTitle: "Fase 1: O Coração Verde",
         icon: "🦜",
         shortDesc: "A maior floresta tropical úmida do planeta, caracterizada por árvores monumentais de até 50 metros, dossel denso e a mais vasta bacia hidrográfica do globo terrestre.",
         clima: "Equatorial Quente e Úmido",
@@ -7174,40 +7144,6 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
     } else {
       initializeGame();
     }
-  <script>
-/* ===== MAPA DE SELEÇÃO DE FASES ===== */
-(function(){
-  var btnMap=document.getElementById('btnMap');
-  var mapOverlay=document.getElementById('mapOverlay');
-  var btnMapClose=document.getElementById('btnMapClose');
-  if(!btnMap||!mapOverlay)return;
-  btnMap.addEventListener('click',function(){mapOverlay.style.display='flex';renderMapPins();});
-  if(btnMapClose)btnMapClose.addEventListener('click',function(){mapOverlay.style.display='none';});
-  mapOverlay.addEventListener('click',function(e){if(e.target===mapOverlay)mapOverlay.style.display='none';});
-})();
-function renderMapPins(){
-  var holder=document.getElementById('mapPins');
-  if(!holder)return;
-  holder.innerHTML='';
-  var pos=[{x:25,y:5},{x:40,y:8},{x:60,y:8},{x:75,y:15},{x:50,y:15},{x:50,y:22},{x:60,y:22},{x:35,y:35},{x:45,y:55},{x:50,y:80}];
-  BIOMES_DATA.forEach(function(b,idx){
-    var done=(completedLevels&&completedLevels[idx])||0;
-    var unlocked=idx===0||((completedLevels&&completedLevels[idx-1])||0)>=10;
-    var p=document.createElement('button');
-    p.className='pin'+(unlocked?'':' locked');
-    p.style.left=pos[idx].x+'%';
-    p.style.top=pos[idx].y+'%';
-    p.innerHTML='<span class="pin-icon">'+(unlocked?(done>=10?'✓':b.icon):'🔒')+'</span><span class="pin-tip">'+b.name+' • '+done+'/10</span>';
-    if(unlocked){
-      p.addEventListener('click',function(){
-        mapOverlay.style.display='none';
-        goToLevel(idx,0);
-      });
-    }
-    holder.appendChild(p);
-  });
-}
-</script>
   </script>
 <script>
 /* Skip artifact shell — fixed helpers served beside every artifact. */
