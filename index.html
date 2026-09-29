@@ -5,98 +5,100 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Minha Cidade do Futuro</title>
 <style>
-  :root{--font-pixel:"Courier New",monospace;--bg:#0f172a;--panel:#1e293b;--border:#334155;--azul:#2E86DE;--amarelo:#F5B700;--verde:#2ECC71;--branco:#f8fafc;--cinza:#94a3b8;}
-  *{margin:0;padding:0;box-sizing:border-box;}
-  body{background:var(--bg);color:var(--branco);font-family:var(--font-pixel);overflow:hidden;height:100vh;}
-  .game-screen{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;padding:16px;}
-  .game-screen.active{display:flex;}
-  h1{font-size:clamp(20px,5vw,40px);text-align:center;text-shadow:3px 3px 0 rgba(0,0,0,.5);margin-bottom:8px;}
-  .subtitle{color:var(--cinza);font-size:clamp(11px,2.2vw,16px);text-align:center;margin-bottom:24px;}
-  .info-list{list-style:none;text-align:center;margin-bottom:28px;font-size:clamp(11px,2vw,14px);line-height:1.9;}
-  .btn{font-family:var(--font-pixel);font-size:clamp(14px,3vw,20px);padding:14px 34px;border:3px solid var(--branco);border-radius:8px;cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.4);transition:transform .1s;}
-  .btn:active{transform:translateY(3px);}
-  .btn-green{background:#22c55e;color:#052e16;}
-  .press-start-hint{position:absolute;bottom:18px;color:var(--cinza);font-size:12px;animation:blink 1.4s infinite;}
-  @keyframes blink{50%{opacity:.3;}}
-  .map-header{width:100%;max-width:900px;display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
-  .map-header h1{font-size:clamp(16px,3.5vw,26px);margin:0;}
-  .map-controls{display:flex;gap:8px;}
-  .btn-sm{font-size:12px;padding:8px 14px;border:2px solid var(--border);background:var(--panel);color:var(--branco);border-radius:6px;cursor:pointer;}
-  .map-wrap{position:relative;width:min(94vw,78vh);background:#0b1220;border:3px solid var(--border);border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.6);overflow:visible;}
-  .map-inner{position:relative;display:inline-block;line-height:0;border-radius:10px;overflow:visible;}
-  .map-image{width:100%;display:block;object-fit:contain;image-rendering:auto;}
-  .map-canvas{width:100%;height:auto;display:none;image-rendering:pixelated;}
-  .map-fallback-notice{display:none;position:absolute;top:8px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.75);color:#fbbf24;font-size:11px;padding:6px 10px;border-radius:6px;z-index:20;text-align:center;}
-  .pin{position:absolute;transform:translate(-50%,-100%);width:30px;height:30px;cursor:pointer;z-index:10;transition:transform .15s;}
-  .pin:hover{transform:translate(-50%,-100%) scale(1.25);z-index:999;}
-  .pin .head{position:absolute;inset:0;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:3px solid var(--branco);box-shadow:0 3px 6px rgba(0,0,0,.5);}
-  .pin .dot{position:absolute;top:9px;left:9px;width:12px;height:12px;border-radius:50%;background:var(--branco);}
-  .pin.locked{opacity:.55;filter:grayscale(.6);}
-  .pin.locked .lock{position:absolute;top:-6px;left:50%;transform:translateX(-50%);font-size:14px;z-index:1000;}
-  .pin.done .check{position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-size:16px;color:#22c55e;text-shadow:0 0 4px #000;z-index:1000;}
-  .pin.next .head{animation:pulse 1.2s infinite;}
-  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,.7);}50%{box-shadow:0 0 0 10px rgba(255,255,255,0);}}
-  .pin-tooltip{position:absolute;top:38px;left:50%;transform:translateX(-50%);background:rgba(15,23,42,.97);border:2px solid #475569;border-radius:10px;padding:10px 12px;font-size:12px;white-space:normal;max-width:220px;min-width:140px;display:none;z-index:1000;text-align:center;box-shadow:0 8px 20px rgba(0,0,0,.6);pointer-events:none;line-height:1.5;}
-  .pin:hover .pin-tooltip{display:block;}
-  .pin-tooltip .t-name{font-weight:bold;font-size:13px;color:var(--branco);margin-bottom:2px;}
-  .pin-tooltip .t-group{color:var(--cinza);font-size:11px;}
-  .pin-tooltip .t-prog{color:#fbbf24;font-size:11px;margin-top:2px;}
-  .legend{position:absolute;bottom:10px;left:10px;background:rgba(15,23,42,.85);border:2px solid var(--border);border-radius:8px;padding:8px 10px;font-size:11px;z-index:20;}
-  .legend-title{color:var(--cinza);margin-bottom:5px;text-transform:uppercase;font-size:10px;}
-  .legend-item{display:flex;align-items:center;gap:6px;margin-bottom:3px;}
-  .legend-item .sw{width:10px;height:10px;border-radius:2px;display:inline-block;}
-  .map-source{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.6);color:var(--cinza);font-size:10px;padding:3px 6px;border-radius:4px;z-index:20;}
-  .modal{position:fixed;inset:0;background:rgba(0,0,0,.75);display:none;align-items:center;justify-content:center;z-index:100;padding:16px;}
-  .modal.active{display:flex;}
-  .modal-box{background:var(--panel);border:3px solid var(--border);border-radius:12px;padding:20px;max-width:440px;width:100%;text-align:center;}
-  .modal-box h2{font-size:clamp(15px,3vw,22px);margin-bottom:16px;}
-  .levels{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:16px;}
-  .lvl{font-family:var(--font-pixel);font-size:16px;padding:12px 0;border:2px solid var(--border);border-radius:8px;background:#0f172a;color:var(--branco);cursor:pointer;}
-  .lvl.locked{opacity:.4;cursor:not-allowed;}
-  .lvl:not(.locked):hover{background:#334155;}
-  .btn-close{margin-top:8px;}
-  .confirm-msg{font-size:clamp(14px,2.6vw,18px);margin-bottom:18px;line-height:1.6;}
-  .loading{position:fixed;inset:0;background:var(--bg);display:none;align-items:center;justify-content:center;flex-direction:column;gap:14px;z-index:200;}
-  .loading.active{display:flex;}
-  .loading .spinner{width:40px;height:40px;border:4px solid var(--border);border-top-color:var(--azul);border-radius:50%;animation:spin 1s linear infinite;}
-  @keyframes spin{to{transform:rotate(360deg);}}
-  .game-hud{width:min(96vw,960px);display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:clamp(12px,2vw,16px);}
-  .game-hud .hud-item{background:var(--panel);border:2px solid var(--border);border-radius:8px;padding:6px 12px;}
-  .game-hud .hud-item span{color:var(--amarelo);}
-  #game-canvas{width:min(96vw,960px);height:auto;background:#000;border:3px solid var(--border);border-radius:10px;image-rendering:pixelated;display:block;}
-  .game-controls{width:min(96vw,960px);display:flex;justify-content:space-between;margin-top:8px;font-size:11px;color:var(--cinza);}
-  .btn-pause{font-family:var(--font-pixel);font-size:12px;padding:6px 12px;border:2px solid var(--border);background:var(--panel);color:var(--branco);border-radius:6px;cursor:pointer;}
-  .quiz-box{background:var(--panel);border:3px solid var(--border);border-radius:12px;padding:24px;max-width:560px;width:100%;text-align:center;}
-  .quiz-box h2{font-size:clamp(16px,3vw,24px);margin-bottom:6px;}
-  .quiz-q{font-size:clamp(14px,2.6vw,18px);margin:16px 0;line-height:1.5;min-height:60px;}
-  .quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
-  .quiz-opt{font-family:var(--font-pixel);font-size:clamp(12px,2.2vw,15px);padding:12px;border:2px solid var(--border);border-radius:8px;background:#0f172a;color:var(--branco);cursor:pointer;text-align:left;}
-  .quiz-opt:hover{background:#334155;}
-  .quiz-opt.correct{background:#16a34a;border-color:#22c55e;}
-  .quiz-opt.wrong{background:#dc2626;border-color:#ef4444;}
-  .quiz-feedback{font-size:clamp(13px,2.4vw,16px);margin-top:8px;min-height:24px;}
-  .quiz-feedback.good{color:#4ade80;}
-  .quiz-feedback.bad{color:#f87171;}
+:root{--font-pixel:"Courier New",monospace;--bg:#0f172a;--panel:#1e293b;--border:#334155;--azul:#2E86DE;--amarelo:#F5B700;--verde:#2ECC71;--branco:#f8fafc;--cinza:#94a3b8;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--branco);font-family:var(--font-pixel);overflow:hidden;height:100vh;}
+.screen{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;padding:16px;}
+.screen.active{display:flex;}
+h1{font-size:clamp(20px,5vw,40px);text-align:center;text-shadow:3px 3px 0 rgba(0,0,0,.5);margin-bottom:8px;}
+.subtitle{color:var(--cinza);font-size:clamp(11px,2.2vw,16px);text-align:center;margin-bottom:20px;}
+.info-list{list-style:none;text-align:center;margin-bottom:22px;font-size:clamp(11px,2vw,14px);line-height:1.9;}
+.btn{font-family:var(--font-pixel);font-size:clamp(14px,3vw,20px);padding:14px 34px;border:3px solid var(--branco);border-radius:8px;cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.4);transition:transform .1s;}
+.btn:active{transform:translateY(3px);}
+.btn-green{background:#22c55e;color:#052e16;}
+.btn-sm{font-size:12px;padding:8px 14px;border:2px solid var(--border);background:var(--panel);color:var(--branco);border-radius:6px;cursor:pointer;}
+.press-start-hint{position:absolute;bottom:18px;color:var(--cinza);font-size:12px;animation:blink 1.4s infinite;}
+@keyframes blink{50%{opacity:.3;}}
+.map-header{width:100%;max-width:900px;display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.map-header h1{font-size:clamp(16px,3.5vw,26px);margin:0;}
+.map-controls{display:flex;gap:8px;}
+.map-wrap{position:relative;width:min(94vw,78vh);background:#0b1220;border:3px solid var(--border);border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.6);overflow:visible;}
+.map-inner{position:relative;display:inline-block;line-height:0;border-radius:10px;overflow:visible;}
+.map-image{width:100%;display:block;object-fit:contain;image-rendering:auto;}
+.map-canvas{width:100%;height:auto;display:none;image-rendering:pixelated;}
+.map-fallback-notice{display:none;position:absolute;top:8px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.75);color:#fbbf24;font-size:11px;padding:6px 10px;border-radius:6px;z-index:20;text-align:center;}
+.pin{position:absolute;transform:translate(-50%,-100%);width:30px;height:30px;cursor:pointer;z-index:10;transition:transform .15s;}
+.pin:hover{transform:translate(-50%,-100%) scale(1.25);z-index:999;}
+.pin .head{position:absolute;inset:0;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:3px solid var(--branco);box-shadow:0 3px 6px rgba(0,0,0,.5);}
+.pin .dot{position:absolute;top:9px;left:9px;width:12px;height:12px;border-radius:50%;background:var(--branco);}
+.pin.locked{opacity:.55;filter:grayscale(.6);}
+.pin.locked .lock{position:absolute;top:-6px;left:50%;transform:translateX(-50%);font-size:14px;z-index:1000;}
+.pin.done .check{position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-size:16px;color:#22c55e;text-shadow:0 0 4px #000;z-index:1000;}
+.pin.next .head{animation:pulse 1.2s infinite;}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,.7);}50%{box-shadow:0 0 0 10px rgba(255,255,255,0);}}
+.pin-tooltip{position:absolute;top:38px;left:50%;transform:translateX(-50%);background:rgba(15,23,42,.97);border:2px solid #475569;border-radius:10px;padding:10px 12px;font-size:12px;white-space:normal;max-width:220px;min-width:140px;display:none;z-index:1000;text-align:center;box-shadow:0 8px 20px rgba(0,0,0,.6);pointer-events:none;line-height:1.5;}
+.pin:hover .pin-tooltip{display:block;}
+.pin-tooltip .t-name{font-weight:bold;font-size:13px;color:var(--branco);margin-bottom:2px;}
+.pin-tooltip .t-group{color:var(--cinza);font-size:11px;}
+.pin-tooltip .t-prog{color:#fbbf24;font-size:11px;margin-top:2px;}
+.legend{position:absolute;bottom:10px;left:10px;background:rgba(15,23,42,.85);border:2px solid var(--border);border-radius:8px;padding:8px 10px;font-size:11px;z-index:20;}
+.legend-title{color:var(--cinza);margin-bottom:5px;text-transform:uppercase;font-size:10px;}
+.legend-item{display:flex;align-items:center;gap:6px;margin-bottom:3px;}
+.legend-item .sw{width:10px;height:10px;border-radius:2px;display:inline-block;}
+.map-source{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.6);color:var(--cinza);font-size:10px;padding:3px 6px;border-radius:4px;z-index:20;}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.75);display:none;align-items:center;justify-content:center;z-index:100;padding:16px;}
+.modal.active{display:flex;}
+.modal-box{background:var(--panel);border:3px solid var(--border);border-radius:12px;padding:20px;max-width:440px;width:100%;text-align:center;}
+.modal-box h2{font-size:clamp(15px,3vw,22px);margin-bottom:16px;}
+.levels{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:16px;}
+.lvl{font-family:var(--font-pixel);font-size:16px;padding:12px 0;border:2px solid var(--border);border-radius:8px;background:#0f172a;color:var(--branco);cursor:pointer;}
+.lvl.locked{opacity:.4;cursor:not-allowed;}
+.lvl:not(.locked):hover{background:#334155;}
+.btn-close{margin-top:8px;}
+.confirm-msg{font-size:clamp(14px,2.6vw,18px);margin-bottom:18px;line-height:1.6;}
+.loading{position:fixed;inset:0;background:var(--bg);display:none;align-items:center;justify-content:center;flex-direction:column;gap:14px;z-index:200;}
+.loading.active{display:flex;}
+.loading .spinner{width:40px;height:40px;border:4px solid var(--border);border-top-color:var(--azul);border-radius:50%;animation:spin 1s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.game-hud{width:min(96vw,960px);display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:clamp(12px,2vw,16px);gap:6px;flex-wrap:wrap;}
+.hud-item{background:var(--panel);border:2px solid var(--border);border-radius:8px;padding:6px 12px;}
+.hud-item span{color:var(--amarelo);}
+#game-canvas{width:min(96vw,960px);height:auto;background:#000;border:3px solid var(--border);border-radius:10px;image-rendering:pixelated;display:block;}
+.game-controls{width:min(96vw,960px);display:flex;justify-content:space-between;margin-top:8px;font-size:11px;color:var(--cinza);}
+.btn-pause{font-family:var(--font-pixel);font-size:12px;padding:6px 12px;border:2px solid var(--border);background:var(--panel);color:var(--branco);border-radius:6px;cursor:pointer;}
+.quiz-box{background:var(--panel);border:3px solid var(--border);border-radius:12px;padding:24px;max-width:560px;width:100%;text-align:center;}
+.quiz-box h2{font-size:clamp(16px,3vw,24px);margin-bottom:6px;}
+.quiz-q{font-size:clamp(14px,2.6vw,18px);margin:16px 0;line-height:1.5;min-height:60px;}
+.quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+.quiz-opt{font-family:var(--font-pixel);font-size:clamp(12px,2.2vw,15px);padding:12px;border:2px solid var(--border);border-radius:8px;background:#0f172a;color:var(--branco);cursor:pointer;text-align:left;}
+.quiz-opt:hover{background:#334155;}
+.quiz-opt.correct{background:#16a34a;border-color:#22c55e;}
+.quiz-opt.wrong{background:#dc2626;border-color:#ef4444;}
+.quiz-feedback{font-size:clamp(13px,2.4vw,16px);margin-top:8px;min-height:24px;}
+.quiz-feedback.good{color:#4ade80;}
+.quiz-feedback.bad{color:#f87171;}
+.end-actions{display:flex;gap:10px;justify-content:center;margin-top:6px;flex-wrap:wrap;}
 </style>
 </head>
 <body>
 
 <div id="loading" class="loading"><div class="spinner"></div><div>Carregando mapa...</div></div>
 
-<main id="screen-start" class="game-screen active">
+<main id="screen-start" class="screen active">
   <h1>MINHA CIDADE DO FUTURO</h1>
   <p class="subtitle">Aventura pela cidade inteligente e sustentável • Cascavel/CE</p>
   <ul class="info-list">
     <li>🎮 Objetivo: conhecer os 10 polos ecológicos da região</li>
     <li>🧠 100 questões: sustentabilidade, meio ambiente e tecnologia</li>
     <li>🗺️ 3 zonas: Litoral, Centro Urbano e Sertão</li>
-    <li>⚡ Controles: clique, toque ou pressione [ENTER]</li>
+    <li>▶ ⬅➡ / A D: andar • ESPAÇO / W: pular (2x = duplo)</li>
+    <li>▶ X / J: atirar projéteis • Chegue à bandeira FIM e responda a pergunta!</li>
   </ul>
   <button id="btn-play" class="btn btn-green">JOGAR</button>
   <div class="press-start-hint">Pressione [ENTER] ou clique para iniciar</div>
 </main>
 
-<main id="screen-map" class="game-screen">
+<main id="screen-map" class="screen">
   <header class="map-header">
     <h1>📍 MAPA DA CIDADE</h1>
     <div class="map-controls">
@@ -121,9 +123,9 @@
   </div>
 </main>
 
-<main id="screen-game" class="game-screen">
+<main id="screen-game" class="screen">
   <div class="game-hud">
-    <div class="hud-item">🏖️ Balbino — Nível <span id="hud-level">1</span></div>
+    <div class="hud-item">🏖️ Balbino — Nível <span id="hud-level">1</span>/10</div>
     <div class="hud-item">❤️ <span id="hud-lives">3</span></div>
     <div class="hud-item">⭐ <span id="hud-score">0</span></div>
     <div class="hud-item">⏱️ <span id="hud-time">0</span></div>
@@ -131,7 +133,7 @@
   </div>
   <canvas id="game-canvas" width="960" height="540"></canvas>
   <div class="game-controls">
-    <span>← → / A D: mover • Espaço / ↑ / W: pular (2x = duplo)</span>
+    <span>⬅➡ / A D: andar • ESPAÇO / W: pular (duplo no ar)</span>
     <span>X / J: atirar • P: pausar</span>
   </div>
 </main>
@@ -141,13 +143,6 @@
     <h2 id="levels-title">Escolha o nível</h2>
     <div id="levels-grid" class="levels"></div>
     <button id="btn-close-levels" class="btn btn-sm btn-close">FECHAR</button>
-  </div>
-</div>
-
-<div id="modal-confirm" class="modal">
-  <div class="modal-box">
-    <p id="confirm-msg" class="confirm-msg"></p>
-    <button id="btn-confirm-back" class="btn btn-green">VOLTAR AO MAPA</button>
   </div>
 </div>
 
@@ -163,9 +158,13 @@
 
 <div id="modal-end" class="modal">
   <div class="modal-box">
-    <h2 id="end-title">Fim de jogo</h2>
+    <h2 id="end-title">Nível concluído</h2>
     <p id="end-msg" class="confirm-msg"></p>
-    <button id="btn-end-back" class="btn btn-green">VOLTAR AO MAPA</button>
+    <div class="end-actions">
+      <button id="btn-end-next" class="btn btn-green">PRÓXIMO NÍVEL ▶</button>
+      <button id="btn-end-replay" class="btn btn-sm">🔄 REJOGAR</button>
+      <button id="btn-end-map" class="btn btn-sm">🗺️ MAPA</button>
+    </div>
   </div>
 </div>
 
@@ -221,9 +220,6 @@ var modalLevels=document.getElementById("modal-levels");
 var levelsTitle=document.getElementById("levels-title");
 var levelsGrid=document.getElementById("levels-grid");
 var btnCloseLevels=document.getElementById("btn-close-levels");
-var modalConfirm=document.getElementById("modal-confirm");
-var confirmMsg=document.getElementById("confirm-msg");
-var btnConfirmBack=document.getElementById("btn-confirm-back");
 var modalQuiz=document.getElementById("modal-quiz");
 var quizTitle=document.getElementById("quiz-title");
 var quizQ=document.getElementById("quiz-q");
@@ -233,7 +229,9 @@ var btnQuizNext=document.getElementById("btn-quiz-next");
 var modalEnd=document.getElementById("modal-end");
 var endTitle=document.getElementById("end-title");
 var endMsg=document.getElementById("end-msg");
-var btnEndBack=document.getElementById("btn-end-back");
+var btnEndNext=document.getElementById("btn-end-next");
+var btnEndReplay=document.getElementById("btn-end-replay");
+var btnEndMap=document.getElementById("btn-end-map");
 
 /* ESTADO */
 var state={completed:{}};
@@ -248,6 +246,7 @@ function locationProgress(i){var l=LOCATIONS[i];if(!l)return 0;var d=0;for(var k
 function goToMap(){screenStart.classList.remove("active");screenMap.classList.add("active");renderPins();}
 function goToStart(){screenMap.classList.remove("active");screenStart.classList.add("active");}
 function goToGame(){screenMap.classList.remove("active");screenGame.classList.add("active");}
+function backToMap(){modalEnd.classList.remove("active");screenGame.classList.remove("active");screenMap.classList.add("active");renderPins();}
 
 /* CARGA DA IMAGEM */
 var mapLoaded=false;
@@ -290,12 +289,12 @@ function openLevels(loc){
     var b=document.createElement("button");b.className="lvl";b.textContent=i;
     var unlocked=i===1||state.completed[loc.id+"-"+(i-1)];
     if(!unlocked){b.classList.add("locked");b.disabled=true;}
-    else{(function(lvl){b.addEventListener("click",function(){selectLevel(lvl);});})(i);}
+    else{(function(lvl){b.addEventListener("click",function(){startLevel(lvl);});})(i);}
     levelsGrid.appendChild(b);
   }
   modalLevels.classList.add("active");
 }
-function selectLevel(lvl){currentLevel=lvl;modalLevels.classList.remove("active");confirmMsg.textContent=currentLoc.nome+" — NÍVEL "+lvl+" selecionado!";modalConfirm.classList.add("active");}
+function startLevel(lvl){currentLevel=lvl;modalLevels.classList.remove("active");startGame();}
 
 /* FASE DE BALBINO — ESTILO CELESTE */
 var gameCanvas=document.getElementById("game-canvas");
@@ -339,7 +338,6 @@ function resetGame(){
 }
 
 function startGame(){resetGame();goToGame();if(animId)cancelAnimationFrame(animId);animId=requestAnimationFrame(gameLoop);}
-
 function gameLoop(){if(!paused&&!gameOver&&!gameWin){updateGame();frame++;}renderGame();if(!gameOver&&!gameWin){animId=requestAnimationFrame(gameLoop);}}
 
 function updateGame(){
@@ -371,7 +369,7 @@ function updateGame(){
 }
 
 function killEnemy(idx){var en=enemies[idx];if(!en.alive)return;en.alive=false;score+=100;hudScore.textContent=score;for(var i=0;i<14;i++){particles.push({x:en.x+en.w/2,y:en.y+en.h/2,vx:(Math.random()-0.5)*6,vy:-Math.random()*6,life:30,color:"#fbbf24"});}}
-function loseLife(){if(player.inv>0)return;lives--;hudLives.textContent=lives;player.inv=60;if(lives<=0){gameOver=true;endTitle.textContent="FIM DE JOGO";endMsg.textContent="Você perdeu todas as vidas na praia de Balbino. Tente de novo!";modalEnd.classList.add("active");}else{player.x=80;player.y=300;player.vx=0;player.vy=0;}}
+function loseLife(){if(player.inv>0)return;lives--;hudLives.textContent=lives;player.inv=60;if(lives<=0){gameOver=true;endTitle.textContent="FIM DE JOGO";endMsg.textContent="Você perdeu todas as vidas na praia de Balbino. Tente de novo!";btnEndNext.style.display="inline-block";btnEndReplay.style.display="inline-block";btnEndMap.style.display="inline-block";modalEnd.classList.add("active");}else{player.x=80;player.y=300;player.vx=0;player.vy=0;}}
 
 /* QUIZ NO FIM DE CADA NÍVEL */
 function showQuiz(){
@@ -393,7 +391,6 @@ function showQuiz(){
         for(var k=0;k<opts.length;k++){opts[k].disabled=true;if(k===q.a)opts[k].classList.add("correct");}
         if(idx===q.a){
           quizCorrect=true;
-          b.classList.add("correct");
           quizFeedback.textContent="✅ Correto! +200 pontos";
           quizFeedback.className="quiz-feedback good";
           score+=200;hudScore.textContent=score;
@@ -422,6 +419,7 @@ function finishQuiz(){
     endTitle.textContent="NÍVEL "+currentLevel+" CONCLUÍDO! 🏆";
     endMsg.textContent="Você chegou à bandeira FIM em Balbino! Pontuação: "+score+" pontos.";
   }
+  btnEndNext.style.display="inline-block";btnEndReplay.style.display="inline-block";btnEndMap.style.display="inline-block";
   modalEnd.classList.add("active");
   renderPins();
 }
@@ -455,9 +453,10 @@ btnPlay.addEventListener("click",goToMap);
 btnBack.addEventListener("click",goToStart);
 btnReset.addEventListener("click",function(){if(confirm("Deseja reiniciar seu progresso no mapa?"))resetState();});
 btnCloseLevels.addEventListener("click",function(){modalLevels.classList.remove("active");});
-btnConfirmBack.addEventListener("click",function(){modalConfirm.classList.remove("active");startGame();});
 btnQuizNext.addEventListener("click",finishQuiz);
-btnEndBack.addEventListener("click",function(){modalEnd.classList.remove("active");screenGame.classList.remove("active");screenMap.classList.add("active");renderPins();});
+btnEndNext.addEventListener("click",function(){modalEnd.classList.remove("active");if(currentLevel<TOTAL_LEVELS){currentLevel++;startGame();}else{backToMap();}});
+btnEndReplay.addEventListener("click",function(){modalEnd.classList.remove("active");startGame();});
+btnEndMap.addEventListener("click",backToMap);
 btnPause.addEventListener("click",function(){paused=!paused;btnPause.textContent=paused?"▶️ Continuar":"⏸️ Pausar";});
 document.addEventListener("keydown",function(e){keys[e.key]=true;if(e.key==="Enter"&&screenStart.classList.contains("active"))goToMap();if((e.key==="p"||e.key==="P")&&screenGame.classList.contains("active")){paused=!paused;btnPause.textContent=paused?"▶️ Continuar":"⏸️ Pausar";}});
 document.addEventListener("keyup",function(e){keys[e.key]=false;});
