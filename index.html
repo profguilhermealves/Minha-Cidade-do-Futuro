@@ -65,6 +65,14 @@
   .loading.active{display:flex;}
   .loading .spinner{width:40px;height:40px;border:4px solid var(--border);border-top-color:var(--azul);border-radius:50%;animation:spin 1s linear infinite;}
   @keyframes spin{to{transform:rotate(360deg);}}
+
+  /* ===== TELA DO JOGO (FASE) ===== */
+  .game-hud{width:min(96vw,960px);display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:clamp(12px,2vw,16px);}
+  .game-hud .hud-item{background:var(--panel);border:2px solid var(--border);border-radius:8px;padding:6px 12px;}
+  .game-hud .hud-item span{color:var(--amarelo);}
+  #game-canvas{width:min(96vw,960px);height:auto;background:#000;border:3px solid var(--border);border-radius:10px;image-rendering:pixelated;display:block;}
+  .game-controls{width:min(96vw,960px);display:flex;justify-content:space-between;margin-top:8px;font-size:11px;color:var(--cinza);}
+  .btn-pause{font-family:var(--font-pixel);font-size:12px;padding:6px 12px;border:2px solid var(--border);background:var(--panel);color:var(--branco);border-radius:6px;cursor:pointer;}
 </style>
 </head>
 <body>
@@ -112,6 +120,21 @@
   </div>
 </main>
 
+<main id="screen-game" class="game-screen">
+  <div class="game-hud">
+    <div class="hud-item">🏖️ Balbino — Nível <span id="hud-level">1</span></div>
+    <div class="hud-item">❤️ <span id="hud-lives">3</span></div>
+    <div class="hud-item">⭐ <span id="hud-score">0</span></div>
+    <div class="hud-item">⏱️ <span id="hud-time">0</span></div>
+    <button id="btn-pause" class="btn-pause">⏸️ Pausar</button>
+  </div>
+  <canvas id="game-canvas" width="960" height="540"></canvas>
+  <div class="game-controls">
+    <span>← → / A D: mover • Espaço / ↑ / W: pular</span>
+    <span>X / Z: atirar • P: pausar</span>
+  </div>
+</main>
+
 <div id="modal-levels" class="modal">
   <div class="modal-box">
     <h2 id="levels-title">Escolha o nível</h2>
@@ -124,6 +147,14 @@
   <div class="modal-box">
     <p id="confirm-msg" class="confirm-msg"></p>
     <button id="btn-confirm-back" class="btn btn-green">VOLTAR AO MAPA</button>
+  </div>
+</div>
+
+<div id="modal-end" class="modal">
+  <div class="modal-box">
+    <h2 id="end-title">Fim de jogo</h2>
+    <p id="end-msg" class="confirm-msg"></p>
+    <button id="btn-end-back" class="btn btn-green">VOLTAR AO MAPA</button>
   </div>
 </div>
 
@@ -156,6 +187,7 @@ var STORAGE_KEY = "minhaCidadeFuturoProgresso";
 /* ===== ELEMENTOS ===== */
 var screenStart = document.getElementById("screen-start");
 var screenMap = document.getElementById("screen-map");
+var screenGame = document.getElementById("screen-game");
 var loading = document.getElementById("loading");
 var mapImg = document.getElementById("map-img");
 var mapCanvas = document.getElementById("map-canvas");
@@ -172,6 +204,10 @@ var btnCloseLevels = document.getElementById("btn-close-levels");
 var modalConfirm = document.getElementById("modal-confirm");
 var confirmMsg = document.getElementById("confirm-msg");
 var btnConfirmBack = document.getElementById("btn-confirm-back");
+var modalEnd = document.getElementById("modal-end");
+var endTitle = document.getElementById("end-title");
+var endMsg = document.getElementById("end-msg");
+var btnEndBack = document.getElementById("btn-end-back");
 
 /* ===== ESTADO ===== */
 var state = { completed: {} };
@@ -181,9 +217,7 @@ function loadState() {
     var raw = localStorage.getItem(STORAGE_KEY);
     if (raw) state = JSON.parse(raw);
     if (!state.completed) state.completed = {};
-  } catch (e) {
-    state = { completed: {} };
-  }
+  } catch (e) { state = { completed: {} }; }
 }
 function saveState() {
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
@@ -193,7 +227,6 @@ function resetState() {
   saveState();
   renderPins();
 }
-
 function isLocationUnlocked(idx) {
   if (idx === 0) return true;
   return isLocationComplete(idx - 1);
@@ -227,10 +260,13 @@ function goToStart() {
   screenMap.classList.remove("active");
   screenStart.classList.add("active");
 }
+function goToGame() {
+  screenMap.classList.remove("active");
+  screenGame.classList.add("active");
+}
 
 /* ===== CARGA DA IMAGEM DO MAPA ===== */
 var mapLoaded = false;
-
 function showMapImage(src) {
   mapImg.onload = function () {
     mapImg.style.display = "block";
@@ -240,29 +276,18 @@ function showMapImage(src) {
   };
   mapImg.src = src;
 }
-
 function loadMapCascade() {
-  var tried = ["MAPA_INICIAL.png", "mapa_inicial.png", "Mapa_Inicial.png", "MAPA INICIAL.png", "mapa_inicial.PNG", "Mapa-Inicial.png", "mapa-inicial.png"];
+  var tried = ["MAPA_INICIAL.png","mapa_inicial.png","Mapa_Inicial.png","MAPA INICIAL.png","mapa_inicial.PNG","Mapa-Inicial.png","mapa-inicial.png"];
   var i = 0;
   function tryNext() {
-    if (i >= tried.length) {
-      applyFallbackMap();
-      return;
-    }
+    if (i >= tried.length) { applyFallbackMap(); return; }
     var img = new Image();
-    img.onload = function () {
-      mapSource.textContent = "Mapa: imagem local";
-      showMapImage(tried[i]);
-    };
-    img.onerror = function () {
-      i++;
-      tryNext();
-    };
+    img.onload = function () { mapSource.textContent = "Mapa: imagem local"; showMapImage(tried[i]); };
+    img.onerror = function () { i++; tryNext(); };
     img.src = tried[i];
   }
   tryNext();
 }
-
 function applyFallbackMap() {
   mapImg.style.display = "none";
   mapCanvas.style.display = "block";
@@ -270,30 +295,20 @@ function applyFallbackMap() {
   mapSource.textContent = "Mapa: padrão";
   drawFallbackMap();
 }
-
 function drawFallbackMap() {
   var ctx = mapCanvas.getContext("2d");
-  mapCanvas.width = 600;
-  mapCanvas.height = 800;
-  ctx.clearRect(0, 0, 600, 800);
-  var grad = ctx.createLinearGradient(0, 0, 0, 220);
-  grad.addColorStop(0, "#0ea5e9");
-  grad.addColorStop(1, "#7dd3fc");
-  ctx.fillStyle = grad;
-  ctx.fillRect(0, 0, 600, 220);
-  ctx.fillStyle = "#fef3c7";
-  ctx.fillRect(0, 180, 600, 60);
-  ctx.fillStyle = "#16a34a";
-  ctx.fillRect(0, 240, 600, 250);
-  ctx.fillStyle = "#a8a29e";
-  ctx.fillRect(0, 300, 600, 40);
-  ctx.fillStyle = "#92400e";
-  ctx.fillRect(250, 260, 40, 60);
-  var sgrad = ctx.createLinearGradient(0, 490, 0, 800);
-  sgrad.addColorStop(0, "#d97706");
-  sgrad.addColorStop(1, "#92400e");
-  ctx.fillStyle = sgrad;
-  ctx.fillRect(0, 490, 600, 310);
+  mapCanvas.width = 600; mapCanvas.height = 800;
+  ctx.clearRect(0,0,600,800);
+  var grad = ctx.createLinearGradient(0,0,0,220);
+  grad.addColorStop(0,"#0ea5e9"); grad.addColorStop(1,"#7dd3fc");
+  ctx.fillStyle = grad; ctx.fillRect(0,0,600,220);
+  ctx.fillStyle = "#fef3c7"; ctx.fillRect(0,180,600,60);
+  ctx.fillStyle = "#16a34a"; ctx.fillRect(0,240,600,250);
+  ctx.fillStyle = "#a8a29e"; ctx.fillRect(0,300,600,40);
+  ctx.fillStyle = "#92400e"; ctx.fillRect(250,260,40,60);
+  var sgrad = ctx.createLinearGradient(0,490,0,800);
+  sgrad.addColorStop(0,"#d97706"); sgrad.addColorStop(1,"#92400e");
+  ctx.fillStyle = sgrad; ctx.fillRect(0,490,600,310);
 }
 
 /* ===== PINS ===== */
@@ -304,7 +319,6 @@ function renderPins() {
     var complete = isLocationComplete(loc.id);
     var prog = locationProgress(loc.id);
     var group = GROUPS[loc.grupo];
-
     var pin = document.createElement("div");
     pin.className = "pin";
     pin.style.left = loc.x + "%";
@@ -312,49 +326,25 @@ function renderPins() {
     if (!unlocked) pin.classList.add("locked");
     if (complete) pin.classList.add("done");
     if (unlocked && !complete) pin.classList.add("next");
-
     var head = document.createElement("div");
-    head.className = "head";
-    head.style.background = group.cor;
+    head.className = "head"; head.style.background = group.cor;
     pin.appendChild(head);
-
     var dot = document.createElement("div");
-    dot.className = "dot";
-    pin.appendChild(dot);
-
+    dot.className = "dot"; pin.appendChild(dot);
     if (!unlocked) {
-      var lock = document.createElement("div");
-      lock.className = "lock";
-      lock.textContent = "🔒";
-      pin.appendChild(lock);
+      var lock = document.createElement("div"); lock.className = "lock"; lock.textContent = "🔒"; pin.appendChild(lock);
     }
     if (complete) {
-      var check = document.createElement("div");
-      check.className = "check";
-      check.textContent = "✓";
-      pin.appendChild(check);
+      var check = document.createElement("div"); check.className = "check"; check.textContent = "✓"; pin.appendChild(check);
     }
-
-    var tip = document.createElement("div");
-    tip.className = "pin-tooltip";
-    var tName = document.createElement("div");
-    tName.className = "t-name";
-    tName.textContent = loc.nome;
-    var tGroup = document.createElement("div");
-    tGroup.className = "t-group";
-    tGroup.textContent = group.nome;
-    var tProg = document.createElement("div");
-    tProg.className = "t-prog";
-    tProg.textContent = prog + "/" + TOTAL_LEVELS + " níveis";
-    tip.appendChild(tName);
-    tip.appendChild(tGroup);
-    tip.appendChild(tProg);
+    var tip = document.createElement("div"); tip.className = "pin-tooltip";
+    var tName = document.createElement("div"); tName.className = "t-name"; tName.textContent = loc.nome;
+    var tGroup = document.createElement("div"); tGroup.className = "t-group"; tGroup.textContent = group.nome;
+    var tProg = document.createElement("div"); tProg.className = "t-prog"; tProg.textContent = prog + "/" + TOTAL_LEVELS + " níveis";
+    tip.appendChild(tName); tip.appendChild(tGroup); tip.appendChild(tProg);
     pin.appendChild(tip);
-
     if (unlocked) {
-      pin.addEventListener("click", function () {
-        openLevels(loc);
-      });
+      pin.addEventListener("click", function () { openLevels(loc); });
     }
     pinsLayer.appendChild(pin);
   });
@@ -362,52 +352,514 @@ function renderPins() {
 
 /* ===== NÍVEIS ===== */
 var currentLoc = null;
-
+var currentLevel = 1;
 function openLevels(loc) {
   currentLoc = loc;
   levelsTitle.textContent = loc.nome + " — Escolha o nível";
   levelsGrid.innerHTML = "";
   for (var i = 1; i <= TOTAL_LEVELS; i++) {
     var b = document.createElement("button");
-    b.className = "lvl";
-    b.textContent = i;
+    b.className = "lvl"; b.textContent = i;
     var unlocked = i === 1 || state.completed[loc.id + "-" + (i - 1)];
-    if (!unlocked) {
-      b.classList.add("locked");
-      b.disabled = true;
-    } else {
-      b.addEventListener("click", function () {
-        selectLevel(i);
-      });
+    if (!unlocked) { b.classList.add("locked"); b.disabled = true; }
+    else {
+      (function (lvl) {
+        b.addEventListener("click", function () { selectLevel(lvl); });
+      })(i);
     }
     levelsGrid.appendChild(b);
   }
   modalLevels.classList.add("active");
 }
-
 function selectLevel(lvl) {
+  currentLevel = lvl;
   modalLevels.classList.remove("active");
   confirmMsg.textContent = currentLoc.nome + " — NÍVEL " + lvl + " selecionado!";
   modalConfirm.classList.add("active");
 }
 
-/* ===== LISTENERS (registrados primeiro) ===== */
+/* ===== FASE DE BALBINO (side-scroller) ===== */
+var gameCanvas = document.getElementById("game-canvas");
+var gctx = gameCanvas.getContext("2d");
+var hudLevel = document.getElementById("hud-level");
+var hudLives = document.getElementById("hud-lives");
+var hudScore = document.getElementById("hud-score");
+var hudTime = document.getElementById("hud-time");
+var btnPause = document.getElementById("btn-pause");
+
+var GAME_W = 960, GAME_H = 540;
+var LEVEL_LEN = 4200;
+var GROUND_Y = 460;
+
+var player, enemies, platforms, projectiles, particles;
+var cameraX, score, lives, gameTime, gameOver, gameWin, paused, animId;
+var keys = {};
+
+function resetGame() {
+  player = {
+    x: 80, y: 300, w: 34, h: 46,
+    vx: 0, vy: 0, onGround: false,
+    facing: 1, shootCd: 0, inv: 0, anim: 0
+  };
+  enemies = [];
+  platforms = [];
+  projectiles = [];
+  particles = [];
+  cameraX = 0;
+  score = 0; lives = 3; gameTime = 0;
+  gameOver = false; gameWin = false; paused = false;
+
+  // Plataformas (dunas e tábuas)
+  platforms.push({ x: 0, y: GROUND_Y, w: LEVEL_LEN, h: 80, solid: true });
+  platforms.push({ x: 500, y: 360, w: 140, h: 20 });
+  platforms.push({ x: 760, y: 300, w: 120, h: 20 });
+  platforms.push({ x: 1050, y: 360, w: 150, h: 20 });
+  platforms.push({ x: 1400, y: 300, w: 130, h: 20 });
+  platforms.push({ x: 1750, y: 350, w: 140, h: 20 });
+  platforms.push({ x: 2100, y: 290, w: 130, h: 20 });
+  platforms.push({ x: 2450, y: 360, w: 150, h: 20 });
+  platforms.push({ x: 2800, y: 310, w: 130, h: 20 });
+  platforms.push({ x: 3150, y: 360, w: 140, h: 20 });
+  platforms.push({ x: 3500, y: 300, w: 130, h: 20 });
+  platforms.push({ x: 3850, y: 360, w: 150, h: 20 });
+
+  // Inimigos: bola de lixo, lixeira monstro, caranguejo mutante, moreia do lixo
+  enemies.push({ type: "bola", x: 420, y: GROUND_Y - 30, w: 30, h: 30, vx: 2.2, alive: true, dir: 1 });
+  enemies.push({ type: "lixeira", x: 700, y: GROUND_Y - 52, w: 40, h: 52, vx: 1.2, alive: true, dir: 1 });
+  enemies.push({ type: "caranguejo", x: 1000, y: GROUND_Y - 26, w: 34, h: 26, vx: 1.8, alive: true, dir: -1 });
+  enemies.push({ type: "moreia", x: 1300, y: GROUND_Y - 36, w: 44, h: 36, vx: 1.5, alive: true, dir: 1 });
+  enemies.push({ type: "bola", x: 1650, y: GROUND_Y - 30, w: 30, h: 30, vx: 2.4, alive: true, dir: -1 });
+  enemies.push({ type: "lixeira", x: 2000, y: GROUND_Y - 52, w: 40, h: 52, vx: 1.3, alive: true, dir: -1 });
+  enemies.push({ type: "caranguejo", x: 2350, y: GROUND_Y - 26, w: 34, h: 26, vx: 1.9, alive: true, dir: 1 });
+  enemies.push({ type: "moreia", x: 2700, y: GROUND_Y - 36, w: 44, h: 36, vx: 1.6, alive: true, dir: -1 });
+  enemies.push({ type: "bola", x: 3050, y: GROUND_Y - 30, w: 30, h: 30, vx: 2.5, alive: true, dir: 1 });
+  enemies.push({ type: "lixeira", x: 3400, y: GROUND_Y - 52, w: 40, h: 52, vx: 1.4, alive: true, dir: -1 });
+  enemies.push({ type: "caranguejo", x: 3700, y: GROUND_Y - 26, w: 34, h: 26, vx: 2.0, alive: true, dir: 1 });
+  enemies.push({ type: "moreia", x: 4000, y: GROUND_Y - 36, w: 44, h: 36, vx: 1.7, alive: true, dir: -1 });
+
+  hudLives.textContent = lives;
+  hudScore.textContent = score;
+  hudTime.textContent = "0";
+  hudLevel.textContent = currentLevel;
+}
+
+function startGame() {
+  resetGame();
+  goToGame();
+  if (animId) cancelAnimationFrame(animId);
+  animId = requestAnimationFrame(gameLoop);
+}
+
+function gameLoop() {
+  if (!paused && !gameOver && !gameWin) {
+    updateGame();
+  }
+  renderGame();
+  if (!gameOver && !gameWin) {
+    animId = requestAnimationFrame(gameLoop);
+  }
+}
+
+function updateGame() {
+  gameTime += 1 / 60;
+  hudTime.textContent = Math.floor(gameTime);
+
+  // Controles
+  var move = 0;
+  if (keys["ArrowLeft"] || keys["a"] || keys["A"]) move -= 1;
+  if (keys["ArrowRight"] || keys["d"] || keys["D"]) move += 1;
+  player.vx = move * 4.5;
+  if (move !== 0) player.facing = move;
+
+  // Pular
+  if ((keys["ArrowUp"] || keys[" " ] || keys["w"] || keys["W"]) && player.onGround) {
+    player.vy = -13;
+    player.onGround = false;
+  }
+
+  // Atirar
+  player.shootCd -= 1;
+  if ((keys["x"] || keys["X"] || keys["z"] || keys["Z"]) && player.shootCd <= 0) {
+    player.shootCd = 18;
+    projectiles.push({ x: player.x + (player.facing > 0 ? player.w : 0), y: player.y + 14, vx: player.facing * 9, w: 10, h: 6 });
+  }
+
+  // Física do jogador
+  player.vy += 0.7;
+  player.x += player.vx;
+  player.y += player.vy;
+
+  // Colisão com plataformas
+  player.onGround = false;
+  for (var i = 0; i < platforms.length; i++) {
+    var p = platforms[i];
+    if (player.x + player.w > p.x && player.x < p.x + p.w) {
+      if (player.vy >= 0 && player.y + player.h > p.y && player.y + player.h < p.y + p.h + 14) {
+        player.y = p.y - player.h;
+        player.vy = 0;
+        player.onGround = true;
+      }
+    }
+  }
+
+  // Limites
+  if (player.x < 0) player.x = 0;
+  if (player.x > LEVEL_LEN - player.w) player.x = LEVEL_LEN - player.w;
+  if (player.y > GAME_H + 100) { loseLife(); }
+
+  player.inv -= 1;
+
+  // Câmera segue o jogador
+  cameraX = player.x - GAME_W * 0.35;
+  if (cameraX < 0) cameraX = 0;
+  if (cameraX > LEVEL_LEN - GAME_W) cameraX = LEVEL_LEN - GAME_W;
+
+  // Projéteis
+  for (var j = projectiles.length - 1; j >= 0; j--) {
+    var pr = projectiles[j];
+    pr.x += pr.vx;
+    if (pr.x < cameraX - 50 || pr.x > cameraX + GAME_W + 50) { projectiles.splice(j, 1); continue; }
+    for (var e = 0; e < enemies.length; e++) {
+      var en = enemies[e];
+      if (!en.alive) continue;
+      if (pr.x < en.x + en.w && pr.x + pr.w > en.x && pr.y < en.y + en.h && pr.y + pr.h > en.y) {
+        killEnemy(e);
+        projectiles.splice(j, 1);
+        break;
+      }
+    }
+  }
+
+  // Inimigos
+  for (var k = 0; k < enemies.length; k++) {
+    var en2 = enemies[k];
+    if (!en2.alive) continue;
+    en2.x += en2.vx * en2.dir;
+    if (en2.x < cameraX) en2.x = cameraX;
+    if (en2.x > cameraX + GAME_W - en2.w) en2.dir *= -1;
+    // Colisão com o jogador
+    if (player.inv <= 0 && player.x < en2.x + en2.w && player.x + player.w > en2.x && player.y < en2.y + en2.h && player.y + player.h > en2.y) {
+      // Pular na cabeça
+      if (player.vy > 0 && player.y + player.h - en2.y < 18) {
+        killEnemy(k);
+        player.vy = -9;
+      } else {
+        loseLife();
+      }
+    }
+  }
+
+  // Partículas
+  for (var m = particles.length - 1; m >= 0; m--) {
+    var pa = particles[m];
+    pa.x += pa.vx; pa.y += pa.vy; pa.vy += 0.3; pa.life--;
+    if (pa.life <= 0) particles.splice(m, 1);
+  }
+
+  // Bandeira FIM
+  if (player.x + player.w > LEVEL_LEN - 60) {
+    gameWin = true;
+    winLevel();
+  }
+}
+
+function killEnemy(idx) {
+  var en = enemies[idx];
+  if (!en.alive) return;
+  en.alive = false;
+  score += 100;
+  hudScore.textContent = score;
+  for (var i = 0; i < 12; i++) {
+    particles.push({ x: en.x + en.w / 2, y: en.y + en.h / 2, vx: (Math.random() - 0.5) * 6, vy: -Math.random() * 6, life: 30, color: "#fbbf24" });
+  }
+}
+
+function loseLife() {
+  if (player.inv > 0) return;
+  lives--;
+  hudLives.textContent = lives;
+  player.inv = 60;
+  if (lives <= 0) {
+    gameOver = true;
+    endTitle.textContent = "FIM DE JOGO";
+    endMsg.textContent = "Você perdeu todas as vidas na praia de Balbino. Tente de novo!";
+    modalEnd.classList.add("active");
+  } else {
+    player.x = 80; player.y = 300; player.vx = 0; player.vy = 0;
+  }
+}
+
+function winLevel() {
+  var key = currentLoc.id + "-" + currentLevel;
+  state.completed[key] = true;
+  saveState();
+  endTitle.textContent = "NÍVEL " + currentLevel + " CONCLUÍDO! 🏆";
+  endMsg.textContent = "Você chegou à bandeira FIM em Balbino! Pontuação: " + score + " pontos.";
+  modalEnd.classList.add("active");
+  renderPins();
+}
+
+/* ===== RENDERIZAÇÃO DA FASE ===== */
+function drawPixelRect(x, y, w, h, color) {
+  gctx.fillStyle = color;
+  gctx.fillRect(Math.round(x), Math.round(y), Math.round(w), Math.round(h));
+}
+
+function renderGame() {
+  gctx.imageSmoothingEnabled = false;
+  // Céu
+  var sky = gctx.createLinearGradient(0, 0, 0, GAME_H);
+  sky.addColorStop(0, "#38bdf8");
+  sky.addColorStop(0.6, "#a5e8ff");
+  sky.addColorStop(1, "#fef3c7");
+  gctx.fillStyle = sky;
+  gctx.fillRect(0, 0, GAME_W, GAME_H);
+
+  // Sol
+  drawPixelRect(cameraX + 820, 50, 60, 60, "#fde047");
+  drawPixelRect(cameraX + 835, 65, 30, 30, "#facc15");
+
+  // Mar (fundo)
+  drawPixelRect(0, 300, GAME_W, 160, "#0ea5e9");
+  // Ondas
+  for (var o = 0; o < 8; o++) {
+    var ox = ((cameraX * 0.6 + o * 140) % (GAME_W + 200)) - 100;
+    drawPixelRect(ox, 320, 60, 6, "#7dd3fc");
+  }
+
+  // Jangadas
+  drawJangada(cameraX + 200, 360);
+  drawJangada(cameraX + 700, 390);
+
+  // Areia (chão)
+  drawPixelRect(0, GROUND_Y, GAME_W, GAME_H - GROUND_Y, "#fcd34d");
+  drawPixelRect(0, GROUND_Y + 8, GAME_W, 6, "#fbbf24");
+
+  // Plataformas (tábuas de madeira)
+  for (var i = 0; i < platforms.length; i++) {
+    var p = platforms[i];
+    if (p.solid && p.h > 40) {
+      var sx = p.x - cameraX;
+      if (sx + p.w < 0 || sx > GAME_W) continue;
+      drawPixelRect(sx, p.y, p.w, p.h, "#92400e");
+      drawPixelRect(sx, p.y, p.w, 6, "#b45309");
+    } else if (p.h <= 40) {
+      var sx2 = p.x - cameraX;
+      if (sx2 + p.w < 0 || sx2 > GAME_W) continue;
+      drawPixelRect(sx2, p.y, p.w, p.h, "#a16207");
+      drawPixelRect(sx2, p.y, p.w, 5, "#ca8a04");
+    }
+  }
+
+  // Coqueiros (decorativos)
+  drawPalm(cameraX + 120, GROUND_Y);
+  drawPalm(cameraX + 900, GROUND_Y);
+  drawPalm(cameraX + 1600, GROUND_Y);
+  drawPalm(cameraX + 2300, GROUND_Y);
+  drawPalm(cameraX + 3000, GROUND_Y);
+  drawPalm(cameraX + 3700, GROUND_Y);
+
+  // Mangues
+  drawMangrove(cameraX + 450, GROUND_Y);
+  drawMangrove(cameraX + 1200, GROUND_Y);
+  drawMangrove(cameraX + 2600, GROUND_Y);
+
+  // Gaivotas voando
+  drawSeagull(cameraX + 300, 120, 1);
+  drawSeagull(cameraX + 800, 80, -1);
+  drawSeagull(cameraX + 1500, 140, 1);
+
+  // Placas de trânsito futuristas
+  drawFutSign(cameraX + 550, GROUND_Y - 60);
+  drawFutSign(cameraX + 2200, GROUND_Y - 60);
+  drawFutSign(cameraX + 3300, GROUND_Y - 60);
+
+  // Lixeiras futuristas
+  drawFutTrash(cameraX + 250, GROUND_Y);
+  drawFutTrash(cameraX + 1400, GROUND_Y);
+  drawFutTrash(cameraX + 2900, GROUND_Y);
+
+  // Letreiro BALBINO
+  drawSign(cameraX + 2000, GROUND_Y - 130);
+
+  // Bandeira FIM
+  drawFlag(LEVEL_LEN - 60, GROUND_Y);
+
+  // Inimigos
+  for (var k = 0; k < enemies.length; k++) {
+    var en = enemies[k];
+    if (!en.alive) continue;
+    drawEnemy(en);
+  }
+
+  // Projéteis
+  for (var j = 0; j < projectiles.length; j++) {
+    var pr = projectiles[j];
+    var px = pr.x - cameraX;
+    drawPixelRect(px, pr.y, pr.w, pr.h, "#22c55e");
+    drawPixelRect(px + 2, pr.y + 1, 2, 2, "#a7f3d0");
+  }
+
+  // Partículas
+  for (var m = 0; m < particles.length; m++) {
+    var pa = particles[m];
+    drawPixelRect(pa.x - cameraX, pa.y, 4, 4, pa.color);
+  }
+
+  // Jogador
+  drawPlayer();
+
+  // HUD de vida (corações)
+  drawPixelRect(10, 10, 20, 20, "#ef4444");
+}
+
+function drawPlayer() {
+  var x = player.x - cameraX;
+  var y = player.y;
+  // Calça cinza (pernas)
+  drawPixelRect(x + 8, y + 32, 9, 12, "#6b7280");
+  drawPixelRect(x + 17, y + 32, 9, 12, "#6b7280");
+  // Tênis escuros
+  drawPixelRect(x + 7, y + 43, 10, 3, "#1f2937");
+  drawPixelRect(x + 16, y + 43, 10, 3, "#1f2937");
+  // Braços (mangas da blusa branca + mãos)
+  drawPixelRect(x + 2, y + 16, 5, 12, "#f8fafc");
+  drawPixelRect(x + 27, y + 16, 5, 12, "#f8fafc");
+  drawPixelRect(x + 1, y + 27, 4, 4, "#fcd34d");
+  drawPixelRect(x + 29, y + 27, 4, 4, "#fcd34d");
+  // Corpo: blusa branca
+  drawPixelRect(x + 6, y + 14, 22, 18, "#f8fafc");
+  // Inscrição "Cc" na blusa
+  gctx.fillStyle = "#dc2626";
+  gctx.font = "bold 11px 'Courier New', monospace";
+  gctx.textAlign = "center";
+  gctx.fillText("Cc", x + 17, y + 28);
+  // Cabeça (tom de pele) e cabelo escuro
+  drawPixelRect(x + 9, y, 16, 16, "#fcd34d");
+  drawPixelRect(x + 7, y - 2, 20, 6, "#3f3f46");
+  drawPixelRect(x + 7, y - 2, 6, 10, "#3f3f46");
+  // Olhos
+  drawPixelRect(x + 12, y + 6, 3, 3, "#0f172a");
+  drawPixelRect(x + 19, y + 6, 3, 3, "#0f172a");
+}
+
+function drawEnemy(en) {
+  var x = en.x - cameraX;
+  var y = en.y;
+  if (en.type === "bola") {
+    drawPixelRect(x, y, en.w, en.h, "#78716c");
+    drawPixelRect(x + 4, y + 4, en.w - 8, en.h - 8, "#a8a29e");
+    drawPixelRect(x + 2, y + 2, 6, 6, "#57534e");
+  } else if (en.type === "lixeira") {
+    drawPixelRect(x + 2, y, en.w - 4, en.h, "#475569");
+    drawPixelRect(x, y + 6, en.w, 10, "#64748b");
+    drawPixelRect(x + 6, y + 4, 6, 6, "#22c55e");
+    drawPixelRect(x + 2, y + 2, 4, 4, "#0f172a");
+    drawPixelRect(x + en.w - 8, y + 2, 4, 4, "#0f172a");
+  } else if (en.type === "caranguejo") {
+    drawPixelRect(x, y + 6, en.w, en.h - 6, "#dc2626");
+    drawPixelRect(x + 4, y, 8, 8, "#b91c1c");
+    drawPixelRect(x + en.w - 12, y, 8, 8, "#b91c1c");
+    drawPixelRect(x + 2, y + 4, 4, 4, "#0f172a");
+    drawPixelRect(x + en.w - 8, y + 4, 4, 4, "#0f172a");
+  } else if (en.type === "moreia") {
+    drawPixelRect(x, y + 8, en.w, en.h - 8, "#166534");
+    drawPixelRect(x + 4, y, 8, 10, "#15803d");
+    drawPixelRect(x + 2, y + 2, 4, 4, "#fef3c7");
+    drawPixelRect(x + 10, y + 2, 4, 4, "#fef3c7");
+  }
+}
+
+function drawJangada(x, y) {
+  drawPixelRect(x, y, 70, 10, "#92400e");
+  drawPixelRect(x + 8, y - 14, 6, 14, "#a16207");
+  drawPixelRect(x + 8, y - 30, 3, 16, "#f8fafc");
+  drawPixelRect(x + 30, y - 8, 12, 8, "#fcd34d");
+}
+
+function drawPalm(x, y) {
+  drawPixelRect(x + 8, y - 60, 8, 60, "#92400e");
+  drawPixelRect(x - 14, y - 66, 50, 8, "#16a34a");
+  drawPixelRect(x - 10, y - 72, 40, 6, "#15803d");
+  drawPixelRect(x - 2, y - 78, 20, 6, "#22c55e");
+}
+
+function drawMangrove(x, y) {
+  drawPixelRect(x + 6, y - 40, 10, 40, "#78350f");
+  drawPixelRect(x - 4, y - 48, 30, 10, "#15803d");
+  drawPixelRect(x, y - 54, 22, 6, "#166534");
+}
+
+function drawSeagull(x, y, dir) {
+  drawPixelRect(x, y, 4, 4, "#f8fafc");
+  drawPixelRect(x + 4, y - 2, 8, 3, "#e2e8f0");
+  drawPixelRect(x - 4, y - 2, 8, 3, "#e2e8f0");
+}
+
+function drawFutSign(x, y) {
+  drawPixelRect(x + 14, y, 4, 30, "#94a3b8");
+  drawPixelRect(x, y - 8, 32, 22, "#0ea5e9");
+  drawPixelRect(x + 8, y - 2, 16, 10, "#f8fafc");
+  drawPixelRect(x + 12, y, 8, 6, "#22c55e");
+}
+
+function drawFutTrash(x, y) {
+  drawPixelRect(x + 6, y - 30, 24, 30, "#475569");
+  drawPixelRect(x + 4, y - 34, 28, 6, "#64748b");
+  drawPixelRect(x + 12, y - 24, 12, 12, "#22c55e");
+  drawPixelRect(x + 2, y - 10, 4, 4, "#a7f3d0");
+}
+
+function drawSign(x, y) {
+  drawPixelRect(x + 2, y + 40, 4, 40, "#92400e");
+  drawPixelRect(x - 40, y, 88, 40, "#0ea5e9");
+  drawPixelRect(x - 40, y, 88, 40, "rgba(14,165,233,0.9)");
+  gctx.fillStyle = "#ffffff";
+  gctx.font = "bold 22px 'Courier New', monospace";
+  gctx.textAlign = "center";
+  gctx.fillText("BALBINO", x + 4, y + 26);
+}
+
+function drawFlag(x, y) {
+  drawPixelRect(x + 2, y - 70, 4, 70, "#94a3b8");
+  drawPixelRect(x + 6, y - 70, 26, 18, "#22c55e");
+  drawPixelRect(x + 6, y - 70, 26, 6, "#16a34a");
+  gctx.fillStyle = "#f8fafc";
+  gctx.font = "bold 12px 'Courier New', monospace";
+  gctx.textAlign = "left";
+  gctx.fillText("FIM", x + 10, y - 56);
+}
+
+/* ===== LISTENERS ===== */
 btnPlay.addEventListener("click", goToMap);
 btnBack.addEventListener("click", goToStart);
 btnReset.addEventListener("click", function () {
   if (confirm("Deseja reiniciar seu progresso no mapa?")) resetState();
 });
-btnCloseLevels.addEventListener("click", function () {
-  modalLevels.classList.remove("active");
-});
+btnCloseLevels.addEventListener("click", function () { modalLevels.classList.remove("active"); });
 btnConfirmBack.addEventListener("click", function () {
   modalConfirm.classList.remove("active");
+  startGame();
+});
+btnEndBack.addEventListener("click", function () {
+  modalEnd.classList.remove("active");
+  screenGame.classList.remove("active");
+  screenMap.classList.add("active");
+  renderPins();
+});
+btnPause.addEventListener("click", function () {
+  paused = !paused;
+  btnPause.textContent = paused ? "▶️ Continuar" : "⏸️ Pausar";
 });
 document.addEventListener("keydown", function (e) {
-  if (e.key === "Enter" && screenStart.classList.contains("active")) {
-    goToMap();
+  keys[e.key] = true;
+  if (e.key === "Enter" && screenStart.classList.contains("active")) goToMap();
+  if ((e.key === "p" || e.key === "P") && screenGame.classList.contains("active")) {
+    paused = !paused;
+    btnPause.textContent = paused ? "▶️ Continuar" : "⏸️ Pausar";
   }
 });
+document.addEventListener("keyup", function (e) { keys[e.key] = false; });
 screenStart.addEventListener("click", function () {
   if (screenStart.classList.contains("active")) goToMap();
 });
@@ -416,14 +868,9 @@ screenStart.addEventListener("click", function () {
 try { loadState(); } catch (e) {}
 try { loadMapCascade(); } catch (e) { applyFallbackMap(); }
 try { renderPins(); } catch (e) {}
-
 setTimeout(function () {
   loading.classList.remove("active");
-  if (!mapLoaded) {
-    if (mapImg.style.display !== "block") {
-      applyFallbackMap();
-    }
-  }
+  if (!mapLoaded) { if (mapImg.style.display !== "block") applyFallbackMap(); }
 }, 2500);
 </script>
 </body>
