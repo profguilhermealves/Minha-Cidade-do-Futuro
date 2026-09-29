@@ -7313,7 +7313,13 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
       // Aceita ?fase=1 (número) ou ?fase=GUANACES (nome do index)
       return String(b.id) === fase || normalizar(b.name) === alvo;
     });
-    if (idx >= 0) goToLevel(idx, 0);
+    if (idx < 0) return;
+
+    // Nível opcional (?nivel=1 a 10) — padrão: nível 1
+    var nv = parseInt(params.get('nivel'), 10);
+    var lvl = (nv >= 1 && nv <= 10) ? nv - 1 : 0;
+
+    goToLevel(idx, lvl);
   }
 
   if (document.readyState === 'loading') {
