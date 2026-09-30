@@ -3672,65 +3672,53 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
           // Camada 6: Silhuetas de primeiro plano
           drawCinematicForeground(ctx, 0, time, p5);
 
+                    // ==========================================
+          // --- LETREIRO GRANDE "GUANACES" (estilo entrada de cidade) ---
           // ==========================================
-          // --- LETREIRO "GUANACES" EM PRIMEIRO PLANO ---
-          // (desenhado POR ÚLTIMO = fica por cima de tudo)
-          // ==========================================
-          const signX = Math.round(168 + p5);
-          const signY = 84;
+          const signX = Math.round(120 + p5);
+          const signY = 70;
 
-          // Sombra escura atrás da placa (dá profundidade)
-          ctx.fillStyle = "rgba(0,0,0,0.35)";
-          ctx.fillRect(signX + 2, signY + 8, 30, 8);
-
-          // Poste duplo do letreiro
+          // Postes de madeira (dois, grossos)
           ctx.fillStyle = "#5b3a1e";
-          ctx.fillRect(signX + 4, signY + 8, 3, 14);
-          ctx.fillRect(signX + 23, signY + 8, 3, 14);
+          ctx.fillRect(signX + 6, signY + 26, 6, 30);
+          ctx.fillRect(signX + 88, signY + 26, 6, 30);
 
-          // Placa colorida (fundo)
+          // Placa de madeira grande (fundo)
+          ctx.fillStyle = "#8a5a2b";
+          ctx.fillRect(signX - 8, signY - 6, 116, 36);
+          ctx.fillStyle = "#a06a33";
+          ctx.fillRect(signX - 8, signY - 6, 116, 4);   // brilho no topo
+          ctx.fillStyle = "#6e4420";
+          ctx.fillRect(signX - 8, signY + 26, 116, 4);  // sombra embaixo
+
+          // Moldura interna colorida
           ctx.fillStyle = "#e63946";
-          ctx.fillRect(signX, signY, 30, 8);
+          ctx.fillRect(signX - 4, signY - 2, 108, 3);
           ctx.fillStyle = "#f4a261";
-          ctx.fillRect(signX, signY, 8, 8);
+          ctx.fillRect(signX - 4, signY + 1, 108, 3);
           ctx.fillStyle = "#2a9d8f";
-          ctx.fillRect(signX + 8, signY, 7, 8);
+          ctx.fillRect(signX - 4, signY + 4, 108, 3);
           ctx.fillStyle = "#e9c46a";
-          ctx.fillRect(signX + 15, signY, 8, 8);
-          ctx.fillStyle = "#f4a261";
-          ctx.fillRect(signX + 23, signY, 7, 8);
+          ctx.fillRect(signX - 4, signY + 7, 108, 3);
 
-          // Letras "GUANACES" em branco
+          // Letreiro "GUANACES" em texto grande e legível
           ctx.fillStyle = "#ffffff";
-          // G
-          ctx.fillRect(signX + 1, signY + 1, 2, 1); ctx.fillRect(signX + 1, signY + 2, 1, 1);
-          ctx.fillRect(signX + 1, signY + 5, 2, 1); ctx.fillRect(signX + 1, signY + 3, 1, 1);
-          ctx.fillRect(signX + 1, signY + 4, 2, 1);
-          // U
-          ctx.fillRect(signX + 4, signY + 1, 1, 4); ctx.fillRect(signX + 6, signY + 1, 1, 4);
-          ctx.fillRect(signX + 4, signY + 5, 3, 1);
-          // A
-          ctx.fillRect(signX + 8, signY + 1, 3, 1); ctx.fillRect(signX + 8, signY + 2, 1, 3);
-          ctx.fillRect(signX + 10, signY + 2, 1, 3); ctx.fillRect(signX + 8, signY + 5, 3, 1);
-          // N
-          ctx.fillRect(signX + 12, signY + 1, 1, 5); ctx.fillRect(signX + 14, signY + 1, 1, 5);
-          ctx.fillRect(signX + 13, signY + 3, 1, 1);
-          // A
-          ctx.fillRect(signX + 16, signY + 1, 3, 1); ctx.fillRect(signX + 16, signY + 2, 1, 3);
-          ctx.fillRect(signX + 18, signY + 2, 1, 3); ctx.fillRect(signX + 16, signY + 5, 3, 1);
-          // C
-          ctx.fillRect(signX + 20, signY + 1, 2, 1); ctx.fillRect(signX + 20, signY + 2, 1, 3);
-          ctx.fillRect(signX + 20, signY + 5, 2, 1);
-          // E
-          ctx.fillRect(signX + 23, signY + 1, 2, 1); ctx.fillRect(signX + 23, signY + 2, 1, 1);
-          ctx.fillRect(signX + 23, signY + 3, 2, 1); ctx.fillRect(signX + 23, signY + 4, 1, 1);
-          ctx.fillRect(signX + 23, signY + 5, 2, 1);
-          // S
-          ctx.fillRect(signX + 26, signY + 1, 2, 1); ctx.fillRect(signX + 26, signY + 2, 1, 1);
-          ctx.fillRect(signX + 26, signY + 3, 2, 1); ctx.fillRect(signX + 27, signY + 4, 1, 1);
-          ctx.fillRect(signX + 26, signY + 5, 2, 1);
+          ctx.font = "bold 20px 'Courier New', monospace";
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.fillText("GUANACES", signX + 50, signY + 14);
+
+          // Sombra do texto (dá destaque e profundidade)
+          ctx.fillStyle = "rgba(0,0,0,0.5)";
+          ctx.fillText("GUANACES", signX + 51, signY + 15);
+          ctx.fillStyle = "#ffffff";
+          ctx.fillText("GUANACES", signX + 50, signY + 14);
+
+          // Subtexto pequeno "BEM-VINDO"
+          ctx.fillStyle = "#fff3d6";
+          ctx.font = "bold 9px 'Courier New', monospace";
+          ctx.fillText("BEM-VINDO", signX + 50, signY + 24);
           break;
-        }
 
         // ==========================================
         // --- 2. CERRADO (A SAVANA DOURADA) ---
