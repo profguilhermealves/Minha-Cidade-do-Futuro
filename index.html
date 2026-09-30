@@ -43,6 +43,9 @@
   @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,.7);}50%{box-shadow:0 0 0 10px rgba(255,255,255,0);}}
   .pin-tooltip{position:absolute;top:38px;left:50%;transform:translateX(-50%);background:rgba(15,23,42,.97);border:2px solid #475569;border-radius:10px;padding:10px 12px;font-size:12px;white-space:normal;max-width:220px;min-width:140px;display:none;z-index:1000;text-align:center;box-shadow:0 8px 20px rgba(0,0,0,.6);pointer-events:none;line-height:1.5;}
   .pin:hover .pin-tooltip{display:block;}
+  /* Pin selecionado pelo controle: contorno + nome visível */
+.pin.selected{outline:3px solid #fbbf24;z-index:999;}
+.pin.selected .pin-tooltip{display:block;}
   .pin-tooltip .t-name{font-weight:bold;font-size:13px;color:var(--branco);margin-bottom:2px;}
   .pin-tooltip .t-group{color:var(--cinza);font-size:11px;}
   .pin-tooltip .t-prog{color:#fbbf24;font-size:11px;margin-top:2px;}
@@ -444,11 +447,12 @@ setTimeout(function () {
   }
 
   function highlightPin() {
-    var pins = pinsLayer.querySelectorAll('.pin');
-    for (var i = 0; i < pins.length; i++) {
-      pins[i].style.outline = (i === selPin) ? '3px solid #fbbf24' : 'none';
-    }
+  var pins = pinsLayer.querySelectorAll('.pin');
+  for (var i = 0; i < pins.length; i++) {
+    if (i === selPin) pins[i].classList.add('selected');
+    else pins[i].classList.remove('selected');
   }
+}
 
   function moveSel(dir) {
     selPin = (selPin + dir + LOCATIONS.length) % LOCATIONS.length;
