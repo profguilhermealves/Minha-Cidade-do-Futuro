@@ -420,5 +420,105 @@ setTimeout(function () {
   }
 }, 2500);
  </script>
+<script>
+/* ===== CONTROLE XBOX NO MAPA (index.html) ===== */
+(function () {
+  "use strict";
+
+  var selPin = 0;
+  var selLevel = 1;
+  var inModal = false;
+  var prevButtons = new Uint8Array(16);
+
+  // Destaca o pin selecionado com um contorno amarelo
+  function highlightPin() {
+    var pins = pinsLayer.querySelectorAll('.pin');
+    pins.forEach(function (p, i) {
+      p.style.outline = (i === selPin) ? '3px solid #fbbf24' : 'none';
+    });
+  }
+
+  // Move para o próximo/anterior pin liberado
+  function moveSel(dir) {
+    var unlocked = [];
+    LOCATIONS.forEach(function (loc, i) { if (isLocationUnlocked(i)) unlocked.push(i); });
+    if (unlocked.length === 0) return;
+    var pos = unlocked.indexOf(selPin);
+    if (pos < 0) pos = 0;
+    pos = (pos + dir + unlocked.length) % unlocked.length;
+    selPin = unlocked[pos];
+    highlightPin();
+  }
+
+  // Abre o modal de níveis do pin selecionado
+  function openSel() {
+    var loc = LOCATIONS[selPin];
+    if (!loc || !isLocationUnlocked(selPin)) return;
+    openLevels(loc);
+    inModal = true;
+    selLevel = 1;
+    highlightLevels();
+  }
+
+  function highlightLevels() {
+    var btns = levelsGrid.querySelectorAll('.lvl');
+    btns.forEach(function (b, i) {
+      b.style.outline = (i === selLevel - 1) ? '3px solid #fbbf24' : 'none';
+    });
+  }
+
+  function moveLevel(d) {
+    var loc = LOCATIONS[selPin];
+    var nv = selLevel + d;
+    while (nv >= 1 && nv <= TOTAL_LEVELS && !(nv === 1 || state.completed[loc.id + "-" + (nv - 1)])) nv += d;
+    if (nv >= 1 && nv <= TOTAL_LEVELS) { selLevel = nv; highlightLevels(); }
+  }
+
+  function confirmLevel() {
+    modalLevels.classList.remove('active');
+    inModal = false;
+    selectLevel(selLevel);
+  }
+
+  function poll() {
+    var pads = [];
+    try { pads = navigator.getGamepads ? navigator.getGamepads() : []; } catch (e) {}
+    var gp = null;
+    for (var i = 0; i < pads.length; i++) if (pads[i] && pads[i].connected) { gp = pads[i]; break; }
+    if (!gp) { prevButtons = new Uint8Array(16); requestAnimationFrame(poll); return; }
+
+    var cur = new Uint8Array(16);
+    for (var b = 0; b < Math.min(gp.buttons.length, 16); b++) cur[b] = gp.buttons[b].pressed ? 1 : 0;
+    var edge = function (idx) { return cur[idx] === 1 && prevButtons[idx] !== 1; };
+
+    var ax = gp.axes && gp.axes.length ? gp.axes[0] : 0;
+    var ay = gp.axes && gp.axes.length > 1 ? gp.axes[1] : 0;
+    var left = cur[14] || ax < -0.4;
+    var right = cur[15] || ax > 0.4;
+    var up = cur[12] || ay < -0.4;
+    var down = cur[13] || ay > 0.4;
+
+    if (inModal) {
+      if (edge(14) || edge(15) || edge(12) || edge(13)) {
+        moveLevel((edge(15) || edge(13)) ? 1 : -1);
+      }
+      if (edge(0)) confirmLevel();   // A confirma o nível
+      if (edge(1)) {                 // B fecha o modal
+        modalLevels.classList.remove('active');
+        inModal = false;
+        highlightPin();
+      }
+    } else {
+      if (left || right || up || down) moveSel(left ? -1 : right ? 1 : up ? -1 : 1);
+      if (edge(0)) openSel();        // A abre o pin
+    }
+
+    prevButtons = cur;
+    requestAnimationFrame(poll);
+  }
+
+  requestAnimationFrame(poll);
+})();
+</script>
 </body>
 </html>
