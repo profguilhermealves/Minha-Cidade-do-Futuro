@@ -3863,109 +3863,242 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
         // ==========================================
         // --- 3. CAATINGA (O SERTÃO ENCANTADO) ---
         // ==========================================
-        case 2: {
-          // Inselbergs rochosos majestosos sob sol escaldante
+                case 1: {
+          // ==========================================
+          // --- 2. PITOMBEIRA (VILA DO INTERIOR NORDESTINO) ---
+          // ==========================================
+
+          // Camada 2: Serras secas do sertão ao fundo
           drawSteppedRidge(ctx, [
-            [-30 + p1, 74], [45 + p1, 56], [95 + p1, 78], [150 + p1, 50], 
-            [210 + p1, 72], [280 + p1, 58], [360 + p1, 70]
-          ], "#611704", "#8c2a0c", "#3a0c02");
+            [-30 + p1, 76], [60 + p1, 76], [60 + p1, 64], [150 + p1, 64],
+            [150 + p1, 74], [230 + p1, 74], [230 + p1, 62], [360 + p1, 62]
+          ], "#9a6a3c", "#b8844f", "#6e4a28");
 
-          // Serras intermediárias com pedregulhos claros da Caatinga
+          // Colinas de transição (terra batida)
           drawSteppedRidge(ctx, [
-            [-30 + p2, 94], [75 + p2, 86], [160 + p2, 98], [250 + p2, 88], [360 + p2, 92]
-          ], "#943b12", "#c45a23", "#5c2007");
+            [-30 + p2, 96], [80 + p2, 90], [170 + p2, 98], [260 + p2, 88], [360 + p2, 94]
+          ], "#c99b5f", "#d9b077", "#a87d45");
 
-          // Árvore Barriguda monumental (tronco intumescido que guarda água)
-          const barX = Math.round(150 + p3);
-          ctx.fillStyle = "#5c4033";
-          ctx.fillRect(barX - 8, 98, 22, 28);
-          ctx.fillRect(barX - 5, 84, 16, 16);
-          ctx.fillStyle = "#825c48"; // tronco cinzento claro da mata branca
-          ctx.fillRect(barX - 6, 100, 10, 24);
-          ctx.fillRect(barX - 3, 86, 6, 12);
-          // Ramos finos retorcidos quase sem folhas
-          ctx.fillStyle = "#5c4033";
-          ctx.fillRect(barX - 14, 82, 10, 3);
-          ctx.fillRect(barX + 10, 80, 12, 3);
-          ctx.fillStyle = "#40916c"; // pequeninas folhas persistentes
-          ctx.fillRect(barX - 16, 80, 4, 3);
-          ctx.fillRect(barX + 20, 78, 4, 3);
+          // Açude/cacimba com água (ponto de encontro da vila)
+          drawRichWater(ctx, 108, 18, "#3a6ea5", "#5b93c9", "#9ec2ea", "#ffd700", 230 + p1, time);
 
-          // Juazeiro sempre-verde (a árvore que nunca perde as folhas na seca)
-          const juaX = Math.round(270 + p3);
-          ctx.fillStyle = "#4a3319";
-          ctx.fillRect(juaX, 98, 6, 26);
-          ctx.fillStyle = "#1e5e2e";
-          ctx.fillRect(juaX - 14, 84, 32, 16);
-          ctx.fillStyle = "#2d8a45";
-          ctx.fillRect(juaX - 10, 82, 24, 12);
+          // --- PEQUENAS CASAS ESPAÇADAS (estilo interior nordestino) ---
+          // Casa 1 (esquerda, paredes claras, telhado de barro)
+          ctx.fillStyle = "#f2e2c4";
+          ctx.fillRect(25 + p3, 104, 20, 14);
+          ctx.fillStyle = "#c1440e";
+          ctx.fillRect(24 + p3, 101, 22, 4);
+          ctx.fillStyle = "#5b3a1e";
+          ctx.fillRect(32 + p3, 111, 4, 7);
+          ctx.fillStyle = "#7fb3d5";
+          ctx.fillRect(36 + p3, 107, 4, 3);
+
+          // Casa 2 (centro-esquerda, mais afastada)
+          ctx.fillStyle = "#f7ead0";
+          ctx.fillRect(105 + p3, 106, 18, 12);
+          ctx.fillStyle = "#d1495b";
+          ctx.fillRect(104 + p3, 103, 20, 4);
+          ctx.fillStyle = "#5b3a1e";
+          ctx.fillRect(111 + p3, 112, 4, 6);
+          ctx.fillStyle = "#7fb3d5";
+          ctx.fillRect(115 + p3, 108, 4, 3);
+
+          // Casa 3 (direita, bem espaçada)
+          ctx.fillStyle = "#f2e2c4";
+          ctx.fillRect(300 + p3, 106, 20, 14);
+          ctx.fillStyle = "#2a9d8f";
+          ctx.fillRect(299 + p3, 103, 22, 4);
+          ctx.fillStyle = "#5b3a1e";
+          ctx.fillRect(307 + p3, 113, 4, 7);
+          ctx.fillStyle = "#7fb3d5";
+          ctx.fillRect(311 + p3, 109, 4, 3);
+
+          // Casa 4 (extrema direita)
+          ctx.fillStyle = "#f7ead0";
+          ctx.fillRect(345 + p3, 108, 16, 12);
+          ctx.fillStyle = "#e9c46a";
+          ctx.fillRect(344 + p3, 105, 18, 4);
+          ctx.fillStyle = "#5b3a1e";
+          ctx.fillRect(350 + p3, 114, 4, 6);
+
+          // --- ÁRVORES TÍPICAS DO NORDESTE (juazeiro, umbuzeiro) ---
+          const swayNord = Math.sin(time * 0.003) * 1.5;
+          drawDetailedTree(ctx, 70 + p3, 100, 8, 40, "#3a6828", "#4f8a36", "#6aa84f", "#4d2f1d", "#6b4a2f", swayNord, "#c1440e");
+          drawDetailedTree(ctx, 250 + p3, 98, 9, 44, "#3a6828", "#4f8a36", "#6aa84f", "#4d2f1d", "#6b4a2f", -swayNord, "#d1495b");
+          drawDetailedTree(ctx, 160 + p3, 118, 5, 26, "#3a6828", "#4f8a36", "#6aa84f", "#4d2f1d", "#6b4a2f", swayNord, "#e9c46a");
+
+          // --- CHÃO DE TERRA BATIDA DA VILA ---
+          drawGroundDither(ctx, 148, 32, "#c99b5f", "#a87d45", 3);
+          // Estrada de terra que cruza a vila
+          ctx.fillStyle = "#b8844f";
+          ctx.fillRect(0, 148, NATIVE_W, 4);
+          ctx.fillStyle = "#9a6a3c";
+          ctx.fillRect(0, 148, 60, 1);
+          ctx.fillRect(120, 148, 60, 1);
+          ctx.fillRect(240, 148, 60, 1);
+
+          // --- VACAS E CARNEIROS PASSANDO (animados) ---
+          // Vaca 1 (caminhando, com manchas)
+          const vaca1X = Math.round(140 + p4 + Math.sin(time * 0.004) * 6);
+          ctx.fillStyle = "#f5f0e6";
+          ctx.fillRect(vaca1X, 138, 12, 6);
+          ctx.fillRect(vaca1X + 10, 135, 4, 4);   // cabeça
+          ctx.fillStyle = "#2b2b2b";
+          ctx.fillRect(vaca1X + 3, 139, 3, 2);    // mancha
+          ctx.fillRect(vaca1X + 8, 138, 2, 2);    // mancha
+          ctx.fillStyle = "#5b3a1e";
+          ctx.fillRect(vaca1X + 2, 144, 1, 4);    // pernas
+          ctx.fillRect(vaca1X + 5, 144, 1, 4);
+          ctx.fillRect(vaca1X + 8, 144, 1, 4);
+          ctx.fillRect(vaca1X + 11, 144, 1, 4);
+
+          // Vaca 2 (mais ao fundo, menor)
+          const vaca2X = Math.round(230 + p4 + Math.sin(time * 0.004 + 2) * 5);
+          ctx.fillStyle = "#e8dcc8";
+          ctx.fillRect(vaca2X, 140, 10, 5);
+          ctx.fillRect(vaca2X + 8, 137, 3, 3);
+          ctx.fillStyle = "#2b2b2b";
+          ctx.fillRect(vaca2X + 2, 141, 2, 2);
+          ctx.fillStyle = "#5b3a1e";
+          ctx.fillRect(vaca2X + 2, 145, 1, 3);
+          ctx.fillRect(vaca2X + 7, 145, 1, 3);
+
+          // Carneiro 1 (branco, com lã)
+          const carneiro1X = Math.round(60 + p4 + Math.sin(time * 0.005) * 7);
+          ctx.fillStyle = "#fdfdfd";
+          ctx.fillRect(carneiro1X, 140, 9, 5);
+          ctx.fillRect(carneiro1X + 8, 138, 3, 3);  // cabeça
+          ctx.fillStyle = "#d9d9d9";
+          ctx.fillRect(carneiro1X + 1, 139, 7, 1);   // lã
+          ctx.fillStyle = "#5b3a1e";
+          ctx.fillRect(carneiro1X + 2, 145, 1, 3);
+          ctx.fillRect(carneiro1X + 6, 145, 1, 3);
+
+          // Carneiro 2 (pastando)
+          const carneiro2X = Math.round(190 + p4 + Math.sin(time * 0.005 + 1) * 6);
+          ctx.fillStyle = "#fdfdfd";
+          ctx.fillRect(carneiro2X, 141, 8, 4);
+          ctx.fillRect(carneiro2X + 7, 139, 3, 3);
+          ctx.fillStyle = "#d9d9d9";
+          ctx.fillRect(carneiro2X + 1, 140, 6, 1);
+          ctx.fillStyle = "#5b3a1e";
+          ctx.fillRect(carneiro2X + 2, 145, 1, 3);
+          ctx.fillRect(carneiro2X + 5, 145, 1, 3);
+
+          // --- SENHORES DE CHAPÉU ACENANDO (animados) ---
+          // Senhor 1 (acenando o braço)
+          const senhor1X = Math.round(120 + p4);
+          const aceno1 = Math.sin(time * 0.01) * 2;
+          ctx.fillStyle = "#8a5a3a";   // chapéu de couro
+          ctx.fillRect(senhor1X, 138, 6, 2);
+          ctx.fillRect(senhor1X + 1, 136, 4, 2);
+          ctx.fillStyle = "#d9a06e";   // rosto
+          ctx.fillRect(senhor1X + 1, 140, 4, 3);
+          ctx.fillStyle = "#f2e2c4";   // camisa
+          ctx.fillRect(senhor1X, 143, 6, 5);
+          ctx.fillStyle = "#8a5a3a";   // braço acenando
+          ctx.fillRect(senhor1X + 6, 143 + aceno, 2, 2);
+          ctx.fillStyle = "#5b3a1e";   // calça
+          ctx.fillRect(senhor1X + 1, 148, 2, 3);
+          ctx.fillRect(senhor1X + 3, 148, 2, 3);
+
+          // Senhor 2 (acenando para o outro lado)
+          const senhor2X = Math.round(280 + p4);
+          const aceno2 = -Math.sin(time * 0.01) * 2;
+          ctx.fillStyle = "#8a5a3a";
+          ctx.fillRect(senhor2X, 139, 6, 2);
+          ctx.fillRect(senhor2X + 1, 137, 4, 2);
+          ctx.fillStyle = "#d9a06e";
+          ctx.fillRect(senhor2X + 1, 141, 4, 3);
+          ctx.fillStyle = "#f2e2c4";
+          ctx.fillRect(senhor2X, 144, 6, 5);
+          ctx.fillStyle = "#8a5a3a";
+          ctx.fillRect(senhor2X - 2, 144 + aceno2, 2, 2);  // braço acenando à esquerda
+          ctx.fillStyle = "#5b3a1e";
+          ctx.fillRect(senhor2X + 1, 149, 2, 3);
+          ctx.fillRect(senhor2X + 3, 149, 2, 3);
+
+          // --- DETALHES DA VILA ---
+          // Cerca de madeira
+          ctx.fillStyle = "#6b4a2f";
+          ctx.fillRect(200 + p4, 146, 30, 2);
+          ctx.fillRect(202 + p4, 144, 1, 4);
+          ctx.fillRect(210 + p4, 144, 1, 4);
+          ctx.fillRect(218 + p4, 144, 1, 4);
+          ctx.fillRect(226 + p4, 144, 1, 4);
+
+          // Mandacaru (cacto) do sertão
+          ctx.fillStyle = "#3a6828";
+          ctx.fillRect(45 + p4, 140, 3, 8);
+          ctx.fillRect(42 + p4, 142, 3, 3);
+          ctx.fillRect(48 + p4, 143, 3, 3);
           ctx.fillStyle = "#52b788";
-          ctx.fillRect(juaX - 6, 80, 16, 6);
+          ctx.fillRect(45 + p4, 139, 1, 1);
 
-          // Cactos Mandacaru monumentais e Xique-xiques
-          drawDetailedMandacaru(ctx, 40 + p3, 78, 46);
-          drawDetailedMandacaru(ctx, 215 + p3, 84, 40);
+          // --- CÉU: NUVENS E PASSARINHOS ---
+          const cloudX2 = ((time * 0.03) % (NATIVE_W + 60)) - 30;
+          ctx.fillStyle = "rgba(255,255,255,0.85)";
+          ctx.fillRect(cloudX2 + p2, 30, 16, 4);
+          ctx.fillRect(cloudX2 + 4 + p2, 27, 10, 4);
+          ctx.fillRect(cloudX2 + 40 + p2, 40, 12, 3);
+          ctx.fillRect(cloudX2 + 44 + p2, 38, 8, 3);
 
-          // Cacto Coroa-de-frade (arredondado com chapéu vermelho de espinhos)
-          const fradeX = Math.round(95 + p4);
-          ctx.fillStyle = "#2d6a4f";
-          ctx.fillRect(fradeX, 138, 10, 8);
-          ctx.fillStyle = "#52b788";
-          ctx.fillRect(fradeX + 2, 139, 6, 5);
-          ctx.fillStyle = "#d90429"; // Cefálio vermelho (a coroa)
-          ctx.fillRect(fradeX + 1, 134, 8, 4);
-          ctx.fillStyle = "#ffffff"; // florzinhas brancas na coroa
-          ctx.fillRect(fradeX + 3, 133, 2, 2);
+          const birdX2 = ((time * 0.06) % (NATIVE_W + 40)) - 20;
+          const birdY2 = 50 + Math.sin(time * 0.005) * 6;
+          ctx.fillStyle = "#333";
+          ctx.fillRect(Math.round(birdX2 + p2), Math.round(birdY2), 3, 1);
+          ctx.fillRect(Math.round(birdX2 - 2 + p2), Math.round(birdY2 - 1), 2, 1);
+          ctx.fillRect(Math.round(birdX2 + 3 + p2), Math.round(birdY2 - 1), 2, 1);
 
-          // Solo árido com fendas profundas de seca extrema (terra rachada)
-          drawGroundDither(ctx, 140, 40, "#c49f68", "#9c7744", 4);
-          ctx.fillStyle = "#5e3e1a"; // rachaduras profundas
-          const crackX = p4;
-          ctx.fillRect(20 + crackX, 146, 24, 2);
-          ctx.fillRect(36 + crackX, 148, 2, 8);
-          ctx.fillRect(38 + crackX, 154, 16, 2);
-          ctx.fillRect(130 + crackX, 150, 28, 2);
-          ctx.fillRect(148 + crackX, 152, 2, 10);
-          ctx.fillRect(150 + crackX, 160, 20, 2);
-          ctx.fillRect(230 + crackX, 145, 30, 2);
-          ctx.fillRect(246 + crackX, 147, 2, 9);
+          // Camada 6: Silhuetas de primeiro plano
+          drawCinematicForeground(ctx, 1, time, p5);
 
-          // Pedregulhos de lajedo aquecidos pelo sol
-          ctx.fillStyle = "#75624e";
-          ctx.fillRect(75 + p4, 148, 16, 8);
-          ctx.fillStyle = "#9c856e";
-          ctx.fillRect(77 + p4, 147, 12, 3);
+          // ==========================================
+          // --- LETREIRO GRANDE "PITOMBEIRA" (estilo entrada de cidade) ---
+          // ==========================================
+          const signX = Math.round(120 + p5);
+          const signY = 70;
 
-          // Lagarto Teiú tomando sol na pedra
-          const teiuX = Math.round(80 + p4);
-          ctx.fillStyle = "#2b2d42";
-          ctx.fillRect(teiuX, 145, 8, 3);
-          ctx.fillStyle = "#8d99ae";
-          ctx.fillRect(teiuX + 2, 145, 3, 1);
-          ctx.fillStyle = "#2b2d42"; // cauda longa
-          ctx.fillRect(teiuX - 6, 146, 6, 1);
+          // Postes de madeira (dois, grossos)
+          ctx.fillStyle = "#5b3a1e";
+          ctx.fillRect(signX + 6, signY + 26, 6, 30);
+          ctx.fillRect(signX + 88, signY + 26, 6, 30);
 
-          // Tatu-bola fechado em concha redonda no solo
-          const tatubX = Math.round(180 + p4);
-          ctx.fillStyle = "#8d7051";
-          ctx.fillRect(tatubX, 147, 6, 6);
-          ctx.fillStyle = "#b59473";
-          ctx.fillRect(tatubX + 1, 146, 4, 3);
+          // Placa de madeira grande (fundo)
+          ctx.fillStyle = "#8a5a2b";
+          ctx.fillRect(signX - 8, signY - 6, 116, 36);
+          ctx.fillStyle = "#a06a33";
+          ctx.fillRect(signX - 8, signY - 6, 116, 4);
+          ctx.fillStyle = "#6e4420";
+          ctx.fillRect(signX - 8, signY + 26, 116, 4);
 
-          // Serpente cascavel enrolada próxima ao cacto
-          ctx.fillStyle = "#8a6237";
-          ctx.fillRect(16 + p4, 154, 7, 3);
-          ctx.fillRect(21 + p4, 152, 3, 3);
-          ctx.fillStyle = "#000000";
-          ctx.fillRect(23 + p4, 153, 1, 1);
+          // Moldura interna colorida
+          ctx.fillStyle = "#e63946";
+          ctx.fillRect(signX - 4, signY - 2, 108, 3);
+          ctx.fillStyle = "#f4a261";
+          ctx.fillRect(signX - 4, signY + 1, 108, 3);
+          ctx.fillStyle = "#2a9d8f";
+          ctx.fillRect(signX - 4, signY + 4, 108, 3);
+          ctx.fillStyle = "#e9c46a";
+          ctx.fillRect(signX - 4, signY + 7, 108, 3);
 
-          // Carcará altivo planando em círculos e Asa-branca
-          const carcX = ((time * 0.05 + 60) % (NATIVE_W + 90)) - 40;
-          const carcY = 44 + Math.sin(time * 0.003) * 6;
-          drawAnimatedFlockBird(ctx, carcX + p1, carcY, "#1a120b", "#f77f00", "#ffd700", frame);
-          drawAnimatedFlockBird(ctx, carcX - 35 + p1, carcY + 12, "#adb5bd", "#495057", "#000000", frame + 1); // Asa-branca
+          // Letreiro "PITOMBEIRA" em texto grande e legível
+          ctx.fillStyle = "#ffffff";
+          ctx.font = "bold 20px 'Courier New', monospace";
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.fillText("PITOMBEIRA", signX + 50, signY + 14);
 
-          drawCinematicForeground(ctx, 2, time, p5);
+          // Sombra do texto
+          ctx.fillStyle = "rgba(0,0,0,0.5)";
+          ctx.fillText("PITOMBEIRA", signX + 51, signY + 15);
+          ctx.fillStyle = "#ffffff";
+          ctx.fillText("PITOMBEIRA", signX + 50, signY + 14);
+
+          // Subtexto pequeno "BEM-VINDO"
+          ctx.fillStyle = "#fff3d6";
+          ctx.font = "bold 9px 'Courier New', monospace";
+          ctx.fillText("BEM-VINDO", signX + 50, signY + 24);
           break;
         }
 
