@@ -4820,7 +4820,7 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
         ctx.globalAlpha = 0.35;
       }
 
-      // Paleta de cores do novo personagem (menino)
+     // Paleta de cores do novo personagem (menino)
       const hairBrown = "#5a3d2b";      // Cabelo curto castanho
       const hairDark = "#3e2a1c";       // Sombra do cabelo
       const skinColor = "#ffd1b3";      // Pele clara
@@ -4831,6 +4831,14 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
       const pantsGray = "#9aa0a6";      // Calça cinza
       const pantsDark = "#7d838c";      // Sombra da calça
       const shoesDark = "#2b2f3a";      // Sapatos escuros
+
+      // ===== ZOOM: personagem 1.6x maior, ancorado nos pés =====
+      // (mude o 1.6 por 1.4 se quiser menor, ou 1.8 se quiser maior)
+      const SCALE = 1.6;
+      ctx.save();
+      ctx.translate(px + 6.5, py + 13);
+      ctx.scale(SCALE, SCALE);
+      ctx.translate(-(px + 6.5), -(py + 13));
 
       // Efeito de balanço de cabelo ao se mover/pular
       const hairWave = !player.isGrounded 
@@ -4919,74 +4927,75 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
         }
       }
 
-      // --- PERNAS / CALÇA CINZA E SAPATOS (FRAMES DE ANIMAÇÃO) ---
+      // --- PERNAS MAIS COMPRIDAS / CALÇA CINZA E SAPATOS (FRAMES DE ANIMAÇÃO) ---
       if (!player.isGrounded) {
         // NO AR:
         if (player.vy < 0) {
-          // Subindo no pulo: pernas encolhidas
+          // Subindo no pulo: pernas encolhidas (1 fileira a mais)
           ctx.fillStyle = pantsGray;
-          ctx.fillRect(px + 2, py + 10, 4, 1);
+          ctx.fillRect(px + 2, py + 10, 4, 2);
           ctx.fillStyle = shoesDark;
-          ctx.fillRect(px + 2, py + 11, 2, 1);
-          ctx.fillRect(px + 5, py + 11, 2, 1);
+          ctx.fillRect(px + 2, py + 12, 2, 1);
+          ctx.fillRect(px + 5, py + 12, 2, 1);
         } else {
           // Descendo na queda: pernas esticadas para pousar
           ctx.fillStyle = pantsGray;
-          ctx.fillRect(px + 2, py + 10, 2, 2);
-          ctx.fillRect(px + 5, py + 10, 2, 2);
+          ctx.fillRect(px + 2, py + 10, 2, 3);
+          ctx.fillRect(px + 5, py + 10, 2, 3);
           ctx.fillStyle = shoesDark;
-          ctx.fillRect(px + 2, py + 11, 2, 1);
-          ctx.fillRect(px + 5, py + 11, 2, 1);
+          ctx.fillRect(px + 2, py + 12, 2, 1);
+          ctx.fillRect(px + 5, py + 12, 2, 1);
         }
       } else {
         // NO CHÃO (CAMINHADA EM 4 FRAMES):
         ctx.fillStyle = pantsGray;
         if (player.walkFrame === 0) {
-          // Posição neutra / pernas retas
-          ctx.fillRect(px + 2, py + 10, 2, 2);
-          ctx.fillRect(px + 5, py + 10, 2, 2);
+          // Posição neutra / pernas retas (mais compridas)
+          ctx.fillRect(px + 2, py + 10, 2, 3);
+          ctx.fillRect(px + 5, py + 10, 2, 3);
           ctx.fillStyle = shoesDark;
-          ctx.fillRect(px + 2, py + 11, 2, 1);
-          ctx.fillRect(px + 5, py + 11, 2, 1);
+          ctx.fillRect(px + 2, py + 12, 2, 1);
+          ctx.fillRect(px + 5, py + 12, 2, 1);
         } else if (player.walkFrame === 1) {
           // Passo aberto frente
           if (isRight) {
-            ctx.fillRect(px + 1, py + 10, 2, 2);
-            ctx.fillRect(px + 5, py + 9, 2, 2);
+            ctx.fillRect(px + 1, py + 10, 2, 3);
+            ctx.fillRect(px + 5, py + 9, 2, 3);
             ctx.fillStyle = shoesDark;
-            ctx.fillRect(px + 1, py + 11, 2, 1);
-            ctx.fillRect(px + 6, py + 10, 2, 1);
-          } else {
-            ctx.fillRect(px + 6, py + 10, 2, 2);
-            ctx.fillRect(px + 2, py + 9, 2, 2);
-            ctx.fillStyle = shoesDark;
+            ctx.fillRect(px + 1, py + 12, 2, 1);
             ctx.fillRect(px + 6, py + 11, 2, 1);
-            ctx.fillRect(px + 1, py + 10, 2, 1);
+          } else {
+            ctx.fillRect(px + 6, py + 10, 2, 3);
+            ctx.fillRect(px + 2, py + 9, 2, 3);
+            ctx.fillStyle = shoesDark;
+            ctx.fillRect(px + 6, py + 12, 2, 1);
+            ctx.fillRect(px + 1, py + 11, 2, 1);
           }
         } else if (player.walkFrame === 2) {
           // Posição média com leve abaixamento
-          ctx.fillRect(px + 3, py + 10, 3, 2);
+          ctx.fillRect(px + 3, py + 10, 3, 3);
           ctx.fillStyle = shoesDark;
-          ctx.fillRect(px + 2, py + 11, 2, 1);
-          ctx.fillRect(px + 5, py + 11, 2, 1);
+          ctx.fillRect(px + 2, py + 12, 2, 1);
+          ctx.fillRect(px + 5, py + 12, 2, 1);
         } else {
           // Passo aberto trás
           if (isRight) {
-            ctx.fillRect(px + 4, py + 10, 2, 2);
-            ctx.fillRect(px + 1, py + 9, 2, 2);
+            ctx.fillRect(px + 4, py + 10, 2, 3);
+            ctx.fillRect(px + 1, py + 9, 2, 3);
             ctx.fillStyle = shoesDark;
-            ctx.fillRect(px + 5, py + 11, 2, 1);
-            ctx.fillRect(px + 0, py + 10, 2, 1);
+            ctx.fillRect(px + 5, py + 12, 2, 1);
+            ctx.fillRect(px + 0, py + 11, 2, 1);
           } else {
-            ctx.fillRect(px + 3, py + 10, 2, 2);
-            ctx.fillRect(px + 6, py + 9, 2, 2);
+            ctx.fillRect(px + 3, py + 10, 2, 3);
+            ctx.fillRect(px + 6, py + 9, 2, 3);
             ctx.fillStyle = shoesDark;
-            ctx.fillRect(px + 2, py + 11, 2, 1);
-            ctx.fillRect(px + 7, py + 10, 2, 1);
+            ctx.fillRect(px + 2, py + 12, 2, 1);
+            ctx.fillRect(px + 7, py + 11, 2, 1);
           }
         }
       }
       ctx.globalAlpha = 1.0;
+      ctx.restore();
     }
     // --- RENDERIZAÇÃO E COMPORTAMENTO DOS INIMIGOS ---
     function updateAndDrawEnemies(ctx, biome, time) {
