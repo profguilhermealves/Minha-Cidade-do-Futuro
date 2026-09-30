@@ -4820,50 +4820,53 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
         ctx.globalAlpha = 0.35;
       }
 
-      // Paleta de cores Celeste Madeline:
-      const hairRed = "#c72d52";       // Vermelho/rosado profundo
-      const hairHighlight = "#ff5c7a"; // Rosa vibrante Celeste
-      const skinColor = "#ffd1b3";     // Pele clara anime
-      const eyesColor = "#1a1e30";     // Olho escuro pixel
-      const scarfColor = "#ff4757";    // Cachecol vermelho vivo
-      const hoodieBlue = "#3465a4";    // Moletom azul Celeste
-      const hoodieDark = "#204a87";    // Sombra do moletom
-      const pantsDark = "#1c2035";     // Calça azul marinho escura
-      const shoesBrown = "#5c3317";    // Botas marrons
+      // Paleta de cores do novo personagem (menino)
+      const hairBrown = "#5a3d2b";      // Cabelo curto castanho
+      const hairDark = "#3e2a1c";       // Sombra do cabelo
+      const skinColor = "#ffd1b3";      // Pele clara
+      const eyesColor = "#1a1e30";      // Olho escuro pixel
+      const shirtWhite = "#f5f5f5";     // Camisa branca
+      const shirtShadow = "#d8d8d8";    // Sombra da camisa
+      const ccBlack = "#111111";        // Letras "Cc" em preto
+      const pantsGray = "#9aa0a6";      // Calça cinza
+      const pantsDark = "#7d838c";      // Sombra da calça
+      const shoesDark = "#2b2f3a";      // Sapatos escuros
 
       // Efeito de balanço de cabelo ao se mover/pular
       const hairWave = !player.isGrounded 
         ? (player.vy < 0 ? 1 : -1) 
         : ((player.walkFrame % 2 === 0) ? 0 : 1);
 
-      // --- CAMADA DE CABELO DE TRÁS (volume esvoaçante de Celeste) ---
-      ctx.fillStyle = hairRed;
+      // --- CAMADA DE CABELO DE TRÁS (volume curto) ---
+      ctx.fillStyle = hairBrown;
       if (isRight) {
         // Cabelo esvoaça para trás (esquerda)
-        ctx.fillRect(px - 3, py + 2 + hairWave, 4, 5);
-        ctx.fillRect(px - 1, py + 6 + hairWave, 3, 3);
-        ctx.fillStyle = hairHighlight;
-        ctx.fillRect(px - 2, py + 3 + hairWave, 2, 3);
+        ctx.fillRect(px - 2, py + 2 + hairWave, 3, 4);
+        ctx.fillRect(px - 1, py + 5 + hairWave, 2, 2);
+        ctx.fillStyle = hairDark;
+        ctx.fillRect(px - 2, py + 3 + hairWave, 1, 2);
       } else {
         // Cabelo esvoaça para trás (direita)
-        ctx.fillRect(px + 7, py + 2 + hairWave, 4, 5);
-        ctx.fillRect(px + 6, py + 6 + hairWave, 3, 3);
-        ctx.fillStyle = hairHighlight;
-        ctx.fillRect(px + 8, py + 3 + hairWave, 2, 3);
+        ctx.fillRect(px + 7, py + 2 + hairWave, 3, 4);
+        ctx.fillRect(px + 7, py + 5 + hairWave, 2, 2);
+        ctx.fillStyle = hairDark;
+        ctx.fillRect(px + 9, py + 3 + hairWave, 1, 2);
       }
 
       // --- CABEÇA E CABELO SUPERIOR ---
-      // Topo do cabelo
-      ctx.fillStyle = hairHighlight;
+      // Topo do cabelo curto
+      ctx.fillStyle = hairBrown;
       ctx.fillRect(px + 1, py, 6, 2);
-      ctx.fillStyle = hairRed;
-      ctx.fillRect(px + (isRight ? 1 : 2), py + 1, 5, 2);
+      ctx.fillRect(px + 2, py + 1, 4, 1);
+      ctx.fillStyle = hairDark;
+      ctx.fillRect(px + 1, py + 1, 1, 1);
+      ctx.fillRect(px + 6, py + 1, 1, 1);
 
       // Rosto (Pele)
       ctx.fillStyle = skinColor;
       ctx.fillRect(px + (isRight ? 3 : 1), py + 2, 4, 3);
 
-      // Olhos simples de 1 pixel
+      // Olho simples de 1 pixel (lado da direção)
       ctx.fillStyle = eyesColor;
       if (isRight) {
         ctx.fillRect(px + 6, py + 3, 1, 1);
@@ -4871,34 +4874,32 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
         ctx.fillRect(px + 1, py + 3, 1, 1);
       }
 
-      // Franja do cabelo
-      ctx.fillStyle = hairHighlight;
+      // Franja curta do cabelo
+      ctx.fillStyle = hairDark;
       if (isRight) {
-        ctx.fillRect(px + 2, py + 2, 2, 2);
+        ctx.fillRect(px + 2, py + 2, 2, 1);
       } else {
-        ctx.fillRect(px + 4, py + 2, 2, 2);
+        ctx.fillRect(px + 4, py + 2, 2, 1);
       }
 
-      // --- CACHICOL / LENÇO (SCARF) ---
-      ctx.fillStyle = scarfColor;
-      ctx.fillRect(px + 2, py + 5, 5, 2);
-      // Ponta do lenço balançando atrás
-      if (isRight) {
-        ctx.fillRect(px, py + 6, 2, 2);
-      } else {
-        ctx.fillRect(px + 6, py + 6, 2, 2);
-      }
+      // --- CAMISA BRANCA COM "Cc" NO PEITO ---
+      ctx.fillStyle = shirtWhite;
+      ctx.fillRect(px + 2, py + 5, 5, 1);    // gola/ombros
+      ctx.fillRect(px + 1, py + 6, 7, 3);    // corpo da camisa
+      // Letra "C" (maiúscula) em preto
+      ctx.fillStyle = ccBlack;
+      ctx.fillRect(px + 2, py + 6, 2, 1);
+      ctx.fillRect(px + 2, py + 7, 1, 1);
+      ctx.fillRect(px + 2, py + 8, 2, 1);
+      // Letra "c" (minúscula) em preto
+      ctx.fillRect(px + 5, py + 6, 2, 1);
+      ctx.fillRect(px + 5, py + 7, 1, 1);
+      ctx.fillRect(px + 5, py + 8, 2, 1);
 
-      // --- CORPO (MOLETOM AZUL) ---
-      ctx.fillStyle = hoodieBlue;
-      ctx.fillRect(px + 2, py + 7, 5, 3);
-      ctx.fillStyle = hoodieDark;
-      ctx.fillRect(px + (isRight ? 2 : 5), py + 7, 1, 3);
-
-      // Braços alternando na caminhada ou levantados no pulo
+      // --- BRAÇOS (CAMISA BRANCA) alternando na caminhada ou levantados no pulo ---
       if (!player.isGrounded) {
         // No ar (pulo): braços levantados / dinâmicos
-        ctx.fillStyle = hoodieBlue;
+        ctx.fillStyle = shirtWhite;
         if (player.vy < 0) {
           // Subindo: braços para cima
           ctx.fillRect(px + (isRight ? 6 : 1), py + 5, 2, 2);
@@ -4910,7 +4911,7 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
         }
       } else {
         // No chão: braços acompanham passo
-        ctx.fillStyle = hoodieBlue;
+        ctx.fillStyle = shirtWhite;
         if (player.walkFrame === 0 || player.walkFrame === 2) {
           ctx.fillRect(px + (isRight ? 6 : 1), py + 8, 2, 2);
         } else {
@@ -4918,33 +4919,33 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
         }
       }
 
-      // --- PERNAS / CALÇA E BOTAS (FRAMES DE ANIMAÇÃO) ---
+      // --- PERNAS / CALÇA CINZA E SAPATOS (FRAMES DE ANIMAÇÃO) ---
       if (!player.isGrounded) {
         // NO AR:
         if (player.vy < 0) {
           // Subindo no pulo: pernas encolhidas
-          ctx.fillStyle = pantsDark;
+          ctx.fillStyle = pantsGray;
           ctx.fillRect(px + 2, py + 10, 4, 1);
-          ctx.fillStyle = shoesBrown;
+          ctx.fillStyle = shoesDark;
           ctx.fillRect(px + 2, py + 11, 2, 1);
           ctx.fillRect(px + 5, py + 11, 2, 1);
         } else {
           // Descendo na queda: pernas esticadas para pousar
-          ctx.fillStyle = pantsDark;
+          ctx.fillStyle = pantsGray;
           ctx.fillRect(px + 2, py + 10, 2, 2);
           ctx.fillRect(px + 5, py + 10, 2, 2);
-          ctx.fillStyle = shoesBrown;
+          ctx.fillStyle = shoesDark;
           ctx.fillRect(px + 2, py + 11, 2, 1);
           ctx.fillRect(px + 5, py + 11, 2, 1);
         }
       } else {
         // NO CHÃO (CAMINHADA EM 4 FRAMES):
-        ctx.fillStyle = pantsDark;
+        ctx.fillStyle = pantsGray;
         if (player.walkFrame === 0) {
           // Posição neutra / pernas retas
           ctx.fillRect(px + 2, py + 10, 2, 2);
           ctx.fillRect(px + 5, py + 10, 2, 2);
-          ctx.fillStyle = shoesBrown;
+          ctx.fillStyle = shoesDark;
           ctx.fillRect(px + 2, py + 11, 2, 1);
           ctx.fillRect(px + 5, py + 11, 2, 1);
         } else if (player.walkFrame === 1) {
@@ -4952,20 +4953,20 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
           if (isRight) {
             ctx.fillRect(px + 1, py + 10, 2, 2);
             ctx.fillRect(px + 5, py + 9, 2, 2);
-            ctx.fillStyle = shoesBrown;
+            ctx.fillStyle = shoesDark;
             ctx.fillRect(px + 1, py + 11, 2, 1);
             ctx.fillRect(px + 6, py + 10, 2, 1);
           } else {
             ctx.fillRect(px + 6, py + 10, 2, 2);
             ctx.fillRect(px + 2, py + 9, 2, 2);
-            ctx.fillStyle = shoesBrown;
+            ctx.fillStyle = shoesDark;
             ctx.fillRect(px + 6, py + 11, 2, 1);
             ctx.fillRect(px + 1, py + 10, 2, 1);
           }
         } else if (player.walkFrame === 2) {
           // Posição média com leve abaixamento
           ctx.fillRect(px + 3, py + 10, 3, 2);
-          ctx.fillStyle = shoesBrown;
+          ctx.fillStyle = shoesDark;
           ctx.fillRect(px + 2, py + 11, 2, 1);
           ctx.fillRect(px + 5, py + 11, 2, 1);
         } else {
@@ -4973,13 +4974,13 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
           if (isRight) {
             ctx.fillRect(px + 4, py + 10, 2, 2);
             ctx.fillRect(px + 1, py + 9, 2, 2);
-            ctx.fillStyle = shoesBrown;
+            ctx.fillStyle = shoesDark;
             ctx.fillRect(px + 5, py + 11, 2, 1);
             ctx.fillRect(px + 0, py + 10, 2, 1);
           } else {
             ctx.fillRect(px + 3, py + 10, 2, 2);
             ctx.fillRect(px + 6, py + 9, 2, 2);
-            ctx.fillStyle = shoesBrown;
+            ctx.fillStyle = shoesDark;
             ctx.fillRect(px + 2, py + 11, 2, 1);
             ctx.fillRect(px + 7, py + 10, 2, 1);
           }
@@ -4987,7 +4988,6 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
       }
       ctx.globalAlpha = 1.0;
     }
-
     // --- RENDERIZAÇÃO E COMPORTAMENTO DOS INIMIGOS ---
     function updateAndDrawEnemies(ctx, biome, time) {
       const targetGroundY = biome.groundY || 146;
