@@ -7439,10 +7439,10 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
     el.style.display = (gameState === 'menu') ? 'none' : '';
   }
 
-  /* ============ SELEÇÃO DE BOTÕES COM O CONTROLE ============ */
-  var SEL_MENU  = '#btn-play, button.btn, button[data-start], #startBtn, button';
-  var SEL_QUIZ  = '#quiz-options button, #quizOptions button, .quiz-option, .quiz-btn, button[data-answer], button';
-  var SEL_FINAL = '#certificado button, #certificate button, #final-screen button, #gameover button, #gameover-screen button, #end-screen button, button';
+    /* Seletores restritos: só botões DENTRO das telas/overlays do jogo */
+  var SEL_MENU  = '#menu-screen button, #menu button, #startScreen button, #btn-play, button[data-start], #startBtn';
+  var SEL_QUIZ  = '#quiz-options button, #quizOptions button, .quiz-option, .quiz-btn, button[data-answer], #quiz button';
+  var SEL_FINAL = '#certificado button, #certificate button, #final-screen button, #gameover button, #gameover-screen button, #end-screen button';
 
   var FOCUS_DELAY = 300;
   var focusList = [];
@@ -7455,68 +7455,31 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
     var r = el.getClientRects();
     return r.length > 0 && r[0].width > 0 && r[0].height > 0;
   }
+
+  /* EXCLUI botões que pertencem à "casca" da página, não ao jogo:
+     menu superior (Início, som, parallax) e barra de fases (níveis 1-10) */
+  function ehChromeDaPagina(el) {
+    var a = el.closest(
+      'header, nav, .topbar, #topbar, .menu-superior, .menuSuperior, .toolbar, ' +
+      '[id*="progress"], [class*="progress"], ' +
+      '[id*="levels"], [class*="levels"], [id*="fases"], [class*="fases"], ' +
+      '[id*="fase-bar"], [class*="fase-bar"], [class*="barra-de-fase"], ' +
+      '[id*="level-bar"], [class*="level-bar"], [id*="selecao"], [class*="selecao"], ' +
+      '.btn-inicio, #btnInicio, [data-som], [data-parallax]'
+    );
+    return !!a;
+  }
+
   function coletar(sel) {
     var out = [];
     document.querySelectorAll(sel).forEach(function (el) {
+      if (!el || el.disabled) return;
       if (el.closest && el.closest('#touchControls')) return;
+      if (ehChromeDaPagina(el)) return;          // ignora Início, níveis etc.
       if (visivel(el)) out.push(el);
     });
     return out;
   }
-
-  /* CORREÇÃO 2: detecção clara do modo atual */
-  function modoAtual() {
-    if (typeof quizActive !== 'undefined' && quizActive && !quizLock) return 'quiz';
-    if (typeof gameState !== 'undefined' && gameState === 'menu') return 'menu';
-    var fin = document.querySelector(SEL_FINAL);
-    if (fin && fin.getClientRects().length) return 'final';
-    return ''; // jogabilidade: comanda o personagem
-  }
-
-  /* CORREÇÃO 1: limpa TODOS os destaques (usado ao entrar no jogo) */
-  function limparDestaque() {
-    document.querySelectorAll('.control-focused').forEach(function (el) {
-      el.classList.remove('control-focused');
-    });
-  }
-
-  function rebuild() {
-    var m = modoAtual();
-    if (m === focusMode) return;
-    focusMode = m;
-    if (m === 'menu') focusList = coletar(SEL_MENU);
-    else if (m === 'quiz') focusList = coletar(SEL_QUIZ);
-    else if (m === 'final') focusList = coletar(SEL_FINAL);
-    else focusList = [];
-    focusIdx = 0;
-    limparDestaque();          // sempre limpa antes de aplicar
-    aplicarDestaque();
-  }
-  function aplicarDestaque() {
-    focusList.forEach(function (el, i) {
-      if (i === focusIdx) el.classList.add('control-focused');
-      else el.classList.remove('control-focused');
-    });
-  }
-  function mover(d) {
-    if (focusList.length === 0) return;
-    var now = performance.now();
-    if (now - lastFocusMove < FOCUS_DELAY) return;
-    lastFocusMove = now;
-    focusIdx = (focusIdx + d + focusList.length) % focusList.length;
-    aplicarDestaque();
-  }
-  function confirmar() {
-    if (focusList.length === 0) return;
-    var el = focusList[focusIdx];
-    if (focusMode === 'quiz') {
-      var qObj = getQuestionForLevel(currentBiomeIdx, currentLevelIdx);
-      handleQuizAnswer(focusIdx, qObj.ans, qObj);
-    } else {
-      el.click();
-    }
-  }
-
   /* ============ CONTROLE XBOX (Gamepad API) ============ */
   var gamepadPrev = new Map();
 
