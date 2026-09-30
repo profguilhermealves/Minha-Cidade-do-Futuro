@@ -7371,13 +7371,12 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
 (function () {
   "use strict";
 
-  /* Segurança: só roda se estiver no arquivo do jogo */
   if (!document.getElementById('celesteCanvas')) {
-    console.warn('Bloco de controles: canvas do jogo não encontrado. Verifique se colou no arquivo certo.');
+    console.warn('Bloco de controles: canvas do jogo não encontrado.');
     return;
   }
 
-  /* ============ PULO VIA TOQUE/GAMEPAD (mesma lógica do teclado) ============ */
+  /* ============ PULO VIA TOQUE/GAMEPAD ============ */
   function triggerJumpFromTouch() {
     if (keys.jump) return;
     keys.jump = true;
@@ -7408,25 +7407,16 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
   function attachTouchControls() {
     var pad = document.getElementById('touchControls');
     if (!pad) return;
-
     function holdBtn(el, onPress, onRelease) {
       if (!el) return;
       var active = false;
       function press(e) {
         if (e.cancelable) e.preventDefault();
-        if (!active) {
-          active = true;
-          el.classList.add('tc-pressed');
-          onPress();
-        }
+        if (!active) { active = true; el.classList.add('tc-pressed'); onPress(); }
       }
       function release(e) {
         if (e.cancelable) e.preventDefault();
-        if (active) {
-          active = false;
-          el.classList.remove('tc-pressed');
-          onRelease();
-        }
+        if (active) { active = false; el.classList.remove('tc-pressed'); onRelease(); }
       }
       el.addEventListener('touchstart', press, { passive: false });
       el.addEventListener('touchend', release, { passive: false });
@@ -7435,7 +7425,6 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
       el.addEventListener('mouseup', release);
       el.addEventListener('mouseleave', release);
     }
-
     holdBtn(pad.querySelector('.tc-left-btn'),  function () { keys.left = true; },  function () { keys.left = false; });
     holdBtn(pad.querySelector('.tc-right-btn'), function () { keys.right = true; }, function () { keys.right = false; });
     holdBtn(pad.querySelector('.tc-jump-btn'),  triggerJumpFromTouch,               releaseJumpFromTouch);
@@ -7450,8 +7439,7 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
     el.style.display = (gameState === 'menu') ? 'none' : '';
   }
 
-  /* ============ SELEÇÃO DE BOTÕES COM O CONTROLE (princípio do mapa) ============ */
-  /* Ajuste os seletores conforme os botões reais de cada tela. */
+  /* ============ SELEÇÃO DE BOTÕES COM O CONTROLE ============ */
   var SEL_MENU  = '#btn-play, button.btn, button[data-start], #startBtn, button';
   var SEL_QUIZ  = '#quiz-options button, #quizOptions button, .quiz-option, .quiz-btn, button[data-answer], button';
   var SEL_FINAL = '#certificado button, #certificate button, #final-screen button, #gameover button, #gameover-screen button, #end-screen button, button';
@@ -7475,13 +7463,23 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
     });
     return out;
   }
+
+  /* CORREÇÃO 2: detecção clara do modo atual */
   function modoAtual() {
     if (typeof quizActive !== 'undefined' && quizActive && !quizLock) return 'quiz';
     if (typeof gameState !== 'undefined' && gameState === 'menu') return 'menu';
     var fin = document.querySelector(SEL_FINAL);
     if (fin && fin.getClientRects().length) return 'final';
-    return '';
+    return ''; // jogabilidade: comanda o personagem
   }
+
+  /* CORREÇÃO 1: limpa TODOS os destaques (usado ao entrar no jogo) */
+  function limparDestaque() {
+    document.querySelectorAll('.control-focused').forEach(function (el) {
+      el.classList.remove('control-focused');
+    });
+  }
+
   function rebuild() {
     var m = modoAtual();
     if (m === focusMode) return;
@@ -7491,6 +7489,7 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
     else if (m === 'final') focusList = coletar(SEL_FINAL);
     else focusList = [];
     focusIdx = 0;
+    limparDestaque();          // sempre limpa antes de aplicar
     aplicarDestaque();
   }
   function aplicarDestaque() {
@@ -7549,9 +7548,9 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
       var up    = cur[12] === 1 || ay < -0.4;
       var down  = cur[13] === 1 || ay > 0.4;
 
-      rebuild(); // atualiza a lista de botões da tela atual
+      rebuild();
 
-      /* MENU: navega entre os botões; A/Start confirma o destacado */
+      /* MENU: navega botões; A/Start confirma */
       if (focusMode === 'menu') {
         if (left || up) mover(-1);
         else if (right || down) mover(1);
@@ -7560,12 +7559,12 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
         continue;
       }
 
-      /* QUIZ: direcional seleciona a alternativa; A confirma; B/X/Y direto */
+      /* QUIZ: direcional seleciona; A confirma a selecionada; B/X/Y direto */
       if (focusMode === 'quiz') {
         if (left || up) mover(-1);
         else if (right || down) mover(1);
         if (edge(0)) {
-          confirmar();
+          confirmar();   // A confirma a alternativa destacada
         } else if (edge(1)) {
           var q1 = getQuestionForLevel(currentBiomeIdx, currentLevelIdx);
           handleQuizAnswer(1, q1.ans, q1);
@@ -7580,7 +7579,7 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
         continue;
       }
 
-      /* TELA FINAL/CERTIFICADO: navega botões e A confirma */
+      /* TELA FINAL: navega botões; A confirma */
       if (focusMode === 'final') {
         if (left || up) mover(-1);
         else if (right || down) mover(1);
@@ -7589,7 +7588,7 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
         continue;
       }
 
-      /* JOGO (plataforma): movimento igual ao de antes */
+      /* CORREÇÃO 3: JOGABILIDADE — comanda o personagem */
       keys.left = (ax < -0.4 || cur[14] === 1);
       keys.right = (ax > 0.4 || cur[15] === 1);
 
@@ -7613,7 +7612,6 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
     requestAnimationFrame(inputPollLoop);
   }
 
-  /* ============ INICIALIZAÇÃO ============ */
   function boot() {
     attachTouchControls();
     if (!inputPollRunning) {
