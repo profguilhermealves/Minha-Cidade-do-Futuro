@@ -3548,7 +3548,7 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
         // ==========================================
         // --- 1. AMAZÔNIA (O CORAÇÃO VERDE) ---
         // ==========================================
-                case 0: {
+                       case 0: {
           // ==========================================
           // --- 1. GUANACES (CIDADE PEQUENA) ---
           // ==========================================
@@ -3572,22 +3572,135 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
           // Camada 4: Praça central com gramado e calçada
           drawRichWater(ctx, 150, 34, "#6fae5e", "#8cc97a", "#a8d98f", "#d9f2c9", 230 + p1, time);
 
-          // --- LETREIRO COLORIDO "GUANACES" perto da praça ---
-          const signX = Math.round(120 + p3);
-          const signY = 96;
-          // Poste do letreiro
+          // --- CASAZINHAS COM TELHADOS COLORIDOS ---
+          ctx.fillStyle = "#e8d5b0";
+          ctx.fillRect(30 + p3, 104, 18, 12);
+          ctx.fillStyle = "#d1495b";
+          ctx.fillRect(29 + p3, 102, 20, 3);
+          ctx.fillStyle = "#5b3a1e";
+          ctx.fillRect(36 + p3, 110, 4, 6);
+          ctx.fillStyle = "#7fb3d5";
+          ctx.fillRect(40 + p3, 106, 4, 3);
+
+          ctx.fillStyle = "#f2e2c4";
+          ctx.fillRect(270 + p3, 106, 20, 12);
+          ctx.fillStyle = "#2a9d8f";
+          ctx.fillRect(269 + p3, 104, 22, 3);
+          ctx.fillStyle = "#5b3a1e";
+          ctx.fillRect(277 + p3, 112, 4, 6);
+          ctx.fillStyle = "#7fb3d5";
+          ctx.fillRect(281 + p3, 108, 4, 3);
+
+          ctx.fillStyle = "#e8d5b0";
+          ctx.fillRect(320 + p3, 108, 18, 12);
+          ctx.fillStyle = "#e9c46a";
+          ctx.fillRect(319 + p3, 106, 20, 3);
+          ctx.fillStyle = "#5b3a1e";
+          ctx.fillRect(326 + p3, 114, 4, 6);
+
+          // --- MUITAS ÁRVORES (cidade cheia de árvores) ---
+          const swayCity = Math.sin(time * 0.003) * 1.5;
+          drawDetailedTree(ctx, 60 + p3, 100, 8, 40, "#2c5a36", "#3f7d4a", "#5a9e63", "#4d2f1d", "#6b4a2f", swayCity, "#e63946");
+          drawDetailedTree(ctx, 200 + p3, 96, 10, 48, "#2c5a36", "#3f7d4a", "#5a9e63", "#4d2f1d", "#6b4a2f", -swayCity, "#f4a261");
+          drawDetailedTree(ctx, 90 + p3, 118, 6, 30, "#2c5a36", "#3f7d4a", "#5a9e63", "#4d2f1d", "#6b4a2f", swayCity, "#2a9d8f");
+          drawDetailedTree(ctx, 340 + p3, 116, 7, 34, "#2c5a36", "#3f7d4a", "#5a9e63", "#4d2f1d", "#6b4a2f", -swayCity, "#e9c46a");
+          drawDetailedTree(ctx, 150 + p3, 118, 5, 26, "#2c5a36", "#3f7d4a", "#5a9e63", "#4d2f1d", "#6b4a2f", swayCity, "#d1495b");
+
+          // --- CRIANÇAS BRINCANDO NA PRAÇA ---
+          const kid1X = Math.round(180 + p4);
+          const kidJump = Math.abs(Math.sin(time * 0.01)) * 3;
+          ctx.fillStyle = "#ffd1b3";
+          ctx.fillRect(kid1X, 140 - kidJump, 3, 3);
+          ctx.fillStyle = "#e63946";
+          ctx.fillRect(kid1X, 143 - kidJump, 3, 4);
+          ctx.fillStyle = "#1d4ed8";
+          ctx.fillRect(kid1X, 147 - kidJump, 3, 3);
+
+          const kid2X = Math.round(200 + p4 + Math.sin(time * 0.008) * 4);
+          ctx.fillStyle = "#ffd1b3";
+          ctx.fillRect(kid2X, 142, 3, 3);
+          ctx.fillStyle = "#2a9d8f";
+          ctx.fillRect(kid2X, 145, 3, 4);
           ctx.fillStyle = "#6b4a2f";
-          ctx.fillRect(signX + 10, signY + 8, 3, 14);
+          ctx.fillRect(kid2X, 149, 3, 3);
+
+          const kid3X = Math.round(215 + p4);
+          ctx.fillStyle = "#ffd1b3";
+          ctx.fillRect(kid3X, 141, 3, 3);
+          ctx.fillStyle = "#f4a261";
+          ctx.fillRect(kid3X, 144, 3, 4);
+          ctx.fillStyle = "#1d4ed8";
+          ctx.fillRect(kid3X - 1, 146, 1, 2);
+          ctx.fillRect(kid3X + 3, 146, 1, 2);
+          ctx.fillStyle = "#3f7d4a";
+          ctx.fillRect(kid3X, 148, 3, 3);
+
+          // --- DETALHES DA PRAÇA ---
+          ctx.fillStyle = "#6b4a2f";
+          ctx.fillRect(230 + p4, 146, 8, 2);
+          ctx.fillRect(231 + p4, 148, 1, 3);
+          ctx.fillRect(236 + p4, 148, 1, 3);
+          ctx.fillStyle = "#555";
+          ctx.fillRect(250 + p4, 138, 2, 10);
+          ctx.fillStyle = "#ffe066";
+          ctx.fillRect(249 + p4, 136, 4, 2);
+
+          // --- CHÃO DA PRAÇA ---
+          drawGroundDither(ctx, 148, 32, "#5a9e63", "#3f7d4a", 3);
+          ctx.fillStyle = "#c9c2b0";
+          ctx.fillRect(160 + p4, 148, 60, 4);
+          ctx.fillStyle = "#a89f8a";
+          ctx.fillRect(160 + p4, 148, 8, 1);
+          ctx.fillRect(180 + p4, 148, 8, 1);
+          ctx.fillRect(200 + p4, 148, 8, 1);
+
+          // --- CÉU: NUVENS E PASSARINHOS ---
+          const cloudX = ((time * 0.03) % (NATIVE_W + 60)) - 30;
+          ctx.fillStyle = "rgba(255,255,255,0.85)";
+          ctx.fillRect(cloudX + p2, 30, 16, 4);
+          ctx.fillRect(cloudX + 4 + p2, 27, 10, 4);
+          ctx.fillRect(cloudX + 40 + p2, 40, 12, 3);
+          ctx.fillRect(cloudX + 44 + p2, 38, 8, 3);
+
+          const birdX = ((time * 0.06) % (NATIVE_W + 40)) - 20;
+          const birdY = 50 + Math.sin(time * 0.005) * 6;
+          ctx.fillStyle = "#333";
+          ctx.fillRect(Math.round(birdX + p2), Math.round(birdY), 3, 1);
+          ctx.fillRect(Math.round(birdX - 2 + p2), Math.round(birdY - 1), 2, 1);
+          ctx.fillRect(Math.round(birdX + 3 + p2), Math.round(birdY - 1), 2, 1);
+
+          // Camada 6: Silhuetas de primeiro plano
+          drawCinematicForeground(ctx, 0, time, p5);
+
+          // ==========================================
+          // --- LETREIRO "GUANACES" EM PRIMEIRO PLANO ---
+          // (desenhado POR ÚLTIMO = fica por cima de tudo)
+          // ==========================================
+          const signX = Math.round(168 + p5);
+          const signY = 84;
+
+          // Sombra escura atrás da placa (dá profundidade)
+          ctx.fillStyle = "rgba(0,0,0,0.35)";
+          ctx.fillRect(signX + 2, signY + 8, 30, 8);
+
+          // Poste duplo do letreiro
+          ctx.fillStyle = "#5b3a1e";
+          ctx.fillRect(signX + 4, signY + 8, 3, 14);
+          ctx.fillRect(signX + 23, signY + 8, 3, 14);
+
           // Placa colorida (fundo)
           ctx.fillStyle = "#e63946";
-          ctx.fillRect(signX, signY, 24, 8);
+          ctx.fillRect(signX, signY, 30, 8);
           ctx.fillStyle = "#f4a261";
           ctx.fillRect(signX, signY, 8, 8);
           ctx.fillStyle = "#2a9d8f";
-          ctx.fillRect(signX + 8, signY, 8, 8);
+          ctx.fillRect(signX + 8, signY, 7, 8);
           ctx.fillStyle = "#e9c46a";
-          ctx.fillRect(signX + 16, signY, 8, 8);
-          // Letras "GUANACES" em branco (pixel art)
+          ctx.fillRect(signX + 15, signY, 8, 8);
+          ctx.fillStyle = "#f4a261";
+          ctx.fillRect(signX + 23, signY, 7, 8);
+
+          // Letras "GUANACES" em branco
           ctx.fillStyle = "#ffffff";
           // G
           ctx.fillRect(signX + 1, signY + 1, 2, 1); ctx.fillRect(signX + 1, signY + 2, 1, 1);
@@ -3616,112 +3729,6 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
           ctx.fillRect(signX + 26, signY + 1, 2, 1); ctx.fillRect(signX + 26, signY + 2, 1, 1);
           ctx.fillRect(signX + 26, signY + 3, 2, 1); ctx.fillRect(signX + 27, signY + 4, 1, 1);
           ctx.fillRect(signX + 26, signY + 5, 2, 1);
-
-          // --- CASAZINHAS COM TELHADOS COLORIDOS ---
-          // Casa 1 (esquerda)
-          ctx.fillStyle = "#e8d5b0";
-          ctx.fillRect(30 + p3, 104, 18, 12);
-          ctx.fillStyle = "#d1495b";
-          ctx.fillRect(29 + p3, 102, 20, 3);
-          ctx.fillStyle = "#5b3a1e";
-          ctx.fillRect(36 + p3, 110, 4, 6);
-          ctx.fillStyle = "#7fb3d5";
-          ctx.fillRect(40 + p3, 106, 4, 3);
-          // Casa 2 (direita)
-          ctx.fillStyle = "#f2e2c4";
-          ctx.fillRect(270 + p3, 106, 20, 12);
-          ctx.fillStyle = "#2a9d8f";
-          ctx.fillRect(269 + p3, 104, 22, 3);
-          ctx.fillStyle = "#5b3a1e";
-          ctx.fillRect(277 + p3, 112, 4, 6);
-          ctx.fillStyle = "#7fb3d5";
-          ctx.fillRect(281 + p3, 108, 4, 3);
-          // Casa 3 (centro-direita)
-          ctx.fillStyle = "#e8d5b0";
-          ctx.fillRect(320 + p3, 108, 18, 12);
-          ctx.fillStyle = "#e9c46a";
-          ctx.fillRect(319 + p3, 106, 20, 3);
-          ctx.fillStyle = "#5b3a1e";
-          ctx.fillRect(326 + p3, 114, 4, 6);
-
-          // --- MUITAS ÁRVORES (cidade cheia de árvores) ---
-          const swayCity = Math.sin(time * 0.003) * 1.5;
-          drawDetailedTree(ctx, 60 + p3, 100, 8, 40, "#2c5a36", "#3f7d4a", "#5a9e63", "#4d2f1d", "#6b4a2f", swayCity, "#e63946");
-          drawDetailedTree(ctx, 200 + p3, 96, 10, 48, "#2c5a36", "#3f7d4a", "#5a9e63", "#4d2f1d", "#6b4a2f", -swayCity, "#f4a261");
-          drawDetailedTree(ctx, 90 + p3, 118, 6, 30, "#2c5a36", "#3f7d4a", "#5a9e63", "#4d2f1d", "#6b4a2f", swayCity, "#2a9d8f");
-          drawDetailedTree(ctx, 340 + p3, 116, 7, 34, "#2c5a36", "#3f7d4a", "#5a9e63", "#4d2f1d", "#6b4a2f", -swayCity, "#e9c46a");
-          drawDetailedTree(ctx, 150 + p3, 118, 5, 26, "#2c5a36", "#3f7d4a", "#5a9e63", "#4d2f1d", "#6b4a2f", swayCity, "#d1495b");
-
-          // --- CRIANÇAS BRINCANDO NA PRAÇA ---
-          // Criança 1 (pulando corda imaginária)
-          const kid1X = Math.round(180 + p4);
-          const kidJump = Math.abs(Math.sin(time * 0.01)) * 3;
-          ctx.fillStyle = "#ffd1b3";
-          ctx.fillRect(kid1X, 140 - kidJump, 3, 3);   // cabeça
-          ctx.fillStyle = "#e63946";
-          ctx.fillRect(kid1X, 143 - kidJump, 3, 4);   // corpo (camiseta)
-          ctx.fillStyle = "#1d4ed8";
-          ctx.fillRect(kid1X, 147 - kidJump, 3, 3);   // pernas (short)
-          // Criança 2 (correndo)
-          const kid2X = Math.round(200 + p4 + Math.sin(time * 0.008) * 4);
-          ctx.fillStyle = "#ffd1b3";
-          ctx.fillRect(kid2X, 142, 3, 3);
-          ctx.fillStyle = "#2a9d8f";
-          ctx.fillRect(kid2X, 145, 3, 4);
-          ctx.fillStyle = "#6b4a2f";
-          ctx.fillRect(kid2X, 149, 3, 3);
-          // Criança 3 (parada, de braços abertos)
-          const kid3X = Math.round(215 + p4);
-          ctx.fillStyle = "#ffd1b3";
-          ctx.fillRect(kid3X, 141, 3, 3);
-          ctx.fillStyle = "#f4a261";
-          ctx.fillRect(kid3X, 144, 3, 4);
-          ctx.fillStyle = "#1d4ed8";
-          ctx.fillRect(kid3X - 1, 146, 1, 2);  // braço esquerdo
-          ctx.fillRect(kid3X + 3, 146, 1, 2);  // braço direito
-          ctx.fillStyle = "#3f7d4a";
-          ctx.fillRect(kid3X, 148, 3, 3);
-
-          // --- DETALHES DA PRAÇA ---
-          // Banco de praça
-          ctx.fillStyle = "#6b4a2f";
-          ctx.fillRect(230 + p4, 146, 8, 2);
-          ctx.fillRect(231 + p4, 148, 1, 3);
-          ctx.fillRect(236 + p4, 148, 1, 3);
-          // Poste de luz
-          ctx.fillStyle = "#555";
-          ctx.fillRect(250 + p4, 138, 2, 10);
-          ctx.fillStyle = "#ffe066";
-          ctx.fillRect(249 + p4, 136, 4, 2);
-
-          // --- CHÃO DA PRAÇA (gramado + calçada) ---
-          drawGroundDither(ctx, 148, 32, "#5a9e63", "#3f7d4a", 3);
-          // Calçada de pedra
-          ctx.fillStyle = "#c9c2b0";
-          ctx.fillRect(160 + p4, 148, 60, 4);
-          ctx.fillStyle = "#a89f8a";
-          ctx.fillRect(160 + p4, 148, 8, 1);
-          ctx.fillRect(180 + p4, 148, 8, 1);
-          ctx.fillRect(200 + p4, 148, 8, 1);
-
-          // --- CÉU: NUVENS E PASSARINHOS ---
-          const cloudX = ((time * 0.03) % (NATIVE_W + 60)) - 30;
-          ctx.fillStyle = "rgba(255,255,255,0.85)";
-          ctx.fillRect(cloudX + p2, 30, 16, 4);
-          ctx.fillRect(cloudX + 4 + p2, 27, 10, 4);
-          ctx.fillRect(cloudX + 40 + p2, 40, 12, 3);
-          ctx.fillRect(cloudX + 44 + p2, 38, 8, 3);
-
-          // Passarinho voando
-          const birdX = ((time * 0.06) % (NATIVE_W + 40)) - 20;
-          const birdY = 50 + Math.sin(time * 0.005) * 6;
-          ctx.fillStyle = "#333";
-          ctx.fillRect(Math.round(birdX + p2), Math.round(birdY), 3, 1);
-          ctx.fillRect(Math.round(birdX - 2 + p2), Math.round(birdY - 1), 2, 1);
-          ctx.fillRect(Math.round(birdX + 3 + p2), Math.round(birdY - 1), 2, 1);
-
-          // Camada 6: Silhuetas de primeiro plano (flores/arbustos da praça)
-          drawCinematicForeground(ctx, 0, time, p5);
           break;
         }
 
