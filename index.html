@@ -303,7 +303,6 @@ function drawFallbackMap() {
 function renderPins() {
   pinsLayer.innerHTML = "";
   LOCATIONS.forEach(function (loc) {
-    var unlocked = isLocationUnlocked(loc.id);
     var complete = isLocationComplete(loc.id);
     var prog = locationProgress(loc.id);
     var group = GROUPS[loc.grupo];
@@ -312,9 +311,7 @@ function renderPins() {
     pin.className = "pin";
     pin.style.left = loc.x + "%";
     pin.style.top = loc.y + "%";
-    if (!unlocked) pin.classList.add("locked");
     if (complete) pin.classList.add("done");
-    if (unlocked && !complete) pin.classList.add("next");
 
     var head = document.createElement("div");
     head.className = "head";
@@ -325,12 +322,6 @@ function renderPins() {
     dot.className = "dot";
     pin.appendChild(dot);
 
-    if (!unlocked) {
-      var lock = document.createElement("div");
-      lock.className = "lock";
-      lock.textContent = "🔒";
-      pin.appendChild(lock);
-    }
     if (complete) {
       var check = document.createElement("div");
       check.className = "check";
@@ -354,15 +345,14 @@ function renderPins() {
     tip.appendChild(tProg);
     pin.appendChild(tip);
 
-    if (unlocked) {
-      pin.addEventListener("click", function () {
-        openLevels(loc);
-      });
-    }
+    // TODOS os pins ficam clicáveis, independente de progresso
+    pin.addEventListener("click", function () {
+      openLevels(loc);
+    });
+
     pinsLayer.appendChild(pin);
   });
 }
-
 /* ===== NÍVEIS ===== */
 var currentLoc = null;
 
