@@ -3865,7 +3865,7 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
         // ==========================================
                 case 1: {
           // ==========================================
-          // --- 2. PITOMBEIRA (VILA DO INTERIOR NORDESTINO) ---
+          // --- 2. CRISTAIS (VILA DO INTERIOR NORDESTINO) ---
           // ==========================================
 
           // Camada 2: Serras secas do sertão ao fundo
@@ -4054,7 +4054,7 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
           drawCinematicForeground(ctx, 1, time, p5);
 
           // ==========================================
-          // --- LETREIRO GRANDE "PITOMBEIRA" (estilo entrada de cidade) ---
+          // --- LETREIRO GRANDE "CRISTAIS" (estilo entrada de cidade) ---
           // ==========================================
           const signX = Math.round(120 + p5);
           const signY = 70;
@@ -4068,9 +4068,9 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
           ctx.fillStyle = "#8a5a2b";
           ctx.fillRect(signX - 8, signY - 6, 116, 36);
           ctx.fillStyle = "#a06a33";
-          ctx.fillRect(signX - 8, signY - 6, 116, 4);
+          ctx.fillRect(signX - 8, signY - 6, 116, 4);   // brilho no topo
           ctx.fillStyle = "#6e4420";
-          ctx.fillRect(signX - 8, signY + 26, 116, 4);
+          ctx.fillRect(signX - 8, signY + 26, 116, 4);  // sombra embaixo
 
           // Moldura interna colorida
           ctx.fillStyle = "#e63946";
@@ -4082,26 +4082,25 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
           ctx.fillStyle = "#e9c46a";
           ctx.fillRect(signX - 4, signY + 7, 108, 3);
 
-          // Letreiro "PITOMBEIRA" em texto grande e legível
+          // Letreiro "CRISTAIS" em texto grande e legível
           ctx.fillStyle = "#ffffff";
           ctx.font = "bold 20px 'Courier New', monospace";
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
-          ctx.fillText("PITOMBEIRA", signX + 50, signY + 14);
+          ctx.fillText("CRISTAIS", signX + 50, signY + 14);
 
-          // Sombra do texto
+          // Sombra do texto (dá destaque e profundidade)
           ctx.fillStyle = "rgba(0,0,0,0.5)";
-          ctx.fillText("PITOMBEIRA", signX + 51, signY + 15);
+          ctx.fillText("CRISTAIS", signX + 51, signY + 15);
           ctx.fillStyle = "#ffffff";
-          ctx.fillText("PITOMBEIRA", signX + 50, signY + 14);
+          ctx.fillText("CRISTAIS", signX + 50, signY + 14);
 
           // Subtexto pequeno "BEM-VINDO"
           ctx.fillStyle = "#fff3d6";
           ctx.font = "bold 9px 'Courier New', monospace";
           ctx.fillText("BEM-VINDO", signX + 50, signY + 24);
           break;
-        }
-
+    }
         // ==========================================
         // --- 4. MATA ATLÂNTICA (A FLORESTA DAS NUVENS) ---
         // ==========================================
