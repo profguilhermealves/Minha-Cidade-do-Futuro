@@ -3916,7 +3916,7 @@ case 1: {
         // ==========================================
         // --- 3. CAATINGA (O SERTÃO ENCANTADO) ---
         // ==========================================
-case 1: {
+case 2: {
           // ==========================================
           // --- 2. CRISTAIS (VILA DO INTERIOR NORDESTINO) ---
           // ==========================================
@@ -4154,113 +4154,214 @@ case 1: {
           ctx.fillText("BEM-VINDO", signX + 50, signY + 24);
           break;
     }
-        // ==========================================
-        // --- 4. MATA ATLÂNTICA (A FLORESTA DAS NUVENS) ---
-        // ==========================================
-        case 3: {
-          // Serra do Mar com picos verdejantes cobertos de névoa
-          drawSteppedRidge(ctx, [
-            [-30 + p1, 68], [50 + p1, 48], [110 + p1, 70], [180 + p1, 42], 
-            [250 + p1, 64], [320 + p1, 50], [360 + p1, 66]
-          ], "#0b4028", "#15633f", "#062417");
+       // ==========================================
+// --- 4. BALBINO (PRAIA ENSOLARADA) ---
+// ==========================================
+case 3: {
+  // Dunas de areia ao fundo do litoral
+  drawSteppedRidge(ctx, [
+    [-30 + p1, 68], [50 + p1, 56], [110 + p1, 66], [180 + p1, 50],
+    [250 + p1, 62], [320 + p1, 54], [360 + p1, 64]
+  ], "#e8c98a", "#f2dcaa", "#c9a55e");
 
-          // Névoa densa em camadas entre as serras
-          ctx.fillStyle = "rgba(226, 239, 250, 0.35)";
-          ctx.fillRect(0, 68, NATIVE_W, 10);
-          ctx.fillRect(0, 92, NATIVE_W, 12);
+  // Mar azul-turquesa com reflexo do sol (oceano de Balbino)
+  drawRichWater(ctx, 84, 34, "#0e7fb8", "#2aa7dd", "#bfeafd", "#ffe066", 200 + p1, time);
 
-          // Cachoeira caudalosa descendo das escarpas da serra
-          const fallX = Math.round(155 + p2);
-          ctx.fillStyle = "#5aa9e6";
-          ctx.fillRect(fallX, 50, 14, 74);
-          ctx.fillStyle = "#bfe0f8";
-          ctx.fillRect(fallX + 2, 52, 10, 70);
-          ctx.fillStyle = "#ffffff";
-          const foamDrop = (Math.floor(time * 0.35) % 18);
-          ctx.fillRect(fallX + 3, 52 + foamDrop, 4, 16);
-          ctx.fillRect(fallX + 7, 68 + foamDrop, 4, 16);
-          // Névoa e arco-íris sutil na base da cachoeira
-          ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
-          ctx.fillRect(fallX - 8, 118, 30, 8);
-          // Arco-íris em pixels
-          ctx.fillStyle = "rgba(255, 107, 107, 0.45)"; ctx.fillRect(fallX + 16, 112, 12, 1);
-          ctx.fillStyle = "rgba(255, 217, 61, 0.45)";  ctx.fillRect(fallX + 16, 113, 12, 1);
-          ctx.fillStyle = "rgba(107, 203, 119, 0.45)"; ctx.fillRect(fallX + 16, 114, 12, 1);
-          ctx.fillStyle = "rgba(77, 150, 255, 0.45)";  ctx.fillRect(fallX + 16, 115, 12, 1);
+  // Brilho do sol forte na superfície da água (faíscas)
+  ctx.fillStyle = "rgba(255, 255, 255, 0.35)";
+  for (let sp = 0; sp < 8; sp++) {
+    const sparkX = 120 + sp * 28 + Math.sin(time * 0.02 + sp * 3) * 4;
+    ctx.fillRect(sparkX, 100 + (sp % 3) * 6, 6, 2);
+  }
 
-          // Encostas com floresta ombrófila densa
-          drawSteppedRidge(ctx, [
-            [-30 + p2, 94], [70 + p2, 86], [140 + p2, 92], [220 + p2, 84], [360 + p2, 90]
-          ], "#115233", "#1b794b", "#093320");
+  // Faixa de areia clara da praia
+  drawGroundDither(ctx, 128, 30, "#f4e0b0", "#e6c98f", 4);
+  drawGroundDither(ctx, 150, 14, "#f6e6bd", "#ecd49e", 3);
 
-          // Árvore nobre com bromélias e orquídeas epífitas no tronco
-          const swayAtl = Math.sin(time * 0.003) * 1.6;
-          drawDetailedTree(ctx, 35 + p3, 72, 12, 74, "#0d452a", "#197548", "#2ec47c", "#2d1b10", "#472c1a", swayAtl, "#ff6b8b");
-          drawDetailedTree(ctx, 230 + p3, 68, 14, 78, "#0a3822", "#13613b", "#26ab6b", "#29180e", "#422818", -swayAtl, "#ffbe0b");
+  // LETREIRO DE ENTRADA DA PRAIA COM LETRAS COLORIDAS
+  const signX = Math.round(150 + p2);
+  ctx.fillStyle = "#3a6ea5";
+  ctx.fillRect(signX - 41, 104, 82, 18);
+  ctx.fillStyle = "#7fb2e5";
+  ctx.fillRect(signX - 37, 107, 74, 12);
+  ctx.fillStyle = "#1e3a5f";
+  ctx.fillRect(signX - 39, 122, 4, 12);
+  ctx.fillRect(signX + 35, 122, 4, 12);
+  ctx.font = "bold 7px monospace";
+  ctx.textAlign = "center";
+  const cityName = "BALBINO";
+  const letterColors = ["#ff5e5b", "#ffca3a", "#8ac926", "#1982c4", "#6a4c93", "#ff924c", "#2ec4b6"];
+  for (let li = 0; li < cityName.length; li++) {
+    ctx.fillStyle = letterColors[li % letterColors.length];
+    ctx.fillText(cityName[li], signX - 31 + li * 6, 117);
+  }
+  ctx.textAlign = "left";
 
-          // Galho horizontal espesso onde habita o mico-leão-dourado
-          const galhoX = Math.round(45 + p3 + swayAtl);
-          ctx.fillStyle = "#2d1b10";
-          ctx.fillRect(galhoX, 102, 38, 5);
-          ctx.fillStyle = "#472c1a";
-          ctx.fillRect(galhoX + 2, 103, 34, 2);
+  // Coqueiros à beira-mar (esquina esquerda)
+  drawDetailedPalm(ctx, 40 + p3, 74, 34, "#2d5e23", "#458c35", "#70c25a", "#d4a017", Math.sin(time * 0.003) * 1.2);
+  drawDetailedPalm(ctx, 58 + p3, 80, 28, "#2d5e23", "#458c35", "#70c25a", "#d4a017", -Math.sin(time * 0.003) * 1.2);
 
-          // Bromélia imperial vermelha florida no galho
-          ctx.fillStyle = "#e63946";
-          ctx.fillRect(galhoX + 26, 96, 7, 6);
-          ctx.fillStyle = "#ffd166";
-          ctx.fillRect(galhoX + 28, 94, 3, 2);
+  // ===== BARRACAS DE PRAIA (2 barracas com toldo listrado) =====
+  // Barraca 1 (estrutura de madeira + cobertura de palha + toldo listrado)
+  const b1x = 62 + p3;
+  ctx.fillStyle = "#8a5a2b";          // estacas de madeira
+  ctx.fillRect(b1x + 2, 116, 3, 24);
+  ctx.fillRect(b1x + 20, 116, 3, 24);
+  ctx.fillStyle = "#6b4320";
+  ctx.fillRect(b1x - 1, 120, 27, 2);
+  // Toldo listrado vermelho e branco
+  ctx.fillStyle = "#e63946";
+  ctx.fillRect(b1x - 2, 112, 28, 5);
+  ctx.fillStyle = "#f8f8f8";
+  ctx.fillRect(b1x + 5, 112, 3, 5);
+  ctx.fillRect(b1x + 13, 112, 3, 5);
+  ctx.fillRect(b1x + 21, 112, 3, 5);
+  // Mesa e cocos à venda
+  ctx.fillStyle = "#8a5a2b";
+  ctx.fillRect(b1x + 8, 128, 10, 2);
+  ctx.fillStyle = "#5c3a1c";
+  ctx.fillRect(b1x + 10, 130, 3, 2);
+  ctx.fillRect(b1x + 14, 130, 3, 2);
+  ctx.fillStyle = "#3a2410";
+  ctx.fillRect(b1x + 4, 132, 4, 6);   // perna
+  ctx.fillRect(b1x + 22, 132, 4, 6);
 
-          // Mico-leão-dourado reluzente (#ff9e00, juba majestosa e rabo longo)
-          const micoX = galhoX + 10;
-          ctx.fillStyle = "#ff7b00";
-          ctx.fillRect(micoX, 94, 9, 6);
-          ctx.fillRect(micoX + 7, 91, 5, 5); // cabeça com juba
-          ctx.fillStyle = "#ffb703"; // brilho dourado
-          ctx.fillRect(micoX + 8, 92, 3, 3);
-          ctx.fillStyle = "#000000"; // rostinho preto expressivo
-          ctx.fillRect(micoX + 11, 93, 1, 1);
-          // Cauda longa dourada pendurada no galho
-          ctx.fillStyle = "#ff7b00";
-          ctx.fillRect(micoX - 1, 97, 2, 8);
-          ctx.fillRect(micoX + 1, 104, 3, 2);
+  // Barraca 2 (guarda-sol amarelo e cadeira de praia)
+  const b2x = 278 + p3;
+  ctx.fillStyle = "#8a5a2b";
+  ctx.fillRect(b2x + 2, 118, 3, 22);
+  ctx.fillRect(b2x + 19, 118, 3, 22);
+  ctx.fillStyle = "#ffca3a";          // guarda-sol aberto
+  ctx.fillRect(b2x - 4, 108, 31, 4);
+  ctx.fillRect(b2x - 4, 108, 3, 4);
+  ctx.fillRect(b2x + 10, 108, 3, 4);
+  ctx.fillRect(b2x + 23, 108, 3, 4);
+  ctx.fillStyle = "#f8f8f8";          // listras do guarda-sol
+  ctx.fillRect(b2x + 2, 108, 3, 4);
+  ctx.fillRect(b2x + 17, 108, 3, 4);
+  ctx.fillStyle = "#d4a017";          // mastro
+  ctx.fillRect(b2x + 11, 112, 2, 28);
 
-          // Sagui menor curioso em outro ramo
-          ctx.fillStyle = "#adb5bd";
-          ctx.fillRect(galhoX + 28, 101, 5, 4);
-          ctx.fillStyle = "#ffffff"; // tufos brancos nas orelhas
-          ctx.fillRect(galhoX + 31, 100, 2, 2);
+  // ===== BANHISTAS NO MAR (nadando com ondinhas) =====
+  for (let swim = 0; swim < 4; swim++) {
+    const sx0 = 78 + swim * 30 + p2 + Math.sin(time * 0.01 + swim * 2) * 3;
+    const sy0 = 84 + (swim % 2) * 8 + Math.sin(time * 0.015 + swim) * 2;
+    const capCol = swim % 2 === 0 ? "#e63946" : "#ffca3a";
+    ctx.fillStyle = "#3a2410";        // cabelo/cabeça
+    ctx.fillRect(sx0, sy0, 4, 3);
+    ctx.fillStyle = capCol;           // touca de piscina
+    ctx.fillRect(sx0, sy0, 4, 1);
+    ctx.fillStyle = "#e8b89a";        // rosto emergindo
+    ctx.fillRect(sx0 + 1, sy0 + 1, 2, 2);
+    ctx.fillStyle = "#bfeafd";        // bracinho nadando
+    ctx.fillRect(sx0 + (swim % 2 === 0 ? -1 : 4), sy0 + 3, 2, 2);
+  }
 
-          // Solo coberto de musgos, samambaias-açu e lírios
-          drawGroundDither(ctx, 145, 35, "#0b3b24", "#062215", 3);
-          // Samambaiaçu com frondes recortadas
-          const samX = Math.round(110 + p4);
-          ctx.fillStyle = "#2d6a4f";
-          ctx.fillRect(samX, 138, 4, 10);
-          ctx.fillStyle = "#52b788";
-          ctx.fillRect(samX - 8, 134, 20, 3);
-          ctx.fillRect(samX - 12, 136, 8, 2);
-          ctx.fillRect(samX + 8, 136, 8, 2);
+  // ===== CARANGUEJOS NA AREIA (2 caranguejos andando) =====
+  for (let crab = 0; crab < 2; crab++) {
+    const crabX = (crab === 0 ? 96 : 246) + p4 + Math.sin(time * 0.008 + crab * 5) * 4;
+    const crabY = 140 + (crab % 2) * 3;
+    ctx.fillStyle = "#c0392b";        // corpo
+    ctx.fillRect(crabX, crabY, 7, 4);
+    ctx.fillStyle = "#7f1d1d";        // pinças
+    ctx.fillRect(crabX - 2, crabY + 1, 2, 2);
+    ctx.fillRect(crabX + 7, crabY + 1, 2, 2);
+    ctx.fillStyle = "#e05b48";
+    ctx.fillRect(crabX + 2, crabY, 3, 1);  // carapaça iluminada
+    // olhinhos de lado
+    ctx.fillStyle = "#111827";
+    ctx.fillRect(crabX + 4, crabY - 1, 2, 1);
+  }
 
-          // Saíra-sete-cores (ave ultra colorida da Mata Atlântica)
-          const sairaX = Math.round(185 + p4);
-          ctx.fillStyle = "#00b4d8"; // azul turquesa
-          ctx.fillRect(sairaX, 136, 6, 4);
-          ctx.fillStyle = "#ffb703"; // peito laranja
-          ctx.fillRect(sairaX + 4, 137, 2, 3);
-          ctx.fillStyle = "#52b788"; // dorso verde
-          ctx.fillRect(sairaX + 1, 135, 4, 2);
+  // ===== PONTO DE APOIO AO TURISTA (TOTEM ROBÓTICO) =====
+  const totemX = Math.round(195 + p4);
+  ctx.fillStyle = "#475569";          // corpo metálico
+  ctx.fillRect(totemX, 124, 14, 20);
+  ctx.fillStyle = "#64748b";          // brilho metálico
+  ctx.fillRect(totemX + 2, 126, 4, 16);
+  ctx.fillStyle = "#0f172a";          // cabeça do robô
+  ctx.fillRect(totemX + 3, 118, 8, 7);
+  ctx.fillStyle = "#38bdf8";          // visor da tela
+  ctx.fillRect(totemX + 5, 120, 4, 3);
+  // Olhos LED (piscam em azul por ser totem ativo)
+  ctx.fillStyle = (time % 40) < 20 ? "#4ade80" : "#10b981";
+  ctx.fillRect(totemX + 4, 119, 2, 2);
+  ctx.fillRect(totemX + 9, 119, 2, 2);
+  // Braços robóticos acenando (saudação ao turista)
+  const totemWave = Math.floor(Math.sin(time * 0.07) * 2);
+  ctx.fillStyle = "#94a3b8";
+  ctx.fillRect(totemX - 3, 124 + totemWave, 4, 3);
+  ctx.fillRect(totemX + 13, 126 - totemWave, 4, 3);
+  // Base e pés do totem
+  ctx.fillStyle = "#334155";
+  ctx.fillRect(totemX - 1, 144, 16, 3);
+  ctx.fillStyle = "#1e293b";
+  ctx.fillRect(totemX + 2, 147, 4, 3);
+  ctx.fillRect(totemX + 9, 147, 4, 3);
 
-          // Borboleta Morpho esmeralda voando perto da água
-          const bflyAtlX = 135 + Math.sin(time * 0.006) * 16 + p4;
-          const bflyAtlY = 126 + Math.cos(time * 0.008) * 8;
-          ctx.fillStyle = "#38b000";
-          ctx.fillRect(Math.round(bflyAtlX), Math.round(bflyAtlY), 3, 2);
-          ctx.fillRect(Math.round(bflyAtlX + 4), Math.round(bflyAtlY), 3, 2);
+  // ===== LIXEIRAS INTELIGENTES COM PEDESTRES JOGANDO LIXO =====
+  // Lixeira inteligente 1 (à esquerda do totem) com pedestre jogando lixo
+  const lixo1x = Math.round(178 + p4);
+  ctx.fillStyle = "#22c55e";          // tampa com painel solar verde
+  ctx.fillRect(lixo1x, 136, 8, 3);
+  ctx.fillStyle = "#475569";          // corpo metálico
+  ctx.fillRect(lixo1x + 1, 139, 6, 8);
+  ctx.fillStyle = "#38bdf8";          // LED indicador de cheio
+  ctx.fillRect(lixo1x + 4, 141, 2, 2);
+  // Pedestre 1 (menino) jogando o lixo
+  const ped1x = Math.round(172 + p4);
+  const toss1 = Math.floor(Math.sin(time * 0.1) * 2);
+  ctx.fillStyle = "#3a2410";          // cabelo
+  ctx.fillRect(ped1x + 1, 134, 3, 2);
+  ctx.fillStyle = "#e8b89a";          // rosto
+  ctx.fillRect(ped1x + 1, 136, 3, 2);
+  ctx.fillStyle = "#1982c4";          // camiseta
+  ctx.fillRect(ped1x, 138, 5, 6);
+  ctx.fillStyle = "#2c2c34";          // pernas
+  ctx.fillRect(ped1x + 1, 144, 1, 3);
+  ctx.fillRect(ped1x + 3, 144, 1, 3);
+  // Braço levantado jogando o lixo + latinha verde voando
+  ctx.fillStyle = "#5a4632";
+  ctx.fillRect(ped1x + 5, 132 + toss1, 2, 4);
+  ctx.fillStyle = "#22c55e";          // latinha/lixo voando
+  ctx.fillRect(ped1x + 6, 128 + toss1 * 2, 3, 3);
 
-          drawCinematicForeground(ctx, 3, time, p5);
-          break;
-        }
+  // Lixeira inteligente 2 (à direita do totem) com senhora jogando lixo
+  const lixo2x = Math.round(218 + p4);
+  ctx.fillStyle = "#22c55e";
+  ctx.fillRect(lixo2x, 136, 8, 3);
+  ctx.fillStyle = "#475569";
+  ctx.fillRect(lixo2x + 1, 139, 6, 8);
+  ctx.fillStyle = "#38bdf8";
+  ctx.fillRect(lixo2x + 4, 141, 2, 2);
+  // Pedestre 2 (senhora) jogando o lixo
+  const ped2x = Math.round(225 + p4);
+  const toss2 = Math.floor(Math.sin(time * 0.1 + 3) * 2);
+  ctx.fillStyle = "#3a2a1a";          // cabelo
+  ctx.fillRect(ped2x + 1, 134, 4, 2);
+  ctx.fillStyle = "#e8b89a";          // rosto
+  ctx.fillRect(ped2x + 2, 136, 3, 2);
+  ctx.fillStyle = "#c94f7c";          // vestido
+  ctx.fillRect(ped2x, 138, 6, 7);
+  ctx.fillRect(ped2x - 1, 142, 8, 3);
+  ctx.fillStyle = "#e8a9c0";          // braço jogando lixo
+  ctx.fillRect(ped2x - 2, 132 + toss2, 2, 4);
+  ctx.fillStyle = "#22c55e";          // lixo voando
+  ctx.fillRect(ped2x - 3, 128 + toss2 * 2, 3, 3);
+
+  // ===== GAIVOTAS CORTANDO O CÉU (flock de pássaros brancos) =====
+  const gaiX = ((time * 0.06) % (NATIVE_W + 80)) - 40;
+  drawAnimatedFlockBird(ctx, gaiX + p2, 44, "#3a3f47", "#eef2f7", "#ffffff", frame);
+  drawAnimatedFlockBird(ctx, gaiX - 16 + p2, 50, "#3a3f47", "#dbe2ea", "#f8fafc", frame + 1);
+  drawAnimatedFlockBird(ctx, gaiX - 34 + p2, 47, "#3a3f47", "#dbe2ea", "#f8fafc", frame + 2);
+
+  // Faixa de espuma da onda batendo na areia (primeiro plano)
+  ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
+  ctx.fillRect(0, 152, NATIVE_W, 3);
+
+  drawCinematicForeground(ctx, 3, time, p5);
+  break;
+}
 
         // ==========================================
         // --- 5. PAMPA (AS COXILHAS DO SUL) ---
