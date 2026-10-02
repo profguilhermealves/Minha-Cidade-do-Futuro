@@ -3721,149 +3721,202 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
           break;
     }
 
-        // ==========================================
-        // --- 2. CERRADO (A SAVANA DOURADA) ---
-        // ==========================================
-        case 1: {
-          // Chapadas tabulares monumentais com degraus rochosos
-          drawSteppedRidge(ctx, [
-            [-30 + p1, 76], [60 + p1, 76], [60 + p1, 64], [150 + p1, 64], 
-            [150 + p1, 74], [230 + p1, 74], [230 + p1, 62], [360 + p1, 62]
-          ], "#425725", "#628038", "#2c3b18");
+       // ==========================================
+// --- 2. PITOMBEIRAS (CIDADE DO SEMIÁRIDO) ---
+// ==========================================
+case 1: {
+  // Morros pedregosos do sertão nordestino
+  drawSteppedRidge(ctx, [
+    [-30 + p1, 76], [60 + p1, 76], [60 + p1, 64], [150 + p1, 64],
+    [150 + p1, 74], [230 + p1, 74], [230 + p1, 62], [360 + p1, 62]
+  ], "#8f7745", "#a98e58", "#5e4a28");
 
-          // Colinas de transição
-          drawSteppedRidge(ctx, [
-            [-30 + p2, 96], [80 + p2, 90], [170 + p2, 98], [260 + p2, 88], [360 + p2, 94]
-          ], "#738b34", "#94b343", "#516323");
+  // Colinas secas de transição
+  drawSteppedRidge(ctx, [
+    [-30 + p2, 96], [80 + p2, 90], [170 + p2, 98], [260 + p2, 88], [360 + p2, 94]
+  ], "#a8854d", "#c39e60", "#73542f");
 
-          // Vereda de Buritis com espelho d'água cristalino
-          drawRichWater(ctx, 108, 18, "#284a7e", "#4478bb", "#9ec2ea", "#ffd700", 230 + p1, time);
-          drawDetailedPalm(ctx, 270 + p2, 70, 38, "#2d5e23", "#458c35", "#70c25a", "#d4a017", Math.sin(time * 0.003) * 1.2);
-          drawDetailedPalm(ctx, 292 + p2, 76, 32, "#2d5e23", "#458c35", "#70c25a", "#d4a017", -Math.sin(time * 0.003) * 1.2);
+  // Açude da cidade (espelho d'água do sertão) com o sol refletindo
+  drawRichWater(ctx, 108, 18, "#1e5a7a", "#3d8ab3", "#a8d8ee", "#ffe066", 230 + p1, time);
 
-          // Savana dourada ondulando ao vento
-          drawGroundDither(ctx, 122, 28, "#b8860b", "#d4af37", 4);
-          // Tufos de capim dourado com pontas balançando
-          const grassSway = Math.floor(Math.sin(time * 0.004) * 2);
-          ctx.fillStyle = "#f3e07c";
-          for (let gx = 0; gx < NATIVE_W; gx += 14) {
-            ctx.fillRect(gx + p3 + grassSway, 124, 2, 4);
-            ctx.fillRect(gx + 3 + p3 + grassSway, 122, 2, 6);
-          }
+  // Carnaúbas na beira do açude (palmeira típica do Ceará)
+  drawDetailedPalm(ctx, 270 + p2, 70, 38, "#3a5a24", "#557b30", "#7fb05a", "#c9a227", Math.sin(time * 0.003) * 1.2);
+  drawDetailedPalm(ctx, 292 + p2, 76, 32, "#3a5a24", "#557b30", "#7fb05a", "#c9a227", -Math.sin(time * 0.003) * 1.2);
 
-          // Ipê-amarelo florido em glória total (tronco tortuoso do cerrado)
-          const ipeX = Math.round(85 + p3);
-          const swayIpe = Math.sin(time * 0.003) * 1.5;
-          ctx.fillStyle = "#5c2c16"; // tronco retorcido
-          ctx.fillRect(ipeX, 94, 7, 34);
-          ctx.fillRect(ipeX + 6, 100, 8, 4);
-          ctx.fillRect(ipeX - 7, 106, 8, 4);
-          ctx.fillRect(ipeX - 10, 101, 4, 7);
-          ctx.fillStyle = "#874523";
-          ctx.fillRect(ipeX + 2, 96, 2, 30);
-          // Flores douradas exuberantes do ipê
-          ctx.fillStyle = "#d49b00";
-          ctx.fillRect(ipeX - 18 + swayIpe, 80, 42, 16);
-          ctx.fillRect(ipeX - 12 + swayIpe, 68, 30, 14);
-          ctx.fillStyle = "#ffd700";
-          ctx.fillRect(ipeX - 16 + swayIpe, 78, 38, 14);
-          ctx.fillRect(ipeX - 10 + swayIpe, 66, 26, 12);
-          ctx.fillStyle = "#fff48a"; // pétalas iluminadas
-          ctx.fillRect(ipeX - 8 + swayIpe, 64, 18, 5);
-          ctx.fillRect(ipeX + 2 + swayIpe, 74, 12, 4);
+  // Chão seco e terroso da caatinga
+  drawGroundDither(ctx, 122, 28, "#c08a3e", "#96682a", 4);
+  // Faixa de terra rachada perto da base (camada do chão)
+  drawGroundDither(ctx, 146, 16, "#c2924a", "#9a6f2f", 3);
 
-          // Pequizeiro com folhas e pequizinhos verdes
-          const pequiX = Math.round(230 + p3);
-          ctx.fillStyle = "#482310";
-          ctx.fillRect(pequiX, 108, 6, 26);
-          ctx.fillStyle = "#3a6828";
-          ctx.fillRect(pequiX - 12, 96, 30, 14);
-          ctx.fillStyle = "#8db832";
-          ctx.fillRect(pequiX - 10, 94, 24, 10);
-          ctx.fillStyle = "#ffd166"; // pequi maduro
-          ctx.fillRect(pequiX - 4, 104, 3, 3);
-          ctx.fillRect(pequiX + 6, 102, 3, 3);
+  // LETREIRO DE ENTRADA DA CIDADE COM LETRAS COLORIDAS
+  const signX = Math.round(150 + p2);
+  ctx.fillStyle = "#4a2f12";
+  ctx.fillRect(signX - 41, 104, 82, 18);
+  ctx.fillStyle = "#8a5a2b";
+  ctx.fillRect(signX - 37, 107, 74, 12);
+  ctx.fillStyle = "#2c1a08";
+  ctx.fillRect(signX - 39, 122, 4, 12);
+  ctx.fillRect(signX + 35, 122, 4, 12);
+  ctx.font = "bold 7px monospace";
+  ctx.textAlign = "center";
+  const cityName = "PITOMBEIRAS";
+  const letterColors = ["#ff5e5b", "#ffca3a", "#8ac926", "#1982c4", "#6a4c93", "#ff924c", "#2ec4b6", "#e63946", "#f4a261", "#5bc0eb", "#ff9f1c"];
+  for (let li = 0; li < cityName.length; li++) {
+    ctx.fillStyle = letterColors[li % letterColors.length];
+    ctx.fillText(cityName[li], signX - 34 + li * 6, 117);
+  }
+  ctx.textAlign = "left";
 
-          // Solo avermelhado de latossolo com cupinzeiro monumental
-          drawGroundDither(ctx, 148, 32, "#8c3b17", "#5c260f", 3);
-          // Cupinzeiro com cavidades e textura
-          const cupimX = Math.round(180 + p4);
-          ctx.fillStyle = "#5c260f";
-          ctx.fillRect(cupimX, 134, 14, 18);
-          ctx.fillRect(cupimX + 2, 128, 10, 8);
-          ctx.fillRect(cupimX + 4, 123, 6, 6);
-          ctx.fillStyle = "#8c3b17";
-          ctx.fillRect(cupimX + 2, 136, 4, 14);
-          ctx.fillRect(cupimX + 4, 129, 3, 6);
-          ctx.fillStyle = "#2c1207"; // galerias dos cupins
-          ctx.fillRect(cupimX + 7, 138, 2, 2);
-          ctx.fillRect(cupimX + 9, 144, 2, 2);
+  // Casinhas simples da cidade
+  // Casa 1 (parede de barro, telhado de palha e varal com roupas coloridas)
+  const c1x = 62 + p3;
+  ctx.fillStyle = "#c98d5a";
+  ctx.fillRect(c1x, 132, 18, 14);
+  ctx.fillStyle = "#7c4a22";
+  ctx.fillRect(c1x - 1, 128, 20, 5);
+  ctx.fillStyle = "#5c3418";
+  ctx.fillRect(c1x - 2, 131, 22, 2);
+  ctx.fillStyle = "#5c3a1c";
+  ctx.fillRect(c1x + 7, 140, 4, 6); // porta
+  ctx.fillStyle = "#3a2410";
+  ctx.fillRect(c1x + 2, 136, 4, 4); // janela
+  ctx.fillStyle = "#222222";
+  ctx.fillRect(c1x + 3, 128, 14, 1); // varal
+  ctx.fillStyle = "#ff595e"; ctx.fillRect(c1x + 4, 127, 3, 3);
+  ctx.fillStyle = "#1982c4"; ctx.fillRect(c1x + 8, 128, 3, 3);
+  ctx.fillStyle = "#ffca3a"; ctx.fillRect(c1x + 12, 127, 3, 3);
 
-          // Trilha de formigas saúvas carregando folhas cortadas
-          ctx.fillStyle = "#200d05";
-          const antBaseX = 140 + p4;
-          for (let a = 0; a < 5; a++) {
-            const ax = antBaseX + a * 6;
-            ctx.fillRect(ax, 154, 2, 1);
-            ctx.fillStyle = "#52b788"; // pedacinho de folha verde na cabeça
-            ctx.fillRect(ax + 1, 152, 2, 2);
-            ctx.fillStyle = "#200d05";
-          }
+  // Casa 2 (parede branca, telhado de telha)
+  const c2x = 285 + p3;
+  ctx.fillStyle = "#f0e6d4";
+  ctx.fillRect(c2x, 132, 16, 14);
+  ctx.fillStyle = "#b3402a";
+  ctx.fillRect(c2x - 1, 127, 18, 6);
+  ctx.fillStyle = "#d9a441";
+  ctx.fillRect(c2x - 2, 133, 20, 1);
+  ctx.fillStyle = "#5c3a1c";
+  ctx.fillRect(c2x + 6, 140, 4, 6);
+  ctx.fillStyle = "#3a2410";
+  ctx.fillRect(c2x + 10, 135, 4, 4);
 
-          // Lobo-guará caminhando nas coxilhas do cerrado (#d9531e, patas pretas compridas)
-          const loboX = Math.round(120 + p4);
-          ctx.fillStyle = "#c84813"; // corpo esguio avermelhado
-          ctx.fillRect(loboX, 136, 13, 6);
-          ctx.fillRect(loboX + 11, 133, 4, 4); // cabeça
-          ctx.fillStyle = "#ffffff";
-          ctx.fillRect(loboX + 9, 137, 3, 2); // papo branco
-          ctx.fillStyle = "#090b12"; // focinho e ponta da cauda pretos
-          ctx.fillRect(loboX + 15, 134, 2, 2);
-          ctx.fillRect(loboX - 4, 138, 5, 3); // cauda com ponta preta
-          // Pernas longas pretas características do lobo-guará
-          ctx.fillRect(loboX + 2, 142, 1, 8);
-          ctx.fillRect(loboX + 4, 142, 1, 8);
-          ctx.fillRect(loboX + 9, 142, 1, 8);
-          ctx.fillRect(loboX + 11, 142, 1, 8);
+  // Mandacarus e cactos da caatinga
+  const cac1 = 88 + p3;
+  ctx.fillStyle = "#2e6b34";
+  ctx.fillRect(cac1, 136, 4, 12);
+  ctx.fillRect(cac1 - 3, 138, 3, 4);
+  ctx.fillRect(cac1 + 4, 139, 3, 5);
+  const cac2 = 248 + p3;
+  ctx.fillStyle = "#2e6b34";
+  ctx.fillRect(cac2, 138, 3, 10);
+  ctx.fillRect(cac2 - 2, 140, 3, 4);
+  ctx.fillRect(cac2 + 3, 140, 3, 4);
 
-          // Seriema elegante
-          const seriemaX = Math.round(255 + p4);
-          ctx.fillStyle = "#8a96a8";
-          ctx.fillRect(seriemaX, 134, 8, 6);
-          ctx.fillRect(seriemaX + 6, 128, 3, 7);
-          ctx.fillStyle = "#e63946"; // bico e pernas vermelhas
-          ctx.fillRect(seriemaX + 9, 129, 3, 2);
-          ctx.fillRect(seriemaX + 2, 140, 1, 9);
-          ctx.fillRect(seriemaX + 5, 140, 1, 9);
+  // CAMPINHO DE FUTEBOL com crianças jogando
+  const fieldX = 175 + p4;
+  ctx.fillStyle = "#6f9e4f";  // gramado do campinho
+  ctx.fillRect(fieldX, 140, 84, 15);
+  ctx.fillStyle = "#5c8a40";
+  ctx.fillRect(fieldX, 140, 84, 2);
+  ctx.fillStyle = "#e9f2e0";  // linha do meio-campo
+  ctx.fillRect(fieldX + 2, 147, 80, 1);
+  // Traves
+  ctx.fillStyle = "#f5f5f5";
+  ctx.fillRect(fieldX + 2, 140, 1, 5);
+  ctx.fillRect(fieldX + 1, 139, 4, 1);
+  ctx.fillRect(fieldX + 81, 140, 1, 5);
+  ctx.fillRect(fieldX + 79, 139, 4, 1);
+  // Bola rolando no campo
+  const ballX = fieldX + 40 + Math.sin(time * 0.008) * 26;
+  ctx.fillStyle = "#ffffff";
+  ctx.beginPath(); ctx.arc(ballX, 153, 2, 0, 7); ctx.fill();
 
-          // Tatu-canastra escavando na terra
-          const tatuX = Math.round(45 + p4);
-          ctx.fillStyle = "#5e503f";
-          ctx.fillRect(tatuX, 148, 10, 5);
-          ctx.fillRect(tatuX + 9, 149, 3, 3);
-          ctx.fillStyle = "#3a3024";
-          ctx.fillRect(tatuX + 1, 151, 8, 2);
+  // Crianças correndo atrás da bola (pernas animadas)
+  for (let kid = 0; kid < 4; kid++) {
+    const kx = fieldX + 12 + kid * 18 + Math.sin(time * 0.012 + kid * 1.5) * 5;
+    const run = Math.floor(time * 0.05 + kid) % 2;
+    const camisa = kid % 2 === 0 ? "#e63946" : "#1982c4";
+    ctx.fillStyle = "#3a2410";          // cabelo
+    ctx.fillRect(kx + 1, 134, 3, 2);
+    ctx.fillStyle = "#e8b89a";          // rosto
+    ctx.fillRect(kx + 1, 136, 3, 2);
+    ctx.fillStyle = camisa;             // camisa
+    ctx.fillRect(kx, 138, 4, 5);
+    ctx.fillStyle = "#2c2c34";          // pernas animadas
+    ctx.fillRect(kx + 1, 143, 1, 3);
+    if (run === 0) { ctx.fillRect(kx + 2, 143, 1, 3); }
+    else { ctx.fillRect(kx + 2, 143, 1, 2); ctx.fillRect(kx + 3, 144, 1, 2); }
+  }
 
-          // Flores coloridas do cerrado (calliandras vermelhas e perpétuas roxas)
-          ctx.fillStyle = "#e63946";
-          ctx.fillRect(70 + p4, 146, 3, 3);
-          ctx.fillRect(72 + p4, 145, 2, 2);
-          ctx.fillStyle = "#9b5de5";
-          ctx.fillRect(215 + p4, 146, 3, 3);
+  // SENHORES E SENHORAS ACENANDO PARA QUEM PASSA (braço animado)
+  // Casal 1 (torcendo no campinho — lado esquerdo)
+  const man1x = Math.round(164 + p4);
+  const wave1 = Math.floor(Math.sin(time * 0.07) * 2);
+  ctx.fillStyle = "#5c3a16";           // chapéu
+  ctx.fillRect(man1x, 130, 7, 2);
+  ctx.fillRect(man1x + 1, 129, 4, 2);
+  ctx.fillStyle = "#7a4a2a";           // rosto
+  ctx.fillRect(man1x + 2, 131, 3, 3);
+  ctx.fillStyle = "#f2f2f2";           // camisa branca
+  ctx.fillRect(man1x + 1, 134, 5, 6);
+  ctx.fillStyle = "#5a4632";           // braço acenando
+  ctx.fillRect(man1x + 5, 134 + wave1, 2, 4);
+  ctx.fillStyle = "#4a5a6a";           // calça
+  ctx.fillRect(man1x + 1, 140, 2, 3);
+  ctx.fillRect(man1x + 4, 140, 2, 3);
 
-          // Fauna alada: Arara-canindé e tucanos cortando o céu
-          const tucX2 = ((time * 0.06) % (NATIVE_W + 80)) - 40;
-          drawAnimatedFlockBird(ctx, tucX2 + p2, 48, "#090b12", "#f77f00", "#ffd700", frame);
-          drawAnimatedFlockBird(ctx, tucX2 - 18 + p2, 54, "#0284c7", "#f77f00", "#ffd700", frame + 1);
+  const woman1x = Math.round(171 + p4);
+  const wave2 = Math.floor(Math.sin(time * 0.07 + 2) * 2);
+  ctx.fillStyle = "#3a2a1a";           // cabelo
+  ctx.fillRect(woman1x + 1, 130, 4, 2);
+  ctx.fillStyle = "#e8b89a";           // rosto
+  ctx.fillRect(woman1x + 2, 132, 3, 2);
+  ctx.fillStyle = "#c94f7c";           // vestido
+  ctx.fillRect(woman1x, 134, 6, 7);
+  ctx.fillRect(woman1x - 1, 138, 8, 3);
+  ctx.fillStyle = "#e8a9c0";           // braço acenando
+  ctx.fillRect(woman1x + 1, 133 + wave2, 2, 4);
 
-          drawCinematicForeground(ctx, 1, time, p5);
-          break;
-        }
+  // Casal 2 (em frente à casa 2 — lado direito)
+  const man2x = Math.round(268 + p4);
+  const wave3 = Math.floor(Math.sin(time * 0.07 + 4) * 2);
+  ctx.fillStyle = "#5c3a16";
+  ctx.fillRect(man2x, 130, 7, 2);
+  ctx.fillRect(man2x + 1, 129, 4, 2);
+  ctx.fillStyle = "#7a4a2a";
+  ctx.fillRect(man2x + 2, 131, 3, 3);
+  ctx.fillStyle = "#f2f2f2";
+  ctx.fillRect(man2x + 1, 134, 5, 6);
+  ctx.fillStyle = "#5a4632";
+  ctx.fillRect(man2x + 5, 134 + wave3, 2, 4);
+  ctx.fillStyle = "#4a5a6a";
+  ctx.fillRect(man2x + 1, 140, 2, 3);
+  ctx.fillRect(man2x + 4, 140, 2, 3);
+
+  const woman2x = Math.round(275 + p4);
+  const wave4 = Math.floor(Math.sin(time * 0.07 + 6) * 2);
+  ctx.fillStyle = "#3a2a1a";
+  ctx.fillRect(woman2x + 1, 130, 4, 2);
+  ctx.fillStyle = "#e8b89a";
+  ctx.fillRect(woman2x + 2, 132, 3, 2);
+  ctx.fillStyle = "#57a05c";           // vestido verde
+  ctx.fillRect(woman2x, 134, 6, 7);
+  ctx.fillRect(woman2x - 1, 138, 8, 3);
+  ctx.fillStyle = "#b0e0b6";
+  ctx.fillRect(woman2x + 1, 133 + wave4, 2, 4);
+
+  // Passarinhos (pombas e carcará) cortando o céu do sertão
+  const tucX2 = ((time * 0.06) % (NATIVE_W + 80)) - 40;
+  drawAnimatedFlockBird(ctx, tucX2 + p2, 48, "#44403c", "#d97706", "#f59e0b", frame);
+  drawAnimatedFlockBird(ctx, tucX2 - 18 + p2, 54, "#57534e", "#d97706", "#f59e0b", frame + 1);
+
+  drawCinematicForeground(ctx, 1, time, p5);
+  break;
+}
 
         // ==========================================
         // --- 3. CAATINGA (O SERTÃO ENCANTADO) ---
         // ==========================================
-                case 1: {
+case 1: {
           // ==========================================
           // --- 2. CRISTAIS (VILA DO INTERIOR NORDESTINO) ---
           // ==========================================
