@@ -4784,92 +4784,278 @@ case 3: {
         }
 
         // ==========================================
-        // --- 6. PANTANAL (O REINO DAS ÁGUAS) ---
+        // --- 5. NOSSA SENHORA DO Ó (A PRAÇA DA MATRIZ) ---
         // ==========================================
         case 5: {
-          // Capões de mata e carandazais no horizonte espelhado
+          // ==========================================
+          // --- CÉU: NUVENS E PÁSSAROS (mantendo o sol existente) ---
+          // ==========================================
+          const cloudPracaA = ((time * 0.03) % (NATIVE_W + 60)) - 30;
+          ctx.fillStyle = "rgba(255,255,255,0.9)";
+          ctx.fillRect(cloudPracaA + p1, 24, 18, 4);
+          ctx.fillRect(cloudPracaA + 5 + p1, 21, 12, 4);
+          ctx.fillRect(cloudPracaA + 42 + p1, 36, 14, 3);
+          ctx.fillRect(cloudPracaA + 46 + p1, 34, 9, 3);
+
+          const cloudPracaB = ((time * 0.05) % (NATIVE_W + 80)) - 40;
+          ctx.fillStyle = "rgba(255,255,255,0.85)";
+          ctx.fillRect(cloudPracaB + p2, 30, 16, 4);
+          ctx.fillRect(cloudPracaB + 4 + p2, 27, 11, 4);
+
+          const passaroPracaX = ((time * 0.06) % (NATIVE_W + 40)) - 20;
+          const passaroPracaY = 46 + Math.sin(time * 0.005) * 5;
+          ctx.fillStyle = "#333";
+          ctx.fillRect(Math.round(passaroPracaX + p2), Math.round(passaroPracaY), 3, 1);
+          ctx.fillRect(Math.round(passaroPracaX - 2 + p2), Math.round(passaroPracaY - 1), 2, 1);
+          ctx.fillRect(Math.round(passaroPracaX + 3 + p2), Math.round(passaroPracaY - 1), 2, 1);
+
+          // ==========================================
+          // --- CAMADA 2: IGREJA MATRIZ AO FUNDO ---
+          // ==========================================
+          // Corpo da igreja
+          const igrejaX = Math.round(150 + p1);
+          ctx.fillStyle = "#fdf3e0";
+          ctx.fillRect(igrejaX, 74, 60, 36);
+          // Telhado
+          ctx.fillStyle = "#c1440e";
+          ctx.fillRect(igrejaX - 4, 70, 68, 5);
+          ctx.fillStyle = "#8a3a10";
+          ctx.fillRect(igrejaX - 4, 75, 68, 2);
+          // Torre central com cruz
+          ctx.fillStyle = "#fdf3e0";
+          ctx.fillRect(igrejaX + 24, 52, 12, 24);
+          ctx.fillStyle = "#c1440e";
+          ctx.fillRect(igrejaX + 22, 54, 16, 3);
+          ctx.fillStyle = "#5b3a1e"; // cruz
+          ctx.fillRect(igrejaX + 29, 46, 2, 8);
+          ctx.fillRect(igrejaX + 27, 48, 6, 2);
+          // Sino / abertura da torre
+          ctx.fillStyle = "#8a5a2b";
+          ctx.fillRect(igrejaX + 27, 60, 6, 8);
+          ctx.fillStyle = "#4a2f12";
+          ctx.fillRect(igrejaX + 28, 61, 4, 6);
+          // Porta principal e janelas
+          ctx.fillStyle = "#6b4a2f";
+          ctx.fillRect(igrejaX + 25, 100, 10, 10);
+          ctx.fillStyle = "#7fb3d5";
+          ctx.fillRect(igrejaX + 6, 84, 6, 8);
+          ctx.fillRect(igrejaX + 48, 84, 6, 8);
+          ctx.fillRect(igrejaX + 26, 84, 8, 6);
+
+          // ==========================================
+          // --- CAMADA 3: ÁRVORES DA PRAÇA AO FUNDO ---
+          // ==========================================
           drawSteppedRidge(ctx, [
-            [-30 + p1, 74], [60 + p1, 68], [140 + p1, 76], [220 + p1, 66], [360 + p1, 72]
-          ], "#1b593a", "#267a50", "#103824");
+            [-30 + p2, 96], [40 + p2, 90], [110 + p2, 98], [180 + p2, 88],
+            [250 + p2, 94], [320 + p2, 90], [390 + p2, 96]
+          ], "#2c5a36", "#3f7d4a", "#1e4028");
 
-          // Águas pantaneiras calmas e gigantescas refletindo o céu azul
-          drawRichWater(ctx, 96, 52, "#185a8a", "#2a82bf", "#7ec8f8", "#ffffff", 230 + p1, time);
+          // Copa das árvores distantes com leve balanço
+          const swayPraçaBack = Math.sin(time * 0.003) * 1.2;
+          ctx.fillStyle = "#3f7d4a";
+          ctx.fillRect(20 + p2 + swayPraçaBack, 88, 22, 10);
+          ctx.fillRect(180 + p2 - swayPraçaBack, 84, 24, 12);
+          ctx.fillRect(300 + p2 + swayPraçaBack, 88, 20, 10);
 
-          // Árvore piúva seca com ninho monumental de Tuiuiú
-          const ninhoX = Math.round(245 + p2);
-          ctx.fillStyle = "#3d2314";
-          ctx.fillRect(ninhoX, 58, 6, 54);
-          ctx.fillRect(ninhoX - 8, 78, 12, 4);
-          ctx.fillStyle = "#5c361e";
-          ctx.fillRect(ninhoX - 14, 52, 34, 7); // base do ninho feita de galhos
-          ctx.fillRect(ninhoX - 10, 48, 26, 5);
+          // ==========================================
+          // --- CAMADA 4: CHÃO DA PRAÇA (GRAMADO + CALÇADA) ---
+          // ==========================================
+          // Gramado principal
+          drawGroundDither(ctx, 148, 36, "#5a9e63", "#3f7d4a", 3);
+          ctx.fillStyle = "#6fae5e";
+          ctx.fillRect(0, 146, NATIVE_W, 14);
 
-          // Família de Tuiuiús no ninho (corpo branco, pescoço preto e faixa vermelha)
+          // Caminhos de calçada cruzando a praça
+          ctx.fillStyle = "#cfc4ae";
+          ctx.fillRect(0, 130, NATIVE_W, 6);
+          ctx.fillRect(120, 130, 8, 30);
+          ctx.fillRect(270, 130, 8, 30);
+          ctx.fillStyle = "#b8ac92";
+          ctx.fillRect(0, 130, NATIVE_W, 1);
+          ctx.fillRect(120, 136, 8, 1);
+          ctx.fillRect(270, 136, 8, 1);
+
+          // ==========================================
+          // --- CAMADA 5: ESTÁTUA DE NOSSA SENHORA DO Ó (CENTRO) ---
+          // ==========================================
+          const estX = Math.round(196 + p3);
+          // Canteiro de flores na base da estátua
+          ctx.fillStyle = "#8a5a2b";
+          ctx.fillRect(estX - 14, 146, 28, 3);
+          ctx.fillStyle = "#e63946";
+          ctx.fillRect(estX - 12, 143, 3, 3);
+          ctx.fillRect(estX - 2, 143, 3, 3);
+          ctx.fillRect(estX + 8, 143, 3, 3);
+          ctx.fillStyle = "#ffd166";
+          ctx.fillRect(estX - 7, 144, 3, 2);
+          ctx.fillRect(estX + 3, 144, 3, 2);
+
+          // Degraus da base
+          ctx.fillStyle = "#d9d4c8";
+          ctx.fillRect(estX - 9, 138, 18, 6);
+          ctx.fillRect(estX - 6, 133, 12, 6);
+
+          // Pilar alto e fino
+          ctx.fillStyle = "#e8e3d8";
+          ctx.fillRect(estX - 3, 88, 6, 46);
+          ctx.fillStyle = "#c9c2b0";
+          ctx.fillRect(estX - 3, 96, 6, 2);
+          ctx.fillRect(estX - 3, 116, 6, 2);
+          ctx.fillRect(estX - 3, 128, 6, 2);
+
+          // Capitel do pilar
+          ctx.fillStyle = "#e8e3d8";
+          ctx.fillRect(estX - 5, 84, 10, 4);
+
+          // Estátua da Santa (manto azul, véu e coroa)
           ctx.fillStyle = "#ffffff";
-          ctx.fillRect(ninhoX - 4, 38, 9, 11);
-          ctx.fillStyle = "#000000";
-          ctx.fillRect(ninhoX + 1, 28, 3, 11); // pescoço longo preto
-          ctx.fillRect(ninhoX + 4, 29, 7, 3);  // bico robusto
-          ctx.fillStyle = "#e63946"; // papo vermelho icônico
-          ctx.fillRect(ninhoX, 35, 5, 4);
-
-          // Vitórias-régias monumentais flutuando com flores brancas e rosas
-          ctx.fillStyle = "#1b7a42";
-          ctx.fillRect(35 + p3, 122, 26, 6);
-          ctx.fillRect(38 + p3, 120, 20, 3);
-          ctx.fillStyle = "#ff70a6"; // flor desabrochada
-          ctx.fillRect(47 + p3, 116, 6, 5);
+          ctx.fillRect(estX - 6, 74, 12, 11); // auréola / nimbo
+          ctx.fillStyle = "#1d4ed8";
+          ctx.fillRect(estX - 4, 70, 8, 9);   // manto azul
+          ctx.fillStyle = "#ffe0b2";
+          ctx.fillRect(estX - 3, 66, 6, 5);   // rosto
           ctx.fillStyle = "#ffffff";
-          ctx.fillRect(49 + p3, 115, 3, 3);
+          ctx.fillRect(estX - 4, 70, 8, 2);   // véu branco
+          ctx.fillStyle = "#ffd166";
+          ctx.fillRect(estX - 4, 63, 8, 3);   // coroa dourada
+          ctx.fillRect(estX - 5, 64, 2, 2);
+          ctx.fillRect(estX + 3, 64, 2, 2);
+          ctx.fillStyle = "#1d4ed8";
+          ctx.fillRect(estX - 3, 75, 2, 4);   // braços
+          ctx.fillRect(estX + 1, 75, 2, 4);
+          ctx.fillStyle = "#ffe0b2";
+          ctx.fillRect(estX - 3, 79, 2, 2);
+          ctx.fillRect(estX + 1, 79, 2, 2);
 
-          // Segunda vitória-régia
-          ctx.fillStyle = "#1b7a42";
-          ctx.fillRect(170 + p3, 128, 22, 5);
+          // ==========================================
+          // --- CAMADA 6: PÉS DE SETE COPAS COM BALANÇO ---
+          // ==========================================
+          // Sete copas 1 (esquerda) - Terminalia catappa, copa em camadas
+          const sete1X = Math.round(48 + p3);
+          const sway1 = Math.sin(time * 0.004) * 1.6;
+          ctx.fillStyle = "#9a9a8a";   // tronco reto, casca cinza clara
+          ctx.fillRect(sete1X, 108, 4, 38);
+          ctx.fillStyle = "#2c5a36";   // camadas horizontais da copa
+          ctx.fillRect(sete1X - 8 + sway1, 102, 20, 5);
+          ctx.fillRect(sete1X - 6 + sway1, 92, 16, 6);
+          ctx.fillRect(sete1X - 10 + sway1, 96, 24, 5);
+          ctx.fillRect(sete1X - 5 + sway1, 86, 14, 6);
+          ctx.fillStyle = "#3f7d4a";
+          ctx.fillRect(sete1X - 6 + sway1, 93, 12, 3);
+          ctx.fillRect(sete1X - 3 + sway1, 87, 8, 3);
+
+          // Sete copas 2 (direita)
+          const sete2X = Math.round(330 + p3);
+          const sway2 = -Math.sin(time * 0.004) * 1.6;
+          ctx.fillStyle = "#9a9a8a";
+          ctx.fillRect(sete2X, 110, 4, 36);
+          ctx.fillStyle = "#2c5a36";
+          ctx.fillRect(sete2X - 8 + sway2, 104, 20, 5);
+          ctx.fillRect(sete2X - 6 + sway2, 94, 16, 6);
+          ctx.fillRect(sete2X - 10 + sway2, 98, 24, 5);
+          ctx.fillRect(sete2X - 5 + sway2, 88, 14, 6);
+          ctx.fillStyle = "#3f7d4a";
+          ctx.fillRect(sete2X - 6 + sway2, 95, 12, 3);
+          ctx.fillRect(sete2X - 3 + sway2, 89, 8, 3);
+
+          // Sete copas 3 (mais ao fundo, entre igreja e praça)
+          const sete3X = Math.round(92 + p2);
+          const sway3 = Math.sin(time * 0.004 + 1) * 1.2;
+          ctx.fillStyle = "#9a9a8a";
+          ctx.fillRect(sete3X, 116, 3, 32);
+          ctx.fillStyle = "#2c5a36";
+          ctx.fillRect(sete3X - 6 + sway3, 110, 15, 4);
+          ctx.fillRect(sete3X - 4 + sway3, 102, 12, 5);
+          ctx.fillRect(sete3X - 8 + sway3, 105, 18, 4);
+
+          // ==========================================
+          // --- CAMADA 7: DETALHES DA PRAÇA ---
+          // ==========================================
+          // Banco de praça (esquerda)
+          ctx.fillStyle = "#6b4a2f";
+          ctx.fillRect(136 + p4, 140, 16, 3);
+          ctx.fillRect(138 + p4, 143, 3, 4);
+          ctx.fillRect(148 + p4, 143, 3, 4);
+          ctx.fillStyle = "#4d2f1d";
+          ctx.fillRect(138 + p4, 137, 12, 3);
+
+          // Poste de luz (direita)
+          ctx.fillStyle = "#555";
+          ctx.fillRect(306 + p4, 106, 2, 40);
+          ctx.fillStyle = "#c9a227";
+          ctx.fillRect(305 + p4, 104, 4, 2);
+          ctx.fillStyle = "#ffe066";
+          ctx.fillRect(305 + p4, 106, 4, 4);
+
+          // ==========================================
+          // --- CAMADA 8: NPCs - PEDESTRES E CRIANÇAS ---
+          // ==========================================
+          // Pedestre 1 (senhor com chapéu caminhando)
+          const ped1X = Math.round(70 + p4 + Math.sin(time * 0.006) * 3);
+          const ped1Passo = Math.floor(time * 0.05) % 2;
+          ctx.fillStyle = "#5b3a1e";
+          ctx.fillRect(ped1X, 132, 5, 2);
+          ctx.fillStyle = "#e8b89a";
+          ctx.fillRect(ped1X + 1, 134, 3, 3);
+          ctx.fillStyle = "#5a7a9a";
+          ctx.fillRect(ped1X, 137, 5, 6);
+          ctx.fillStyle = "#2c2c34";
+          ctx.fillRect(ped1X + 1, 143, 1, 3);
+          if (ped1Passo === 0) {
+            ctx.fillRect(ped1X + 3, 143, 1, 3);
+          } else {
+            ctx.fillRect(ped1X + 3, 143, 1, 2);
+            ctx.fillRect(ped1X + 4, 144, 1, 2);
+          }
+
+          // Pedestre 2 (senhora com vestido caminhando)
+          const ped2X = Math.round(290 + p4 - Math.sin(time * 0.006) * 3);
+          const ped2Passo = Math.floor(time * 0.05 + 1) % 2;
+          ctx.fillStyle = "#3a2a1a";
+          ctx.fillRect(ped2X + 1, 132, 3, 2);
+          ctx.fillStyle = "#e8b89a";
+          ctx.fillRect(ped2X + 1, 134, 3, 3);
+          ctx.fillStyle = "#c94f7c";
+          ctx.fillRect(ped2X, 137, 5, 5);
+          ctx.fillRect(ped2X - 1, 140, 7, 3);
+          ctx.fillStyle = "#2c2c34";
+          ctx.fillRect(ped2X + 1, 143, 1, 3);
+          if (ped2Passo === 0) { ctx.fillRect(ped2X + 3, 143, 1, 3); }
+          else { ctx.fillRect(ped2X + 3, 143, 1, 2); ctx.fillRect(ped2X + 4, 144, 1, 2); }
+
+          // Crianças correndo atrás da bola (gramado da praça)
+          const bolaPraçaX = Math.round(200 + p4 + Math.sin(time * 0.012) * 10);
           ctx.fillStyle = "#ffffff";
-          ctx.fillRect(178 + p3, 125, 5, 4);
+          ctx.beginPath();
+          ctx.arc(bolaPraçaX, 148, 2, 0, 7);
+          ctx.fill();
 
-          // Jacaré-do-pantanal descansando na margem com escamas texturizadas
-          const jacaX = Math.round(135 + p4);
-          ctx.fillStyle = "#1d472c";
-          ctx.fillRect(jacaX, 142, 28, 6);
-          ctx.fillRect(jacaX + 24, 144, 12, 3); // cauda com crista
-          ctx.fillStyle = "#2d6a43";
-          ctx.fillRect(jacaX + 4, 141, 18, 3);
-          ctx.fillStyle = "#ffd166"; // olhos brilhantes
-          ctx.fillRect(jacaX + 6, 139, 2, 2);
-          ctx.fillRect(jacaX + 14, 139, 2, 2);
+          for (let cri = 0; cri < 3; cri++) {
+            const criX = Math.round(178 + cri * 16 + p4 + Math.sin(time * 0.014 + cri * 1.5) * 4);
+            const criPasso = Math.floor(time * 0.05 + cri) % 2;
+            const camisa = cri % 2 === 0 ? "#e63946" : "#1982c4";
+            ctx.fillStyle = "#3a2410";
+            ctx.fillRect(criX + 1, 134, 3, 2);
+            ctx.fillStyle = "#e8b89a";
+            ctx.fillRect(criX + 1, 136, 3, 2);
+            ctx.fillStyle = camisa;
+            ctx.fillRect(criX, 138, 4, 5);
+            ctx.fillStyle = "#2c2c34";
+            ctx.fillRect(criX + 1, 143, 1, 3);
+            if (criPasso === 0) { ctx.fillRect(criX + 2, 143, 1, 3); }
+            else { ctx.fillRect(criX + 2, 143, 1, 2); ctx.fillRect(criX + 3, 144, 1, 2); }
+          }
 
-          // Família de Capivaras comendo capim na margem pantaneira
-          const capiX = Math.round(20 + p4);
-          ctx.fillStyle = "#6f4e37";
-          ctx.fillRect(capiX, 146, 15, 9);
-          ctx.fillRect(capiX + 12, 143, 6, 7); // cabeça robusta
-          ctx.fillStyle = "#000000";
-          ctx.fillRect(capiX + 16, 146, 2, 2); // focinho e olho
-          ctx.fillRect(capiX + 2, 154, 2, 2);
-          ctx.fillRect(capiX + 10, 154, 2, 2);
+          // Pombos bicando no chão da praça
+          const pomboPracaX = Math.round(240 + p4);
+          const pomboBica = Math.floor(time * 0.06) % 2;
+          ctx.fillStyle = "#9a9a9a";
+          ctx.fillRect(pomboPracaX, 144, 4, 3);
+          ctx.fillRect(pomboPracaX + 2, 142 - pomboBica, 2, 2);
+          ctx.fillStyle = "#e63946";
+          ctx.fillRect(pomboPracaX + 1, 146, 1, 1);
 
-          // Filhotinho de capivara atrás da mãe
-          ctx.fillStyle = "#8d6346";
-          ctx.fillRect(capiX - 10, 150, 8, 5);
-          ctx.fillRect(capiX - 4, 148, 4, 4);
-
-          // Sucuri deslizando na água suavemente
-          const sucuriX = Math.round(85 + p3);
-          const sucuriWave = Math.floor(Math.sin(time * 0.005) * 3);
-          ctx.fillStyle = "#2d5a27";
-          ctx.fillRect(sucuriX, 132 + sucuriWave, 16, 3);
-          ctx.fillStyle = "#000000";
-          ctx.fillRect(sucuriX + 4, 132 + sucuriWave, 2, 1);
-          ctx.fillRect(sucuriX + 10, 132 + sucuriWave, 2, 1);
-
-          // Arara-azul-grande voando majestosa pelo céu pantaneiro
-          const araraX = ((time * 0.07 + 50) % (NATIVE_W + 90)) - 40;
-          drawAnimatedFlockBird(ctx, araraX + p2, 45, "#0077b6", "#023e8a", "#ffd166", frame);
-          drawAnimatedFlockBird(ctx, araraX - 16 + p2, 50, "#0077b6", "#023e8a", "#ffd166", frame + 1);
-
-          // Margem e solo
-          drawGroundDither(ctx, 148, 32, "#134226", "#0b2616", 3);
+          // Camada 6: Silhuetas de primeiro plano
           drawCinematicForeground(ctx, 5, time, p5);
           break;
         }
