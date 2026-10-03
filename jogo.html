@@ -5489,91 +5489,102 @@ case 3: {
             ctx.fillRect(Math.round(heliX + 1 + p1), Math.round(heliY) - 1, 2, 2);
           }
 
-          // ==========================================
-          // --- PAINEL DIGITAL DE TÁBUAS DE MARÉS (ADICIONADO) ---
+                   // ==========================================
+          // --- PAINEL DIGITAL DE TÁBUAS DE MARÉS ---
           // ==========================================
           const tideX = Math.round(60 + p4);
           ctx.fillStyle = "#2c2c2c";            // tripé
-          ctx.fillRect(tideX + 2, 142, 3, 12);
+          ctx.fillRect(tideX + 2, 128, 3, 12);
           ctx.fillStyle = "#0f3460";            // moldura do painel
-          ctx.fillRect(tideX - 6, 130, 20, 15);
+          ctx.fillRect(tideX - 6, 116, 20, 15);
           ctx.fillStyle = "#1e1e2f";            // tela LCD
-          ctx.fillRect(tideX - 4, 132, 16, 11);
+          ctx.fillRect(tideX - 4, 118, 16, 11);
           ctx.fillStyle = "#4ade80";            // título em verde
           ctx.font = "bold 6px monospace";
           ctx.textAlign = "center";
-          ctx.fillText("MARE", tideX + 4, 135);
+          ctx.fillText("MARE", tideX + 4, 121);
           ctx.fillStyle = "#67e8f9";            // barras de maré
-          ctx.fillRect(tideX - 2, 137, 3, 2);
-          ctx.fillRect(tideX + 1, 137, 3, 4);
-          ctx.fillRect(tideX + 4, 137, 3, 3);
-          ctx.fillRect(tideX + 7, 137, 3, 5);
-          if ((Math.floor(time * 0.08) % 2) === 0) {  // luz de status piscando
+          ctx.fillRect(tideX - 2, 123, 3, 2);
+          ctx.fillRect(tideX + 1, 123, 3, 4);
+          ctx.fillRect(tideX + 4, 123, 3, 3);
+          ctx.fillRect(tideX + 7, 123, 3, 5);
+          if ((Math.floor(time * 0.08) % 2) === 0) { // luz de status
             ctx.fillStyle = "#facc15";
-            ctx.fillRect(tideX + 11, 132, 2, 2);
+            ctx.fillRect(tideX + 11, 118, 2, 2);
           }
           ctx.textAlign = "left";
 
-          // ==========================================
-          // --- POSTO DE SALVA-VIDAS COM ANTENA DE RÁDIO (ADICIONADO) ---
+                   // ==========================================
+          // --- POSTO SALVA-VIDAS DE TORAS COM ANTENA DE RÁDIO ---
           // ==========================================
           const postX = Math.round(310 + p4);
-          ctx.fillStyle = "#343a40";            // antena de rádio
-          ctx.fillRect(postX + 7, 104, 1, 14);
-          ctx.fillStyle = "#adb5bd";            // hélice da antena
-          ctx.fillRect(postX + 3, 103, 9, 1);
+          // Antena de rádio no topo
+          ctx.fillStyle = "#343a40";
+          ctx.fillRect(postX + 7, 96, 1, 10);
+          ctx.fillStyle = "#adb5bd";
+          ctx.fillRect(postX + 3, 95, 9, 1);
           if ((Math.floor(time * 0.09) % 2) === 0) { // luz vermelha da antena
             ctx.fillStyle = "#e63946";
-            ctx.fillRect(postX + 7, 100, 2, 2);
+            ctx.fillRect(postX + 7, 92, 2, 2);
           }
-          ctx.fillStyle = "#f8f9fa";            // corpo da torre
-          ctx.fillRect(postX, 118, 14, 22);
-          ctx.fillStyle = "#e63946";            // faixas vermelhas
-          ctx.fillRect(postX, 128, 14, 3);
-          ctx.fillRect(postX, 136, 14, 3);
-          ctx.fillStyle = "#212529";            // janela
-          ctx.fillRect(postX + 3, 121, 8, 5);
-          ctx.fillStyle = "#ffd166";            // luz interna
-          ctx.fillRect(postX + 4, 122, 6, 3);
-          ctx.fillStyle = "#e63946";            // cruz de socorro
-          ctx.fillRect(postX + 6, 132, 2, 5);
-          ctx.fillRect(postX + 4, 133, 6, 2);
-          ctx.fillStyle = "#6c757d";            // pernas
-          ctx.fillRect(postX + 1, 140, 2, 6);
-          ctx.fillRect(postX + 11, 140, 2, 6);
+          // Plataforma/telhado da torre
+          ctx.fillStyle = "#6b4a2f";
+          ctx.fillRect(postX - 2, 106, 18, 3);
+          // Paredes de toras de madeira empilhadas
+          ctx.fillStyle = "#8a5a2b";
+          ctx.fillRect(postX, 109, 14, 5);
+          ctx.fillStyle = "#7c4f24";
+          ctx.fillRect(postX, 114, 14, 5);
+          ctx.fillStyle = "#6e4420";
+          ctx.fillRect(postX, 119, 14, 5);
+          ctx.fillStyle = "#5b3a1e";
+          ctx.fillRect(postX, 124, 14, 5);
+          // Janela iluminada
+          ctx.fillStyle = "#212529";
+          ctx.fillRect(postX + 3, 110, 8, 6);
+          ctx.fillStyle = "#ffd166";
+          ctx.fillRect(postX + 4, 111, 6, 4);
+          // Cruz de socorro
+          ctx.fillStyle = "#e63946";
+          ctx.fillRect(postX + 6, 122, 2, 5);
+          ctx.fillRect(postX + 4, 123, 6, 2);
+          // Pernas de madeira
+          ctx.fillStyle = "#5b3a1e";
+          ctx.fillRect(postX + 1, 129, 3, 9);
+          ctx.fillRect(postX + 10, 129, 3, 9);
 
-          // ==========================================
-          // --- LIXEIRAS INTELIGENTES (ADICIONADO) ---
+                   // ==========================================
+          // --- LIXEIRAS INTELIGENTES ---
           // ==========================================
           const lixo1X = Math.round(140 + p4);
           ctx.fillStyle = "#1e3a5f";            // painel solar
-          ctx.fillRect(lixo1X + 1, 143, 5, 3);
-          if ((Math.floor(time * 0.1) % 2) === 0) { // luz verde de "livre"
+          ctx.fillRect(lixo1X + 1, 126, 5, 3);
+          if ((Math.floor(time * 0.1) % 2) === 0) { // luz verde "livre"
             ctx.fillStyle = "#4ade80";
-            ctx.fillRect(lixo1X + 2, 141, 2, 2);
+            ctx.fillRect(lixo1X + 2, 124, 2, 2);
           }
-          ctx.fillStyle = "#2b8a3e";            // corpo da lixeira
-          ctx.fillRect(lixo1X, 146, 7, 8);
+          ctx.fillStyle = "#2b8a3e";            // corpo
+          ctx.fillRect(lixo1X, 129, 7, 8);
           ctx.fillStyle = "#1b6b2a";
-          ctx.fillRect(lixo1X, 153, 7, 1);
+          ctx.fillRect(lixo1X, 136, 7, 1);
           ctx.fillStyle = "#ffffff";            // símbolo de reciclagem
-          ctx.fillRect(lixo1X + 2, 148, 3, 1);
-          ctx.fillRect(lixo1X + 3, 147, 1, 3);
+          ctx.fillRect(lixo1X + 2, 131, 3, 1);
+          ctx.fillRect(lixo1X + 3, 130, 1, 3);
 
           const lixo2X = Math.round(205 + p4);
           ctx.fillStyle = "#1e3a5f";
-          ctx.fillRect(lixo2X + 1, 145, 5, 3);
+          ctx.fillRect(lixo2X + 1, 128, 5, 3);
           if ((Math.floor(time * 0.1 + 1) % 2) === 0) {
             ctx.fillStyle = "#4ade80";
-            ctx.fillRect(lixo2X + 2, 143, 2, 2);
+            ctx.fillRect(lixo2X + 2, 126, 2, 2);
           }
           ctx.fillStyle = "#2b8a3e";
-          ctx.fillRect(lixo2X, 148, 7, 7);
+          ctx.fillRect(lixo2X, 131, 7, 7);
           ctx.fillStyle = "#1b6b2a";
-          ctx.fillRect(lixo2X, 154, 7, 1);
+          ctx.fillRect(lixo2X, 137, 7, 1);
           ctx.fillStyle = "#ffffff";
-          ctx.fillRect(lixo2X + 2, 150, 3, 1);
-          ctx.fillRect(lixo2X + 3, 149, 1, 3);
+          ctx.fillRect(lixo2X + 2, 133, 3, 1);
+          ctx.fillRect(lixo2X + 3, 132, 1, 3);
 
           // ==========================================
           // --- LETREIRO "BEM VINDO A: CAPONGA" (ADICIONADO) ---
