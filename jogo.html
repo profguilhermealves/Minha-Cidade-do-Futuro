@@ -6505,9 +6505,10 @@ case 3: {
           ctx.fillRect(algX + 24, 149, 1, 3);
 
           // Camada 6: Silhuetas de primeiro plano
-          drawCinematicForeground(ctx, 9, time, p5);
+                    drawCinematicForeground(ctx, 9, time, p5);
           break;
         }
+      }   // ← esta fecha o switch — não pode sumir!
 
       // 4. DESENHO DOS ELEMENTOS DO MUNDO (COM CÂMERA SEGUINDO O PERSONAGEM)
       const curWorldW = getWorldWidth();
