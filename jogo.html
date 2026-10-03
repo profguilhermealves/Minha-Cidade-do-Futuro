@@ -4363,99 +4363,196 @@ case 3: {
   break;
 }
 
-       // ==========================================
+      // ==========================================
         // --- 4. ÁGUAS BELAS (PRAIA ENCONTRO COM RIO) ---
         // ==========================================
         case 4: {
+          // ==========================================
           // --- CÉU DE DIA ENSOLARADO ---
-          const skyGrad = ctx.createLinearGradient(0, 0, 0, 90);
-          skyGrad.addColorStop(0, "#4fc3f7");
-          skyGrad.addColorStop(1, "#b3e5fc");
+          // ==========================================
+          const skyGrad = ctx.createLinearGradient(0, 0, 0, 96);
+          skyGrad.addColorStop(0, "#3fa9f5");
+          skyGrad.addColorStop(0.6, "#7cc4f7");
+          skyGrad.addColorStop(1, "#cdeafc");
           ctx.fillStyle = skyGrad;
-          ctx.fillRect(0, 0, NATIVE_W, 90);
+          ctx.fillRect(0, 0, NATIVE_W, 96);
 
-          // Sol com raios
-          const sunX = 330 + p1;
-          const sunY = 30;
-          ctx.fillStyle = "#ffd54f";
-          for (let r = 0; r < 8; r++) {
-            const ang = r * Math.PI / 4;
-            ctx.fillRect(Math.round(sunX + Math.cos(ang) * 14),
-                         Math.round(sunY + Math.sin(ang) * 14), 3, 3);
+          // Sol com raios animados
+          const sunX = 335 + p1;
+          const sunY = 26;
+          ctx.fillStyle = "#ffca28";
+          for (let r = 0; r < 10; r++) {
+            const ang = r * Math.PI / 5 + time * 0.002;
+            ctx.fillRect(Math.round(sunX + Math.cos(ang) * 15),
+                         Math.round(sunY + Math.sin(ang) * 15), 3, 3);
           }
           ctx.beginPath();
-          ctx.arc(sunX, sunY, 10, 0, 7);
+          ctx.arc(sunX, sunY, 11, 0, 7);
           ctx.fillStyle = "#fff176";
           ctx.fill();
+          ctx.beginPath();
+          ctx.arc(sunX, sunY, 6, 0, 7);
+          ctx.fillStyle = "#fffde7";
+          ctx.fill();
 
-          // Nuvens brancas
-          ctx.fillStyle = "rgba(255,255,255,0.9)";
-          const cloudP = ((time * 0.02) % (NATIVE_W + 80)) - 40;
-          ctx.fillRect(cloudP + p1, 22, 18, 5);
-          ctx.fillRect(cloudP + 5 + p1, 18, 12, 5);
-          ctx.fillRect(cloudP + 60 + p1, 34, 14, 4);
-          ctx.fillRect(cloudP + 64 + p1, 31, 9, 4);
+          // Nuvens brancas deslizando
+          ctx.fillStyle = "rgba(255,255,255,0.92)";
+          const cloudP = ((time * 0.02) % (NATIVE_W + 100)) - 50;
+          ctx.fillRect(cloudP + p1, 20, 20, 5);
+          ctx.fillRect(cloudP + 6 + p1, 16, 13, 5);
+          ctx.fillRect(cloudP + 13 + p1, 19, 10, 3);
+          ctx.fillRect(cloudP + 70 + p1, 34, 16, 4);
+          ctx.fillRect(cloudP + 76 + p1, 31, 10, 4);
+          ctx.fillRect(cloudP + 150 + p1, 26, 14, 4);
+          ctx.fillRect(cloudP + 154 + p1, 23, 9, 4);
 
-          // --- MANGUEZAL AO FUNDO (silhueta verde escura) ---
+          // ==========================================
+          // --- MANGUEZAL AO FUNDO (silhueta verde) ---
+          // ==========================================
           drawSteppedRidge(ctx, [
-            [-30 + p1, 92], [40 + p1, 84], [110 + p1, 92], [180 + p1, 82],
-            [250 + p1, 90], [320 + p1, 84], [360 + p1, 92]
+            [-30 + p1, 92], [30 + p1, 84], [90 + p1, 92], [150 + p1, 82],
+            [210 + p1, 90], [270 + p1, 84], [330 + p1, 92], [390 + p1, 86]
           ], "#1b5e20", "#2e7d32", "#0d3b10");
 
+          // Raízes aéreas do mangue (detalhe típico)
+          ctx.fillStyle = "#0d3b10";
+          ctx.fillRect(60 + p1, 88, 2, 6);
+          ctx.fillRect(64 + p1, 90, 2, 5);
+          ctx.fillRect(200 + p1, 86, 2, 7);
+          ctx.fillRect(204 + p1, 88, 2, 5);
+          ctx.fillRect(300 + p1, 88, 2, 6);
+
+          // Garças brancas voando sobre o mangue
+          const garcaX = ((time * 0.05) % (NATIVE_W + 60)) - 30;
+          const garcaY = 40 + Math.sin(time * 0.006) * 4;
+          ctx.fillStyle = "#ffffff";
+          ctx.fillRect(Math.round(garcaX + p1), Math.round(garcaY), 6, 2);
+          ctx.fillRect(Math.round(garcaX - 3 + p1), Math.round(garcaY - 1), 3, 2);
+          ctx.fillRect(Math.round(garcaX + 6 + p1), Math.round(garcaY - 1), 3, 2);
+          ctx.fillStyle = "#e0e0e0";
+          ctx.fillRect(Math.round(garcaX + 1 + p1), Math.round(garcaY + 2), 4, 1);
+
+          // ==========================================
           // --- RIO EM FORMA DE S (água azulada robusta) ---
+          // ==========================================
           ctx.beginPath();
           ctx.moveTo(120 + p2, 90);
-          ctx.bezierCurveTo(60 + p2, 100, 60 + p2, 120, 130 + p2, 128);
-          ctx.bezierCurveTo(200 + p2, 136, 200 + p2, 148, 150 + p2, 160);
-          ctx.lineTo(260 + p2, 160);
-          ctx.bezierCurveTo(300 + p2, 148, 300 + p2, 136, 240 + p2, 128);
-          ctx.bezierCurveTo(180 + p2, 120, 180 + p2, 100, 240 + p2, 90);
+          ctx.bezierCurveTo(50 + p2, 98, 50 + p2, 120, 130 + p2, 128);
+          ctx.bezierCurveTo(210 + p2, 136, 210 + p2, 148, 150 + p2, 162);
+          ctx.lineTo(270 + p2, 162);
+          ctx.bezierCurveTo(310 + p2, 148, 310 + p2, 136, 245 + p2, 128);
+          ctx.bezierCurveTo(180 + p2, 120, 180 + p2, 100, 245 + p2, 90);
           ctx.closePath();
-          const riverGrad = ctx.createLinearGradient(0, 90, 0, 160);
+          const riverGrad = ctx.createLinearGradient(0, 90, 0, 162);
           riverGrad.addColorStop(0, "#4fc3f7");
-          riverGrad.addColorStop(1, "#0288d1");
+          riverGrad.addColorStop(0.5, "#29b6f6");
+          riverGrad.addColorStop(1, "#0277bd");
           ctx.fillStyle = riverGrad;
           ctx.fill();
 
-          // Reflexos de luz na água
-          ctx.fillStyle = "rgba(255,255,255,0.35)";
-          ctx.fillRect(140 + p2, 112, 30, 2);
-          ctx.fillRect(210 + p2, 132, 26, 2);
-          ctx.fillRect(180 + p2, 148, 22, 2);
+          // Ondulações e reflexos de luz na água (animados)
+          ctx.fillStyle = "rgba(255,255,255,0.4)";
+          const ripple = Math.floor(time * 0.05) % 3;
+          ctx.fillRect(140 + p2, 108 + ripple, 28, 2);
+          ctx.fillRect(200 + p2, 130 + ripple, 24, 2);
+          ctx.fillRect(175 + p2, 148 + ripple, 22, 2);
+          ctx.fillStyle = "rgba(255,255,255,0.2)";
+          ctx.fillRect(160 + p2, 118, 40, 1);
+          ctx.fillRect(220 + p2, 140, 32, 1);
 
-          // --- MARGENS DE AREIA ---
+          // ==========================================
+          // --- MARGENS DE AREIA DOURADA ---
+          // ==========================================
           ctx.fillStyle = "#f5deb3";
-          ctx.fillRect(0, 150, NATIVE_W, 10);
+          ctx.fillRect(0, 150, NATIVE_W, 12);
           ctx.fillStyle = "#e8c98a";
           ctx.fillRect(0, 150, NATIVE_W, 3);
+          ctx.fillStyle = "#d9b26a";
+          ctx.fillRect(0, 158, NATIVE_W, 2);
+          // Grãos de areia pontilhados
+          ctx.fillStyle = "rgba(255,255,255,0.5)";
+          ctx.fillRect(20 + p4, 153, 1, 1);
+          ctx.fillRect(90 + p4, 155, 1, 1);
+          ctx.fillRect(180 + p4, 152, 1, 1);
+          ctx.fillRect(300 + p4, 154, 1, 1);
 
-          // --- PEIXES SALTANDO DA ÁGUA ---
-          const fishJump = Math.abs(Math.sin(time * 0.01)) * 6;
-          ctx.fillStyle = "#b0bec5";
+          // ==========================================
+          // --- PEIXES SALTANDO DA ÁGUA (animados) ---
+          // ==========================================
+          const fishJump = Math.abs(Math.sin(time * 0.012)) * 7;
+          ctx.fillStyle = "#90a4ae";
           const f1x = Math.round(150 + p4);
-          ctx.fillRect(f1x, 118 - fishJump, 4, 2);
-          ctx.fillRect(f1x - 2, 118 - fishJump, 2, 1);
-          const f2x = Math.round(225 + p4);
-          ctx.fillRect(f2x, 138 - fishJump, 4, 2);
-          ctx.fillRect(f2x - 2, 138 - fishJump, 2, 1);
+          ctx.fillRect(f1x, 116 - fishJump, 5, 2);
+          ctx.fillRect(f1x - 3, 116 - fishJump, 3, 1);
+          ctx.fillRect(f1x + 4, 116 - fishJump, 2, 1);
+          ctx.fillStyle = "#455a64";
+          ctx.fillRect(f1x + 1, 116 - fishJump, 1, 2);
           ctx.fillStyle = "rgba(255,255,255,0.7)";
-          ctx.fillRect(f1x + 1, 122 - fishJump, 2, 2);
-          ctx.fillRect(f2x + 1, 142 - fishJump, 2, 2);
+          ctx.fillRect(f1x + 1, 121 - fishJump, 2, 2);
+          ctx.fillRect(f1x + 4, 120 - fishJump, 1, 2);
 
-          // --- BANHISTAS NA ÁGUA ---
-          const b1x = Math.round(170 + p4);
+          const f2x = Math.round(225 + p4 + Math.sin(time * 0.01) * 4);
+          ctx.fillStyle = "#78909c";
+          ctx.fillRect(f2x, 136 - fishJump, 5, 2);
+          ctx.fillRect(f2x - 3, 136 - fishJump, 3, 1);
+          ctx.fillStyle = "#455a64";
+          ctx.fillRect(f2x + 1, 136 - fishJump, 1, 2);
+          ctx.fillStyle = "rgba(255,255,255,0.7)";
+          ctx.fillRect(f2x + 1, 141 - fishJump, 2, 2);
+
+          // ==========================================
+          // --- CANOAS COM PESCADORES NO RIO ---
+          // ==========================================
+          // Canoa 1
+          const canoa1x = Math.round(185 + p4);
+          ctx.fillStyle = "#8d6e63";
+          ctx.fillRect(canoa1x, 132, 20, 4);
+          ctx.fillStyle = "#5d4037";
+          ctx.fillRect(canoa1x + 2, 136, 16, 1);
+          ctx.fillStyle = "#a1887f";
+          ctx.fillRect(canoa1x + 8, 128, 2, 4);
           ctx.fillStyle = "#ffe0b2";
-          ctx.fillRect(b1x, 128, 3, 3);
-          ctx.fillRect(b1x - 2, 131, 2, 2);
-          ctx.fillRect(b1x + 3, 131, 2, 2);
-          const b2x = Math.round(235 + p4);
-          ctx.fillStyle = "#d7a86e";
-          ctx.fillRect(b2x, 138, 3, 3);
-          ctx.fillRect(b2x - 2, 141, 2, 2);
-          ctx.fillRect(b2x + 3, 141, 2, 2);
+          ctx.fillRect(canoa1x + 7, 126, 3, 3);
+          ctx.fillStyle = "#8d6e63";
+          ctx.fillRect(canoa1x + 10, 126, 1, 5);
+          ctx.fillStyle = "#4a148c";
+          ctx.fillRect(canoa1x + 10, 130, 1, 1);
 
+          // Canoa 2 (menor, ao fundo)
+          const canoa2x = Math.round(105 + p4);
+          ctx.fillStyle = "#795548";
+          ctx.fillRect(canoa2x, 118, 14, 3);
+          ctx.fillStyle = "#5d4037";
+          ctx.fillRect(canoa2x + 6, 115, 1, 3);
+          ctx.fillStyle = "#ffe0b2";
+          ctx.fillRect(canoa2x + 5, 113, 2, 3);
+
+          // ==========================================
+          // --- BANHISTAS NA ÁGUA (animados) ---
+          // ==========================================
+          const b1x = Math.round(160 + p4);
+          const b1bob = Math.sin(time * 0.01) * 1;
+          ctx.fillStyle = "#ffe0b2";
+          ctx.fillRect(b1x, 126 + b1bob, 3, 3);
+          ctx.fillRect(b1x - 2, 129 + b1bob, 2, 2);
+          ctx.fillRect(b1x + 3, 129 + b1bob, 2, 2);
+          ctx.fillStyle = "#ff8a80";
+          ctx.fillRect(b1x - 1, 132 + b1bob, 5, 2);
+
+          const b2x = Math.round(240 + p4);
+          const b2bob = -Math.sin(time * 0.01) * 1;
+          ctx.fillStyle = "#d7a86e";
+          ctx.fillRect(b2x, 136 + b2bob, 3, 3);
+          ctx.fillRect(b2x - 2, 139 + b2bob, 2, 2);
+          ctx.fillRect(b2x + 3, 139 + b2bob, 2, 2);
+          ctx.fillStyle = "#4fc3f7";
+          ctx.fillRect(b2x - 1, 142 + b2bob, 5, 2);
+
+          // ==========================================
           // --- PESCADORES NA MARGEM ---
-          const pesc1x = Math.round(60 + p4);
+          // ==========================================
+          // Pescador 1 com vara (margem esquerda)
+          const pesc1x = Math.round(55 + p4);
           ctx.fillStyle = "#8d6e63";
           ctx.fillRect(pesc1x, 140, 4, 8);
           ctx.fillStyle = "#ffe0b2";
@@ -4463,36 +4560,83 @@ case 3: {
           ctx.fillStyle = "#5d4037";
           ctx.fillRect(pesc1x, 136, 5, 2);
           ctx.fillStyle = "#6d4c41";
-          ctx.fillRect(pesc1x + 4, 138, 1, 10);
+          ctx.fillRect(pesc1x + 4, 138, 1, 12);
           ctx.fillStyle = "#4a148c";
-          ctx.fillRect(pesc1x + 4, 147, 1, 1);
+          ctx.fillRect(pesc1x + 4, 148, 1, 1);
+          // Linha de pesca
+          ctx.fillStyle = "rgba(255,255,255,0.6)";
+          ctx.fillRect(pesc1x + 4, 148, 1, 3);
 
-          // Pescador 2 em barquinho (dentro do rio)
-          const pesc2x = Math.round(200 + p4);
-          ctx.fillStyle = "#795548";
-          ctx.fillRect(pesc2x, 136, 14, 3);
-          ctx.fillStyle = "#5d4037";
-          ctx.fillRect(pesc2x + 5, 132, 2, 4);
-          ctx.fillStyle = "#ffe0b2";
-          ctx.fillRect(pesc2x + 4, 130, 3, 3);
+          // Pescador 2 (margem direita, com balde de peixes)
+          const pesc2x = Math.round(315 + p4);
           ctx.fillStyle = "#6d4c41";
-          ctx.fillRect(pesc2x + 7, 130, 1, 6);
+          ctx.fillRect(pesc2x, 142, 4, 6);
+          ctx.fillStyle = "#ffe0b2";
+          ctx.fillRect(pesc2x + 1, 140, 3, 3);
+          ctx.fillStyle = "#3e2723";
+          ctx.fillRect(pesc2x, 138, 5, 2);
+          ctx.fillStyle = "#5d4037";
+          ctx.fillRect(pesc2x - 2, 148, 4, 3);
+          ctx.fillStyle = "#90a4ae";
+          ctx.fillRect(pesc2x - 1, 146, 2, 2);
 
+          // ==========================================
+          // --- ELEMENTOS DE PRAIA ---
+          // ==========================================
+          // Guarda-sol colorido
+          const umbX = Math.round(35 + p4);
+          ctx.fillStyle = "#5d4037";
+          ctx.fillRect(umbX + 3, 142, 1, 8);
+          ctx.fillStyle = "#e53935";
+          ctx.fillRect(umbX - 2, 138, 11, 3);
+          ctx.fillStyle = "#ffffff";
+          ctx.fillRect(umbX, 138, 3, 1);
+          ctx.fillRect(umbX + 5, 138, 3, 1);
+
+          // Caranguejo andando na areia
+          const crabX = Math.round(280 + p4 + Math.sin(time * 0.02) * 2);
+          ctx.fillStyle = "#e53935";
+          ctx.fillRect(crabX, 153, 5, 3);
+          ctx.fillRect(crabX - 2, 152, 2, 1);
+          ctx.fillRect(crabX + 5, 152, 2, 1);
+          ctx.fillRect(crabX - 2, 155, 2, 1);
+          ctx.fillRect(crabX + 5, 155, 2, 1);
+          ctx.fillStyle = "#b71c1c";
+          ctx.fillRect(crabX + 1, 154, 3, 1);
+
+          // Conchas na areia
+          ctx.fillStyle = "#f8bbd0";
+          ctx.fillRect(130 + p4, 154, 2, 2);
+          ctx.fillRect(210 + p4, 155, 2, 2);
+          ctx.fillStyle = "#ffe0b2";
+          ctx.fillRect(250 + p4, 153, 2, 2);
+
+          // ==========================================
           // --- LETREIRO GRANDE "BEM VINDOS A: ÁGUAS BELAS" ---
+          // ==========================================
           const signX = Math.round(120 + p5);
-          const signY = 60;
+          const signY = 58;
 
+          // Postes de madeira grossos
           ctx.fillStyle = "#5b3a1e";
-          ctx.fillRect(signX + 8, signY + 30, 6, 34);
-          ctx.fillRect(signX + 116, signY + 30, 6, 34);
+          ctx.fillRect(signX + 8, signY + 30, 7, 36);
+          ctx.fillRect(signX + 115, signY + 30, 7, 36);
+          ctx.fillStyle = "#3e2410";
+          ctx.fillRect(signX + 8, signY + 60, 7, 6);
+          ctx.fillRect(signX + 115, signY + 60, 7, 6);
 
+          // Placa grande de madeira
           ctx.fillStyle = "#8a5a2b";
-          ctx.fillRect(signX - 10, signY - 8, 150, 42);
+          ctx.fillRect(signX - 10, signY - 8, 150, 44);
           ctx.fillStyle = "#a06a33";
           ctx.fillRect(signX - 10, signY - 8, 150, 5);
           ctx.fillStyle = "#6e4420";
-          ctx.fillRect(signX - 10, signY + 28, 150, 6);
+          ctx.fillRect(signX - 10, signY + 30, 150, 6);
+          ctx.fillStyle = "#5b3a1e";
+          ctx.fillRect(signX - 10, signY - 8, 4, 44);
+          ctx.fillRect(signX + 136, signY - 8, 4, 44);
 
+          // Moldura interna colorida (ondas do rio)
           ctx.fillStyle = "#0288d1";
           ctx.fillRect(signX - 6, signY - 4, 142, 3);
           ctx.fillStyle = "#ffd54f";
@@ -4500,22 +4644,26 @@ case 3: {
           ctx.fillStyle = "#2e7d32";
           ctx.fillRect(signX - 6, signY + 2, 142, 3);
 
+          // Texto "BEM VINDOS A:"
           ctx.fillStyle = "rgba(0,0,0,0.5)";
           ctx.font = "bold 15px 'Courier New', monospace";
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
-          ctx.fillText("BEM VINDOS A:", signX + 65, signY + 8);
+          ctx.fillText("BEM VINDOS A:", signX + 66, signY + 8);
           ctx.fillStyle = "#ffffff";
-          ctx.fillText("BEM VINDOS A:", signX + 64, signY + 7);
+          ctx.fillText("BEM VINDOS A:", signX + 65, signY + 7);
 
+          // Texto "AGUAS BELAS" em destaque
           ctx.fillStyle = "rgba(0,0,0,0.5)";
-          ctx.font = "bold 20px 'Courier New', monospace";
-          ctx.fillText("AGUAS BELAS", signX + 66, signY + 22);
+          ctx.font = "bold 21px 'Courier New', monospace";
+          ctx.fillText("AGUAS BELAS", signX + 67, signY + 23);
           ctx.fillStyle = "#ffd54f";
-          ctx.fillText("AGUAS BELAS", signX + 65, signY + 21);
+          ctx.fillText("AGUAS BELAS", signX + 66, signY + 22);
           ctx.textAlign = "left";
 
+          // ==========================================
           // --- PRIMEIRO PLANO ---
+          // ==========================================
           drawCinematicForeground(ctx, 4, time, p5);
           break;
         }
