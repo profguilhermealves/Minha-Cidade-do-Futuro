@@ -6414,18 +6414,6 @@ case 3: {
           ctx.fillStyle = "#3a2410";
           ctx.fillRect(inflX + 12, jumpKidY - 2, 3, 2);
 
-           // Criança pulando dentro (maior e mais lenta)
-          const jumpKidY = Math.round(120 - Math.abs(Math.sin(time * 0.008)) * 8);
-          ctx.fillStyle = "#3a2410";
-          ctx.fillRect(inflX + 11, jumpKidY - 2, 4, 2);   // cabelo
-          ctx.fillStyle = "#e8b89a";
-          ctx.fillRect(inflX + 11, jumpKidY, 4, 3);        // rosto
-          ctx.fillStyle = "#e63946";
-          ctx.fillRect(inflX + 10, jumpKidY + 3, 6, 4);    // corpo
-          ctx.fillStyle = "#2c2c34";
-          ctx.fillRect(inflX + 11, jumpKidY + 7, 2, 3);    // pernas
-          ctx.fillRect(inflX + 14, jumpKidY + 7, 2, 3);
-
           // Crianças brincando na praça (velocidade normal)
           const bolaX = Math.round(218 + p4 + Math.sin(time * 0.012) * 8);
           ctx.fillStyle = "#ffffff";
