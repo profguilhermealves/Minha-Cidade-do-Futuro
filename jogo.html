@@ -5305,8 +5305,8 @@ case 3: {
           break;
         }
 
-        // ==========================================
-        // --- 8. RESTINGA E DUNAS (AS DUNAS E O OCEANO) ---
+               // ==========================================
+        // --- 8. CAPONGA (AS DUNAS E O OCEANO) ---
         // ==========================================
         case 7: {
           // Oceano Atlântico aberto com ondas quebrando e espelho d'água
@@ -5366,6 +5366,258 @@ case 3: {
           const gullsX = ((time * 0.07 + 70) % (NATIVE_W + 90)) - 40;
           drawAnimatedFlockBird(ctx, gullsX + p1, 44, "#ffffff", "#94a3b8", "#f77f00", frame);
           drawAnimatedFlockBird(ctx, gullsX - 18 + p1, 50, "#ffffff", "#94a3b8", "#f77f00", frame + 1);
+
+          // ==========================================
+          // --- ONDAS ROLANDO NO MAR (ADICIONADO) ---
+          // ==========================================
+          ctx.fillStyle = "rgba(255,255,255,0.75)";
+          for (let w = 0; w < 3; w++) {
+            const wx = ((time * 0.06 + w * 60) % (NATIVE_W + 50)) - 25;
+            const wy = 62 + w * 14;
+            ctx.fillRect(Math.round(wx + p1), wy, 22, 3);       // crista da onda
+            ctx.fillRect(Math.round(wx + 4 + p1), wy - 2, 12, 2); // espuma do topo
+            ctx.fillStyle = "rgba(255,255,255,0.4)";
+            ctx.fillRect(Math.round(wx + 26 + p1), wy + 1, 12, 2); // cauda da onda
+            ctx.fillStyle = "rgba(255,255,255,0.75)";
+          }
+
+          // ==========================================
+          // --- SURFISTAS PEGANDO ONDA (ADICIONADO) ---
+          // ==========================================
+          const surf1X = Math.round(160 + p1 + Math.sin(time * 0.006) * 6);
+          const surf1Y = Math.round(66 + Math.sin(time * 0.012) * 2);
+          ctx.fillStyle = "#e63946";              // prancha
+          ctx.fillRect(surf1X, surf1Y + 4, 10, 2);
+          ctx.fillStyle = "#ffe0b2";              // corpo
+          ctx.fillRect(surf1X + 2, surf1Y, 3, 4);
+          ctx.fillStyle = "#1d4ed8";              // cabelo
+          ctx.fillRect(surf1X + 2, surf1Y - 2, 3, 2);
+          ctx.fillStyle = "rgba(255,255,255,0.6)"; // esteira de espuma
+          ctx.fillRect(surf1X - 4, surf1Y + 6, 5, 1);
+
+          const surf2X = Math.round(250 + p2 + Math.sin(time * 0.006 + 2) * 5);
+          const surf2Y = Math.round(72 + Math.sin(time * 0.012 + 1) * 2);
+          ctx.fillStyle = "#00b4d8";
+          ctx.fillRect(surf2X, surf2Y + 4, 9, 2);
+          ctx.fillStyle = "#d7a86e";
+          ctx.fillRect(surf2X + 2, surf2Y, 3, 4);
+          ctx.fillStyle = "#000000";
+          ctx.fillRect(surf2X + 2, surf2Y - 2, 3, 2);
+          ctx.fillStyle = "rgba(255,255,255,0.6)";
+          ctx.fillRect(surf2X - 4, surf2Y + 6, 5, 1);
+
+          // ==========================================
+          // --- KITESURFISTAS (ADICIONADO) ---
+          // ==========================================
+          const k1x = Math.round(120 + p3 + Math.sin(time * 0.007) * 10);
+          const k1y = 38 + Math.sin(time * 0.009) * 3;
+          ctx.fillStyle = "#ff5d8f";              // pipa
+          ctx.beginPath();
+          ctx.moveTo(k1x + 14, k1y - 6);
+          ctx.lineTo(k1x + 19, k1y);
+          ctx.lineTo(k1x + 14, k1y + 6);
+          ctx.lineTo(k1x + 9, k1y);
+          ctx.closePath();
+          ctx.fill();
+          ctx.strokeStyle = "rgba(255,255,255,0.5)"; // linhas da pipa
+          ctx.beginPath();
+          ctx.moveTo(k1x + 14, k1y);
+          ctx.lineTo(k1x + 2, 80);
+          ctx.stroke();
+          ctx.fillStyle = "#ffd166";
+          ctx.fillRect(k1x + 14, k1y + 4, 5, 1);   // rabiola
+          ctx.fillStyle = "#26a69a";               // prancha
+          ctx.fillRect(k1x, 78, 8, 2);
+          ctx.fillStyle = "#37474f";               // corpo
+          ctx.fillRect(k1x + 1, 75, 4, 4);
+          ctx.fillStyle = "#ffcc80";               // cabeça
+          ctx.fillRect(k1x + 2, 73, 3, 2);
+          ctx.fillStyle = "rgba(255,255,255,0.5)"; // espuma
+          ctx.fillRect(k1x - 6, 80, 6, 1);
+
+          const k2x = Math.round(300 + p2 + Math.sin(time * 0.007 + 1) * 9);
+          const k2y = 42 + Math.sin(time * 0.009 + 2) * 3;
+          ctx.fillStyle = "#7c4dff";
+          ctx.beginPath();
+          ctx.moveTo(k2x + 11, k2y - 5);
+          ctx.lineTo(k2x + 15, k2y);
+          ctx.lineTo(k2x + 11, k2y + 5);
+          ctx.lineTo(k2x + 7, k2y);
+          ctx.closePath();
+          ctx.fill();
+          ctx.strokeStyle = "rgba(255,255,255,0.4)";
+          ctx.beginPath();
+          ctx.moveTo(k2x + 11, k2y);
+          ctx.lineTo(k2x + 1, 88);
+          ctx.stroke();
+          ctx.fillStyle = "#e63946";
+          ctx.fillRect(k2x + 11, k2y + 4, 4, 1);
+          ctx.fillStyle = "#ffd54f";
+          ctx.fillRect(k2x, 86, 7, 2);
+          ctx.fillStyle = "#263238";
+          ctx.fillRect(k2x + 1, 84, 3, 3);
+          ctx.fillStyle = "#ffcc80";
+          ctx.fillRect(k2x + 1, 82, 3, 2);
+
+          // ==========================================
+          // --- HELICÓPTERO DOS BOMBEIROS SOBREVOANDO (ADICIONADO) ---
+          // ==========================================
+          const heliX = ((time * 0.04 + 40) % (NATIVE_W + 160)) - 80;
+          const heliY = 28 + Math.sin(time * 0.005) * 3;
+          ctx.fillStyle = "#e63946";                          // corpo
+          ctx.fillRect(Math.round(heliX + p1), Math.round(heliY), 16, 5);
+          ctx.fillStyle = "#c1121f";                          // cauda
+          ctx.fillRect(Math.round(heliX + 16 + p1), Math.round(heliY) + 1, 8, 2);
+          ctx.fillStyle = "#8ac926";                          // rotor de cauda
+          ctx.fillRect(Math.round(heliX + 24 + p1), Math.round(heliY) - 1, 1, 6);
+          ctx.fillStyle = "#a8dadc";                          // cabine de vidro
+          ctx.fillRect(Math.round(heliX + 3 + p1), Math.round(heliY) + 1, 5, 3);
+          ctx.fillStyle = "#ffffff";                          // patins
+          ctx.fillRect(Math.round(heliX + 3 + p1), Math.round(heliY) + 5, 2, 2);
+          ctx.fillRect(Math.round(heliX + 12 + p1), Math.round(heliY) + 5, 2, 2);
+          const heliRotor = Math.floor(time * 0.2) % 2;       // rotor girando
+          ctx.fillStyle = "rgba(200,200,200,0.8)";
+          if (heliRotor === 0) {
+            ctx.fillRect(Math.round(heliX + 6 + p1), Math.round(heliY) - 3, 5, 1);
+            ctx.fillRect(Math.round(heliX + 6 + p1), Math.round(heliY) - 4, 1, 3);
+            ctx.fillRect(Math.round(heliX + 10 + p1), Math.round(heliY) - 4, 1, 3);
+          } else {
+            ctx.fillRect(Math.round(heliX + 6 + p1), Math.round(heliY) - 4, 5, 2);
+          }
+          if ((Math.floor(time * 0.1) % 2) === 0) {           // luz de alerta
+            ctx.fillStyle = "#ffd166";
+            ctx.fillRect(Math.round(heliX + 1 + p1), Math.round(heliY) - 1, 2, 2);
+          }
+
+          // ==========================================
+          // --- PAINEL DIGITAL DE TÁBUAS DE MARÉS (ADICIONADO) ---
+          // ==========================================
+          const tideX = Math.round(60 + p4);
+          ctx.fillStyle = "#2c2c2c";            // tripé
+          ctx.fillRect(tideX + 2, 142, 3, 12);
+          ctx.fillStyle = "#0f3460";            // moldura do painel
+          ctx.fillRect(tideX - 6, 130, 20, 15);
+          ctx.fillStyle = "#1e1e2f";            // tela LCD
+          ctx.fillRect(tideX - 4, 132, 16, 11);
+          ctx.fillStyle = "#4ade80";            // título em verde
+          ctx.font = "bold 6px monospace";
+          ctx.textAlign = "center";
+          ctx.fillText("MARE", tideX + 4, 135);
+          ctx.fillStyle = "#67e8f9";            // barras de maré
+          ctx.fillRect(tideX - 2, 137, 3, 2);
+          ctx.fillRect(tideX + 1, 137, 3, 4);
+          ctx.fillRect(tideX + 4, 137, 3, 3);
+          ctx.fillRect(tideX + 7, 137, 3, 5);
+          if ((Math.floor(time * 0.08) % 2) === 0) {  // luz de status piscando
+            ctx.fillStyle = "#facc15";
+            ctx.fillRect(tideX + 11, 132, 2, 2);
+          }
+          ctx.textAlign = "left";
+
+          // ==========================================
+          // --- POSTO DE SALVA-VIDAS COM ANTENA DE RÁDIO (ADICIONADO) ---
+          // ==========================================
+          const postX = Math.round(310 + p4);
+          ctx.fillStyle = "#343a40";            // antena de rádio
+          ctx.fillRect(postX + 7, 104, 1, 14);
+          ctx.fillStyle = "#adb5bd";            // hélice da antena
+          ctx.fillRect(postX + 3, 103, 9, 1);
+          if ((Math.floor(time * 0.09) % 2) === 0) { // luz vermelha da antena
+            ctx.fillStyle = "#e63946";
+            ctx.fillRect(postX + 7, 100, 2, 2);
+          }
+          ctx.fillStyle = "#f8f9fa";            // corpo da torre
+          ctx.fillRect(postX, 118, 14, 22);
+          ctx.fillStyle = "#e63946";            // faixas vermelhas
+          ctx.fillRect(postX, 128, 14, 3);
+          ctx.fillRect(postX, 136, 14, 3);
+          ctx.fillStyle = "#212529";            // janela
+          ctx.fillRect(postX + 3, 121, 8, 5);
+          ctx.fillStyle = "#ffd166";            // luz interna
+          ctx.fillRect(postX + 4, 122, 6, 3);
+          ctx.fillStyle = "#e63946";            // cruz de socorro
+          ctx.fillRect(postX + 6, 132, 2, 5);
+          ctx.fillRect(postX + 4, 133, 6, 2);
+          ctx.fillStyle = "#6c757d";            // pernas
+          ctx.fillRect(postX + 1, 140, 2, 6);
+          ctx.fillRect(postX + 11, 140, 2, 6);
+
+          // ==========================================
+          // --- LIXEIRAS INTELIGENTES (ADICIONADO) ---
+          // ==========================================
+          const lixo1X = Math.round(140 + p4);
+          ctx.fillStyle = "#1e3a5f";            // painel solar
+          ctx.fillRect(lixo1X + 1, 143, 5, 3);
+          if ((Math.floor(time * 0.1) % 2) === 0) { // luz verde de "livre"
+            ctx.fillStyle = "#4ade80";
+            ctx.fillRect(lixo1X + 2, 141, 2, 2);
+          }
+          ctx.fillStyle = "#2b8a3e";            // corpo da lixeira
+          ctx.fillRect(lixo1X, 146, 7, 8);
+          ctx.fillStyle = "#1b6b2a";
+          ctx.fillRect(lixo1X, 153, 7, 1);
+          ctx.fillStyle = "#ffffff";            // símbolo de reciclagem
+          ctx.fillRect(lixo1X + 2, 148, 3, 1);
+          ctx.fillRect(lixo1X + 3, 147, 1, 3);
+
+          const lixo2X = Math.round(205 + p4);
+          ctx.fillStyle = "#1e3a5f";
+          ctx.fillRect(lixo2X + 1, 145, 5, 3);
+          if ((Math.floor(time * 0.1 + 1) % 2) === 0) {
+            ctx.fillStyle = "#4ade80";
+            ctx.fillRect(lixo2X + 2, 143, 2, 2);
+          }
+          ctx.fillStyle = "#2b8a3e";
+          ctx.fillRect(lixo2X, 148, 7, 7);
+          ctx.fillStyle = "#1b6b2a";
+          ctx.fillRect(lixo2X, 154, 7, 1);
+          ctx.fillStyle = "#ffffff";
+          ctx.fillRect(lixo2X + 2, 150, 3, 1);
+          ctx.fillRect(lixo2X + 3, 149, 1, 3);
+
+          // ==========================================
+          // --- LETREIRO "BEM VINDO A: CAPONGA" (ADICIONADO) ---
+          // ==========================================
+          const signX = Math.round(120 + p5);
+          const signY = 54;
+
+          ctx.fillStyle = "#6b4a2f";            // postes
+          ctx.fillRect(signX + 8, signY + 30, 7, 38);
+          ctx.fillRect(signX + 115, signY + 30, 7, 38);
+          ctx.fillStyle = "#4a2f12";
+          ctx.fillRect(signX + 8, signY + 62, 7, 6);
+          ctx.fillRect(signX + 115, signY + 62, 7, 6);
+
+          ctx.fillStyle = "#8a5a2b";            // placa de madeira
+          ctx.fillRect(signX - 10, signY - 8, 150, 44);
+          ctx.fillStyle = "#a06a33";
+          ctx.fillRect(signX - 10, signY - 8, 150, 5);
+          ctx.fillStyle = "#6e4420";
+          ctx.fillRect(signX - 10, signY + 30, 150, 6);
+          ctx.fillStyle = "#5b3a1e";
+          ctx.fillRect(signX - 10, signY - 8, 4, 44);
+          ctx.fillRect(signX + 136, signY - 8, 4, 44);
+
+          ctx.fillStyle = "#ff8fab";            // moldura (cores de praia)
+          ctx.fillRect(signX - 6, signY - 4, 142, 3);
+          ctx.fillStyle = "#00b4d8";
+          ctx.fillRect(signX - 6, signY - 1, 142, 3);
+          ctx.fillStyle = "#ffd166";
+          ctx.fillRect(signX - 6, signY + 2, 142, 3);
+
+          ctx.fillStyle = "rgba(0,0,0,0.5)";    // texto
+          ctx.font = "bold 15px 'Courier New', monospace";
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.fillText("BEM VINDO A:", signX + 66, signY + 8);
+          ctx.fillStyle = "#ffffff";
+          ctx.fillText("BEM VINDO A:", signX + 65, signY + 7);
+          ctx.fillStyle = "rgba(0,0,0,0.5)";
+          ctx.font = "bold 21px 'Courier New', monospace";
+          ctx.fillText("CAPONGA", signX + 67, signY + 23);
+          ctx.fillStyle = "#48cae4";
+          ctx.fillText("CAPONGA", signX + 66, signY + 22);
+          ctx.textAlign = "left";
 
           drawCinematicForeground(ctx, 7, time, p5);
           break;
