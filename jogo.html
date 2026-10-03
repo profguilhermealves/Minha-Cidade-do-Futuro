@@ -5060,8 +5060,8 @@ case 3: {
           break;
         }
 
-        // ==========================================
-        // --- 7. MANGUEZAL (O BERÇÁRIO MARINHO) ---
+               // ==========================================
+        // --- 7. BARRA NOVA (O BERÇÁRIO MARINHO) ---
         // ==========================================
         case 6: {
           // Linha costeira distante com ilhotas no pôr do sol alaranjado
@@ -5163,6 +5163,144 @@ case 3: {
           ctx.fillRect(garcaMangueX + 2, 127, 1, 7);
           ctx.fillRect(garcaMangueX + 5, 127, 1, 7);
 
+          // ==========================================
+          // --- PESCADORES AO LONGO DO MANGUEZAL (ADICIONADO) ---
+          // ==========================================
+          // Pescador 1 (margem esquerda, com vara na água)
+          const pescMang1X = Math.round(20 + p4);
+          ctx.fillStyle = "#4a301d";
+          ctx.fillRect(pescMang1X, 138, 4, 8);
+          ctx.fillStyle = "#e8b89a";
+          ctx.fillRect(pescMang1X + 1, 136, 3, 3);
+          ctx.fillStyle = "#5a3a1e";
+          ctx.fillRect(pescMang1X, 134, 5, 2);
+          ctx.fillStyle = "#6d4c41";
+          ctx.fillRect(pescMang1X + 4, 136, 1, 12);
+          ctx.fillStyle = "rgba(255,255,255,0.5)"; // linha de pesca
+          ctx.fillRect(pescMang1X + 4, 146, 1, 4);
+
+          // Pescador 2 (margem direita, com balde de caranguejos)
+          const pescMang2X = Math.round(300 + p4);
+          ctx.fillStyle = "#4a301d";
+          ctx.fillRect(pescMang2X, 140, 4, 6);
+          ctx.fillStyle = "#e8b89a";
+          ctx.fillRect(pescMang2X + 1, 138, 3, 3);
+          ctx.fillStyle = "#3a2410";
+          ctx.fillRect(pescMang2X, 136, 5, 2);
+          ctx.fillStyle = "#6d4c41";
+          ctx.fillRect(pescMang2X - 2, 146, 4, 3); // balde
+          ctx.fillStyle = "#a8201a"; // caranguejo no balde
+          ctx.fillRect(pescMang2X - 1, 144, 2, 2);
+
+          // Pescador 3 (canoa na água, mais ao fundo)
+          const pescMang3X = Math.round(130 + p3);
+          ctx.fillStyle = "#3c2a1a";
+          ctx.fillRect(pescMang3X, 120, 14, 3); // canoa
+          ctx.fillStyle = "#4a301d";
+          ctx.fillRect(pescMang3X + 6, 116, 2, 4);
+          ctx.fillStyle = "#e8b89a";
+          ctx.fillRect(pescMang3X + 5, 114, 3, 3);
+          ctx.fillStyle = "#6d4c41";
+          ctx.fillRect(pescMang3X + 8, 114, 1, 5); // remo/vara
+
+          // ==========================================
+          // --- LETREIRO "BEM VINDO A BARRA NOVA" (ADICIONADO) ---
+          // ==========================================
+          const signX = Math.round(120 + p5);
+          const signY = 58;
+
+          // Postes de madeira grossos
+          ctx.fillStyle = "#4a301d";
+          ctx.fillRect(signX + 8, signY + 30, 7, 36);
+          ctx.fillRect(signX + 115, signY + 30, 7, 36);
+          ctx.fillStyle = "#2c1a0e";
+          ctx.fillRect(signX + 8, signY + 60, 7, 6);
+          ctx.fillRect(signX + 115, signY + 60, 7, 6);
+
+          // Placa grande de madeira (tons escuros, combinando com o pôr do sol)
+          ctx.fillStyle = "#5a3a1e";
+          ctx.fillRect(signX - 10, signY - 8, 150, 44);
+          ctx.fillStyle = "#6e4420";
+          ctx.fillRect(signX - 10, signY - 8, 150, 5);
+          ctx.fillStyle = "#3e2410";
+          ctx.fillRect(signX - 10, signY + 30, 150, 6);
+          ctx.fillStyle = "#2c1a0e";
+          ctx.fillRect(signX - 10, signY - 8, 4, 44);
+          ctx.fillRect(signX + 136, signY - 8, 4, 44);
+
+          // Moldura interna colorida (tons do pôr do sol)
+          ctx.fillStyle = "#fcd090";
+          ctx.fillRect(signX - 6, signY - 4, 142, 3);
+          ctx.fillStyle = "#e63946";
+          ctx.fillRect(signX - 6, signY - 1, 142, 3);
+          ctx.fillStyle = "#123b28";
+          ctx.fillRect(signX - 6, signY + 2, 142, 3);
+
+          // Texto "BEM VINDO A:"
+          ctx.fillStyle = "rgba(0,0,0,0.5)";
+          ctx.font = "bold 15px 'Courier New', monospace";
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.fillText("BEM VINDO A:", signX + 66, signY + 8);
+          ctx.fillStyle = "#ffffff";
+          ctx.fillText("BEM VINDO A:", signX + 65, signY + 7);
+
+          // Texto "BARRA NOVA" em destaque
+          ctx.fillStyle = "rgba(0,0,0,0.5)";
+          ctx.font = "bold 21px 'Courier New', monospace";
+          ctx.fillText("BARRA NOVA", signX + 67, signY + 23);
+          ctx.fillStyle = "#fcd090";
+          ctx.fillText("BARRA NOVA", signX + 66, signY + 22);
+          ctx.textAlign = "left";
+
+                    // ==========================================
+          // --- POSTES DE ILUMINAÇÃO COM ENERGIA SOLAR (ADICIONADO) ---
+          // ==========================================
+          // Poste 1 (esquerda, perto do mangue)
+          const poste1X = Math.round(95 + p4);
+          ctx.fillStyle = "#3a3a3a";          // poste
+          ctx.fillRect(poste1X, 118, 3, 30);
+          ctx.fillStyle = "#2c2c2c";          // braço do poste
+          ctx.fillRect(poste1X - 2, 118, 7, 2);
+          ctx.fillStyle = "#1e3a5f";          // painel solar (placa azul)
+          ctx.fillRect(poste1X - 4, 108, 11, 3);
+          ctx.fillStyle = "#4a90d9";          // brilho do painel
+          ctx.fillRect(poste1X - 3, 109, 9, 1);
+          ctx.fillStyle = "#ffd166";          // luminária acesa
+          ctx.fillRect(poste1X - 2, 120, 7, 2);
+          ctx.fillStyle = "rgba(255, 209, 102, 0.35)"; // halo de luz
+          ctx.fillRect(poste1X - 5, 121, 13, 4);
+
+          // Poste 2 (direita, à beira da água)
+          const poste2X = Math.round(285 + p4);
+          ctx.fillStyle = "#3a3a3a";
+          ctx.fillRect(poste2X, 120, 3, 28);
+          ctx.fillStyle = "#2c2c2c";
+          ctx.fillRect(poste2X - 2, 120, 7, 2);
+          ctx.fillStyle = "#1e3a5f";          // painel solar
+          ctx.fillRect(poste2X - 4, 110, 11, 3);
+          ctx.fillStyle = "#4a90d9";
+          ctx.fillRect(poste2X - 3, 111, 9, 1);
+          ctx.fillStyle = "#ffd166";          // luminária
+          ctx.fillRect(poste2X - 2, 122, 7, 2);
+          ctx.fillStyle = "rgba(255, 209, 102, 0.35)"; // halo de luz
+          ctx.fillRect(poste2X - 5, 123, 13, 4);
+
+          // Poste 3 (centro, mais ao fundo, menor)
+          const poste3X = Math.round(205 + p3);
+          ctx.fillStyle = "#3a3a3a";
+          ctx.fillRect(poste3X, 128, 2, 20);
+          ctx.fillStyle = "#2c2c2c";
+          ctx.fillRect(poste3X - 1, 128, 4, 2);
+          ctx.fillStyle = "#1e3a5f";          // painel solar
+          ctx.fillRect(poste3X - 3, 120, 8, 2);
+          ctx.fillStyle = "#4a90d9";
+          ctx.fillRect(poste3X - 2, 121, 6, 1);
+          ctx.fillStyle = "#ffd166";          // luminária
+          ctx.fillRect(poste3X - 1, 130, 4, 2);
+          ctx.fillStyle = "rgba(255, 209, 102, 0.3)"; // halo de luz
+          ctx.fillRect(poste3X - 3, 131, 8, 3);
+          
           drawCinematicForeground(ctx, 6, time, p5);
           break;
         }
