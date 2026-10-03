@@ -4363,108 +4363,159 @@ case 3: {
   break;
 }
 
-        // ==========================================
-        // --- 5. PAMPA (AS COXILHAS DO SUL) ---
+       // ==========================================
+        // --- 4. ÁGUAS BELAS (PRAIA ENCONTRO COM RIO) ---
         // ==========================================
         case 4: {
-          // Coxilhas suaves ao fundo com bandas de luz crepuscular
-          drawSteppedRidge(ctx, [
-            [-30 + p1, 86], [50 + p1, 78], [130 + p1, 88], [210 + p1, 76], 
-            [290 + p1, 84], [360 + p1, 78]
-          ], "#4d6b38", "#6a914e", "#374c28");
+          // --- CÉU DE DIA ENSOLARADO ---
+          const skyGrad = ctx.createLinearGradient(0, 0, 0, 90);
+          skyGrad.addColorStop(0, "#4fc3f7");
+          skyGrad.addColorStop(1, "#b3e5fc");
+          ctx.fillStyle = skyGrad;
+          ctx.fillRect(0, 0, NATIVE_W, 90);
 
-          // Colinas médias com textura ondulante de gramíneas
-          drawSteppedRidge(ctx, [
-            [-30 + p2, 106], [70 + p2, 98], [160 + p2, 108], [250 + p2, 98], [360 + p2, 104]
-          ], "#668c47", "#84b55c", "#476332");
-
-          // Linhas de vento minuano horizontais em pixels translúcidos
-          ctx.fillStyle = "rgba(228, 236, 247, 0.4)";
-          const windShift = (Math.floor(time * 0.2) % 60);
-          ctx.fillRect(30 + windShift + p1, 65, 40, 1);
-          ctx.fillRect(140 + windShift + p1, 75, 50, 1);
-          ctx.fillRect(220 + windShift + p1, 58, 35, 1);
-
-          // Cerca campeira gaúcha tradicional de moirões de madeira e arame
-          const fenceBase = Math.round(30 + p3);
-          ctx.fillStyle = "#4a3319";
-          for (let f = 0; f < 8; f++) {
-            ctx.fillRect(fenceBase + f * 34, 114, 3, 16);
+          // Sol com raios
+          const sunX = 330 + p1;
+          const sunY = 30;
+          ctx.fillStyle = "#ffd54f";
+          for (let r = 0; r < 8; r++) {
+            const ang = r * Math.PI / 4;
+            ctx.fillRect(Math.round(sunX + Math.cos(ang) * 14),
+                         Math.round(sunY + Math.sin(ang) * 14), 3, 3);
           }
-          ctx.fillStyle = "#94a3b8"; // fios de arame
-          ctx.fillRect(fenceBase - 10, 118, 260, 1);
-          ctx.fillRect(fenceBase - 10, 124, 260, 1);
+          ctx.beginPath();
+          ctx.arc(sunX, sunY, 10, 0, 7);
+          ctx.fillStyle = "#fff176";
+          ctx.fill();
 
-          // Tropa de cavalos crioulos e gado pastando nas coxilhas
-          const horseX = Math.round(180 + p3);
-          ctx.fillStyle = "#6f4e37"; // cavalo castanho
-          ctx.fillRect(horseX, 114, 10, 6);
-          ctx.fillRect(horseX + 8, 110, 4, 6); // pescoço e cabeça
-          ctx.fillStyle = "#2d1a0e"; // crina e rabo
-          ctx.fillRect(horseX + 8, 110, 2, 4);
-          ctx.fillRect(horseX - 3, 115, 3, 4);
-          ctx.fillRect(horseX + 2, 120, 1, 6); // pernas
-          ctx.fillRect(horseX + 4, 120, 1, 6);
-          ctx.fillRect(horseX + 7, 120, 1, 6);
-          ctx.fillRect(horseX + 9, 120, 1, 6);
+          // Nuvens brancas
+          ctx.fillStyle = "rgba(255,255,255,0.9)";
+          const cloudP = ((time * 0.02) % (NATIVE_W + 80)) - 40;
+          ctx.fillRect(cloudP + p1, 22, 18, 5);
+          ctx.fillRect(cloudP + 5 + p1, 18, 12, 5);
+          ctx.fillRect(cloudP + 60 + p1, 34, 14, 4);
+          ctx.fillRect(cloudP + 64 + p1, 31, 9, 4);
 
-          // Boi crioulo malhado à distância
-          const gadoX = Math.round(235 + p3);
+          // --- MANGUEZAL AO FUNDO (silhueta verde escura) ---
+          drawSteppedRidge(ctx, [
+            [-30 + p1, 92], [40 + p1, 84], [110 + p1, 92], [180 + p1, 82],
+            [250 + p1, 90], [320 + p1, 84], [360 + p1, 92]
+          ], "#1b5e20", "#2e7d32", "#0d3b10");
+
+          // --- RIO EM FORMA DE S (água azulada robusta) ---
+          ctx.beginPath();
+          ctx.moveTo(120 + p2, 90);
+          ctx.bezierCurveTo(60 + p2, 100, 60 + p2, 120, 130 + p2, 128);
+          ctx.bezierCurveTo(200 + p2, 136, 200 + p2, 148, 150 + p2, 160);
+          ctx.lineTo(260 + p2, 160);
+          ctx.bezierCurveTo(300 + p2, 148, 300 + p2, 136, 240 + p2, 128);
+          ctx.bezierCurveTo(180 + p2, 120, 180 + p2, 100, 240 + p2, 90);
+          ctx.closePath();
+          const riverGrad = ctx.createLinearGradient(0, 90, 0, 160);
+          riverGrad.addColorStop(0, "#4fc3f7");
+          riverGrad.addColorStop(1, "#0288d1");
+          ctx.fillStyle = riverGrad;
+          ctx.fill();
+
+          // Reflexos de luz na água
+          ctx.fillStyle = "rgba(255,255,255,0.35)";
+          ctx.fillRect(140 + p2, 112, 30, 2);
+          ctx.fillRect(210 + p2, 132, 26, 2);
+          ctx.fillRect(180 + p2, 148, 22, 2);
+
+          // --- MARGENS DE AREIA ---
+          ctx.fillStyle = "#f5deb3";
+          ctx.fillRect(0, 150, NATIVE_W, 10);
+          ctx.fillStyle = "#e8c98a";
+          ctx.fillRect(0, 150, NATIVE_W, 3);
+
+          // --- PEIXES SALTANDO DA ÁGUA ---
+          const fishJump = Math.abs(Math.sin(time * 0.01)) * 6;
+          ctx.fillStyle = "#b0bec5";
+          const f1x = Math.round(150 + p4);
+          ctx.fillRect(f1x, 118 - fishJump, 4, 2);
+          ctx.fillRect(f1x - 2, 118 - fishJump, 2, 1);
+          const f2x = Math.round(225 + p4);
+          ctx.fillRect(f2x, 138 - fishJump, 4, 2);
+          ctx.fillRect(f2x - 2, 138 - fishJump, 2, 1);
+          ctx.fillStyle = "rgba(255,255,255,0.7)";
+          ctx.fillRect(f1x + 1, 122 - fishJump, 2, 2);
+          ctx.fillRect(f2x + 1, 142 - fishJump, 2, 2);
+
+          // --- BANHISTAS NA ÁGUA ---
+          const b1x = Math.round(170 + p4);
+          ctx.fillStyle = "#ffe0b2";
+          ctx.fillRect(b1x, 128, 3, 3);
+          ctx.fillRect(b1x - 2, 131, 2, 2);
+          ctx.fillRect(b1x + 3, 131, 2, 2);
+          const b2x = Math.round(235 + p4);
+          ctx.fillStyle = "#d7a86e";
+          ctx.fillRect(b2x, 138, 3, 3);
+          ctx.fillRect(b2x - 2, 141, 2, 2);
+          ctx.fillRect(b2x + 3, 141, 2, 2);
+
+          // --- PESCADORES NA MARGEM ---
+          const pesc1x = Math.round(60 + p4);
+          ctx.fillStyle = "#8d6e63";
+          ctx.fillRect(pesc1x, 140, 4, 8);
+          ctx.fillStyle = "#ffe0b2";
+          ctx.fillRect(pesc1x + 1, 138, 3, 3);
+          ctx.fillStyle = "#5d4037";
+          ctx.fillRect(pesc1x, 136, 5, 2);
+          ctx.fillStyle = "#6d4c41";
+          ctx.fillRect(pesc1x + 4, 138, 1, 10);
+          ctx.fillStyle = "#4a148c";
+          ctx.fillRect(pesc1x + 4, 147, 1, 1);
+
+          // Pescador 2 em barquinho (dentro do rio)
+          const pesc2x = Math.round(200 + p4);
+          ctx.fillStyle = "#795548";
+          ctx.fillRect(pesc2x, 136, 14, 3);
+          ctx.fillStyle = "#5d4037";
+          ctx.fillRect(pesc2x + 5, 132, 2, 4);
+          ctx.fillStyle = "#ffe0b2";
+          ctx.fillRect(pesc2x + 4, 130, 3, 3);
+          ctx.fillStyle = "#6d4c41";
+          ctx.fillRect(pesc2x + 7, 130, 1, 6);
+
+          // --- LETREIRO GRANDE "BEM VINDOS A: ÁGUAS BELAS" ---
+          const signX = Math.round(120 + p5);
+          const signY = 60;
+
+          ctx.fillStyle = "#5b3a1e";
+          ctx.fillRect(signX + 8, signY + 30, 6, 34);
+          ctx.fillRect(signX + 116, signY + 30, 6, 34);
+
+          ctx.fillStyle = "#8a5a2b";
+          ctx.fillRect(signX - 10, signY - 8, 150, 42);
+          ctx.fillStyle = "#a06a33";
+          ctx.fillRect(signX - 10, signY - 8, 150, 5);
+          ctx.fillStyle = "#6e4420";
+          ctx.fillRect(signX - 10, signY + 28, 150, 6);
+
+          ctx.fillStyle = "#0288d1";
+          ctx.fillRect(signX - 6, signY - 4, 142, 3);
+          ctx.fillStyle = "#ffd54f";
+          ctx.fillRect(signX - 6, signY - 1, 142, 3);
+          ctx.fillStyle = "#2e7d32";
+          ctx.fillRect(signX - 6, signY + 2, 142, 3);
+
+          ctx.fillStyle = "rgba(0,0,0,0.5)";
+          ctx.font = "bold 15px 'Courier New', monospace";
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.fillText("BEM VINDOS A:", signX + 65, signY + 8);
           ctx.fillStyle = "#ffffff";
-          ctx.fillRect(gadoX, 116, 9, 6);
-          ctx.fillStyle = "#4a2810";
-          ctx.fillRect(gadoX + 3, 117, 4, 4);
-          ctx.fillRect(gadoX + 7, 115, 3, 4);
-          ctx.fillStyle = "#090b12";
-          ctx.fillRect(gadoX + 2, 122, 1, 4);
-          ctx.fillRect(gadoX + 7, 122, 1, 4);
+          ctx.fillText("BEM VINDOS A:", signX + 64, signY + 7);
 
-          // Coxilhas frontais com mar de gramíneas e flores campestres
-          drawGroundDither(ctx, 138, 42, "#85b058", "#5f823a", 3);
-          // Flores campestres amarelas, brancas e roxas
-          ctx.fillStyle = "#ffd166";
-          ctx.fillRect(25 + p4, 145, 2, 2);
-          ctx.fillRect(80 + p4, 148, 2, 2);
-          ctx.fillRect(205 + p4, 146, 2, 2);
-          ctx.fillStyle = "#ffffff";
-          ctx.fillRect(55 + p4, 149, 2, 2);
-          ctx.fillRect(160 + p4, 147, 2, 2);
-          ctx.fillStyle = "#b5179e";
-          ctx.fillRect(135 + p4, 150, 2, 2);
-          ctx.fillRect(260 + p4, 148, 2, 2);
+          ctx.fillStyle = "rgba(0,0,0,0.5)";
+          ctx.font = "bold 20px 'Courier New', monospace";
+          ctx.fillText("AGUAS BELAS", signX + 66, signY + 22);
+          ctx.fillStyle = "#ffd54f";
+          ctx.fillText("AGUAS BELAS", signX + 65, signY + 21);
+          ctx.textAlign = "left";
 
-          // Quero-quero (a sentinela dos pampas com esporão vermelho)
-          const qqX = Math.round(110 + p4);
-          ctx.fillStyle = "#6c757d";
-          ctx.fillRect(qqX, 138, 9, 5);
-          ctx.fillStyle = "#000000";
-          ctx.fillRect(qqX + 7, 136, 4, 4); // gravata preta
-          ctx.fillStyle = "#ffffff";
-          ctx.fillRect(qqX + 6, 139, 3, 3);
-          ctx.fillStyle = "#e63946"; // esporão e pernas vermelhas
-          ctx.fillRect(qqX + 8, 134, 1, 2);
-          ctx.fillRect(qqX + 2, 143, 1, 6);
-          ctx.fillRect(qqX + 6, 143, 1, 6);
-
-          // Graxaim (raposa-do-campo) espreitando
-          const graxX = Math.round(65 + p4);
-          ctx.fillStyle = "#9a8c98";
-          ctx.fillRect(graxX, 142, 10, 5);
-          ctx.fillRect(graxX + 8, 139, 4, 4);
-          ctx.fillStyle = "#4a4e69"; // cauda espessa
-          ctx.fillRect(graxX - 5, 143, 6, 3);
-          ctx.fillStyle = "#22223b";
-          ctx.fillRect(graxX + 2, 147, 1, 4);
-          ctx.fillRect(graxX + 7, 147, 1, 4);
-
-          // Ema correndo ao longe no horizonte
-          const emaX = Math.round(280 + p2);
-          ctx.fillStyle = "#6c757d";
-          ctx.fillRect(emaX, 98, 7, 5);
-          ctx.fillRect(emaX + 5, 92, 2, 7); // pescoço comprido
-          ctx.fillRect(emaX + 2, 103, 1, 6);
-          ctx.fillRect(emaX + 5, 103, 1, 6);
-
+          // --- PRIMEIRO PLANO ---
           drawCinematicForeground(ctx, 4, time, p5);
           break;
         }
