@@ -5634,55 +5634,425 @@ case 3: {
           break;
         }
 
-        // ==========================================
-        // --- 9. MATA DE COCAIS (A FLORESTA DAS PALMEIRAS) ---
+               // ==========================================
+        // --- 9. FEIRA DE SÃO BENTO (A MAIOR FEIRA DA REGIÃO) ---
         // ==========================================
         case 8: {
-          // Palmeirais e chapadas ao longe no horizonte
+          // ========== CAMADA 0 (p1) — CÉU DE DIA DE FEIRA ==========
+          const skyGrad = ctx.createLinearGradient(0, 0, 0, 96);
+          skyGrad.addColorStop(0, "#3fa9f5");
+          skyGrad.addColorStop(1, "#cdeafc");
+          ctx.fillStyle = skyGrad;
+          ctx.fillRect(0, 0, NATIVE_W, 96);
+
+          // Sol quente de feira
+          ctx.beginPath();
+          ctx.arc(345 + p1, 18, 8, 0, 7);
+          ctx.fillStyle = "#fff176";
+          ctx.fill();
+          ctx.beginPath();
+          ctx.arc(345 + p1, 18, 4, 0, 7);
+          ctx.fillStyle = "#fffde7";
+          ctx.fill();
+
+          // Nuvens
+          const cloudFeira = ((time * 0.02) % (NATIVE_W + 80)) - 40;
+          ctx.fillStyle = "rgba(255,255,255,0.9)";
+          ctx.fillRect(cloudFeira + p1, 16, 18, 4);
+          ctx.fillRect(cloudFeira + 5 + p1, 13, 12, 4);
+          ctx.fillRect(cloudFeira + 90 + p1, 30, 15, 4);
+          ctx.fillRect(cloudFeira + 94 + p1, 27, 10, 4);
+
+          // ========== CAMADA 1 (p1) — HORIZONTE COM ÁRVORES E BANCAS AO LONGE ==========
           drawSteppedRidge(ctx, [
-            [-30 + p1, 80], [60 + p1, 72], [140 + p1, 82], [220 + p1, 72], [360 + p1, 78]
-          ], "#264022", "#3b6335", "#172614");
+            [-30 + p1, 86], [40 + p1, 80], [110 + p1, 86], [180 + p1, 78],
+            [250 + p1, 84], [320 + p1, 80], [390 + p1, 86]
+          ], "#7a9e5c", "#93b574", "#5d7d44");
 
-          // Vereda de águas puras serpenteando com aguapés
-          drawRichWater(ctx, 102, 28, "#284a88", "#3f6dbd", "#98bdf5", "#ffe885", 230 + p1, time);
+          // Fileira de barracas distantes (silhuetas)
+          for (let fi = 0; fi < 12; fi++) {
+            const fx = -8 + fi * 34 + p1;
+            ctx.fillStyle = "#6e5a3c";
+            ctx.fillRect(fx, 82, 16, 9);      // toldo
+            ctx.fillStyle = "#8a7a5a";
+            ctx.fillRect(fx + 1, 91, 14, 7);  // banca
+            ctx.fillStyle = "#5d5034";
+            ctx.fillRect(fx + 2, 98, 12, 3);  // pernas
+          }
 
-          // Palmeiras de Babaçu gigantescas com grandes cachos de cocos
-          const swayCocais = Math.sin(time * 0.003) * 1.4;
-          drawDetailedPalm(ctx, 55 + p2, 54, 58, "#18451b", "#276e2c", "#4cb554", "#6f4423", swayCocais);
-          drawDetailedPalm(ctx, 220 + p2, 48, 64, "#18451b", "#276e2c", "#4cb554", "#6f4423", -swayCocais);
+          // ========== CAMADA 2 (p2) — BANCAS MÉDIAS COM TOLDOS COLORIDOS ==========
+          const stallCores = ["#e63946", "#2a9d8f", "#f4a261", "#1982c4", "#b5179e"];
+          for (let si = 0; si < 5; si++) {
+            const sx = -4 + si * 68 + p2;
+            // toldo listrado
+            ctx.fillStyle = stallCores[si];
+            ctx.fillRect(sx, 96, 34, 6);
+            ctx.fillStyle = "#ffffff";
+            ctx.fillRect(sx + 4, 96, 4, 6);
+            ctx.fillRect(sx + 14, 96, 4, 6);
+            ctx.fillRect(sx + 24, 96, 4, 6);
+            // bancada de madeira
+            ctx.fillStyle = "#8a5a2b";
+            ctx.fillRect(sx + 1, 102, 32, 4);
+            ctx.fillStyle = "#6e4420";
+            ctx.fillRect(sx + 1, 106, 32, 2);
+            // produtos na bancada
+            ctx.fillStyle = "#e63946"; ctx.fillRect(sx + 5, 99, 4, 3);
+            ctx.fillStyle = "#ffd166"; ctx.fillRect(sx + 12, 99, 4, 3);
+            ctx.fillStyle = "#38b000"; ctx.fillRect(sx + 19, 99, 4, 3);
+            ctx.fillStyle = "#7fb3d5"; ctx.fillRect(sx + 26, 99, 3, 3);
+            // pernas da banca
+            ctx.fillStyle = "#5b3a1e";
+            ctx.fillRect(sx + 3, 108, 2, 4);
+            ctx.fillRect(sx + 28, 108, 2, 4);
+          }
 
-          // Carnaúba majestosa (árvore da cera) em primeiro plano
-          drawDetailedPalm(ctx, 140 + p3, 62, 70, "#1d5221", "#308235", "#5ad463", "#d4a017", swayCocais * 1.3);
+          // Outdoor eletrônico pequeno (p2) no fim da fileira
+          const out2X = Math.round(332 + p2);
+          ctx.fillStyle = "#555";
+          ctx.fillRect(out2X + 2, 84, 1, 24);
+          ctx.fillRect(out2X + 20, 84, 1, 24);
+          ctx.fillStyle = "#0a1e3f";
+          ctx.fillRect(out2X - 2, 70, 26, 16);
+          ctx.fillStyle = "#111";
+          ctx.fillRect(out2X, 72, 22, 12);
+          const ad2 = Math.floor(time * 0.15) % 2;
+          ctx.fillStyle = ad2 === 0 ? "#4ade80" : "#ffca28";
+          ctx.font = "bold 5px monospace";
+          ctx.textAlign = "center";
+          ctx.fillText(ad2 === 0 ? "FEIRA" : "OFERTA", out2X + 11, 78);
+          ctx.fillStyle = ad2 === 0 ? "#ffca28" : "#4ade80";
+          ctx.fillText("HOJE", out2X + 11, 82);
 
-          // Solo avermelhado da transição sertão-floresta
-          drawGroundDither(ctx, 136, 44, "#8a451e", "#5c2b11", 3);
+          // ========== CAMADA 3 — CHÃO DA FEIRA ==========
+          drawGroundDither(ctx, 128, 50, "#c2a06a", "#a07840", 4);
+          // Piso de paralelepípedo
+          ctx.fillStyle = "#b0a390";
+          ctx.fillRect(0, 146, NATIVE_W, 8);
+          ctx.fillStyle = "#9a8d76";
+          ctx.fillRect(0, 146, NATIVE_W, 1);
 
-          // Cocos de babaçu caídos no chão da mata
-          ctx.fillStyle = "#5c2b11";
-          ctx.fillRect(80 + p4, 150, 4, 3);
-          ctx.fillRect(100 + p4, 152, 4, 3);
-          ctx.fillRect(195 + p4, 148, 4, 3);
-          ctx.fillStyle = "#8a451e";
-          ctx.fillRect(81 + p4, 150, 2, 2);
+          // ========== CAMADA 4 (p3) — BANCAS PRINCIPAIS COM VENDEDORES ==========
+          const vWave = Math.sin(time * 0.02) * 1;
 
-          // Paca pastando pacificamente sob a sombra dos cocais
-          const pacaX = Math.round(165 + p4);
-          ctx.fillStyle = "#6f4423";
-          ctx.fillRect(pacaX, 144, 12, 6);
-          ctx.fillRect(pacaX + 10, 142, 5, 5);
-          // Manchas brancas no lombo da paca
+          // --- BANCA DE FRUTAS ---
+          const fruX = Math.round(28 + p3);
+          ctx.fillStyle = "#ffd166";              // toldo amarelo/verde
+          ctx.fillRect(fruX - 6, 96, 52, 7);
+          ctx.fillStyle = "#38b000";
+          ctx.fillRect(fruX - 2, 96, 5, 7);
+          ctx.fillRect(fruX + 11, 96, 5, 7);
+          ctx.fillRect(fruX + 24, 96, 5, 7);
+          ctx.fillRect(fruX + 37, 96, 5, 7);
+          ctx.fillStyle = "#5b3a1e";              // letreiro da banca
+          ctx.fillRect(fruX + 6, 90, 30, 6);
+          ctx.fillStyle = "#fff3d6";
+          ctx.font = "bold 6px monospace";
+          ctx.textAlign = "center";
+          ctx.fillText("FRUTAS", fruX + 21, 94);
+          ctx.fillStyle = "#8a5a2b";              // bancada
+          ctx.fillRect(fruX - 2, 103, 48, 5);
+          ctx.fillStyle = "#6e4420";
+          ctx.fillRect(fruX - 2, 108, 48, 2);
+          ctx.fillStyle = "#5b3a1e";
+          ctx.fillRect(fruX + 2, 110, 3, 8);
+          ctx.fillRect(fruX + 41, 110, 3, 8);
+          // frutas na bancada
+          ctx.fillStyle = "#e63946"; ctx.fillRect(fruX + 3, 100, 5, 3);
+          ctx.fillStyle = "#f4a261"; ctx.fillRect(fruX + 10, 100, 5, 3);
+          ctx.fillStyle = "#ffd166"; ctx.fillRect(fruX + 17, 100, 6, 2);
+          ctx.fillStyle = "#9b5de5"; ctx.fillRect(fruX + 25, 100, 4, 3);
+          ctx.fillStyle = "#38b000"; ctx.fillRect(fruX + 31, 101, 3, 2);
+          ctx.fillStyle = "#e63946"; ctx.fillRect(fruX + 36, 100, 5, 3);
+          // caixotes
+          ctx.fillStyle = "#a07840";
+          ctx.fillRect(fruX + 2, 113, 10, 4);
+          ctx.fillRect(fruX + 34, 113, 10, 4);
+          ctx.fillStyle = "#e63946"; ctx.fillRect(fruX + 4, 112, 6, 1);
+          ctx.fillStyle = "#ffd166"; ctx.fillRect(fruX + 36, 112, 6, 1);
+          // vendedor de chapéu de palha acenando
+          ctx.fillStyle = "#ffe0b2"; ctx.fillRect(fruX + 16, 90, 5, 4);
+          ctx.fillStyle = "#5b3a1e"; ctx.fillRect(fruX + 15, 86, 7, 4);
+          ctx.fillStyle = "#d1495b"; ctx.fillRect(fruX + 15, 94, 7, 8);
+          ctx.fillStyle = "#ffe0b2";
+          ctx.fillRect(fruX + 14, 92 + Math.round(vWave), 2, 6);
+          ctx.fillRect(fruX + 21, 92, 2, 6);
+
+          // --- BANCA DE VERDURAS ---
+          const verX = Math.round(152 + p3);
+          ctx.fillStyle = "#38b000";              // toldo verde/branco
+          ctx.fillRect(verX - 6, 96, 52, 7);
           ctx.fillStyle = "#ffffff";
-          ctx.fillRect(pacaX + 2, 146, 2, 1);
-          ctx.fillRect(pacaX + 5, 146, 2, 1);
-          ctx.fillRect(pacaX + 8, 146, 2, 1);
-          ctx.fillStyle = "#000000";
-          ctx.fillRect(pacaX + 13, 144, 1, 1);
+          ctx.fillRect(verX - 2, 96, 5, 7);
+          ctx.fillRect(verX + 11, 96, 5, 7);
+          ctx.fillRect(verX + 24, 96, 5, 7);
+          ctx.fillRect(verX + 37, 96, 5, 7);
+          ctx.fillStyle = "#5b3a1e";              // letreiro
+          ctx.fillRect(verX + 6, 90, 30, 6);
+          ctx.fillStyle = "#fff3d6";
+          ctx.font = "bold 6px monospace";
+          ctx.fillText("VERDURAS", verX + 21, 94);
+          ctx.fillStyle = "#8a5a2b";              // bancada
+          ctx.fillRect(verX - 2, 103, 48, 5);
+          ctx.fillStyle = "#6e4420";
+          ctx.fillRect(verX - 2, 108, 48, 2);
+          ctx.fillStyle = "#5b3a1e";
+          ctx.fillRect(verX + 2, 110, 3, 8);
+          ctx.fillRect(verX + 41, 110, 3, 8);
+          // verduras na bancada
+          ctx.fillStyle = "#2f9e44"; ctx.fillRect(verX + 4, 100, 10, 3);
+          ctx.fillStyle = "#38b000"; ctx.fillRect(verX + 16, 100, 8, 2);
+          ctx.fillStyle = "#e63946"; ctx.fillRect(verX + 26, 100, 4, 3);
+          ctx.fillStyle = "#fd7e14"; ctx.fillRect(verX + 32, 100, 4, 3);
+          ctx.fillStyle = "#6f4423"; ctx.fillRect(verX + 38, 101, 3, 2);
+          // vendedora com avental
+          ctx.fillStyle = "#ffe0b2"; ctx.fillRect(verX + 17, 90, 5, 4);
+          ctx.fillStyle = "#3a2410"; ctx.fillRect(verX + 16, 84, 7, 3);
+          ctx.fillStyle = "#c94f7c"; ctx.fillRect(verX + 16, 94, 7, 8);
+          ctx.fillStyle = "#ffffff"; ctx.fillRect(verX + 17, 96, 5, 5);
+          ctx.fillStyle = "#ffe0b2";
+          ctx.fillRect(verX + 15, 92 + Math.round(vWave), 2, 6);
+          ctx.fillRect(verX + 21, 92, 2, 6);
 
-          // Papagaios-verdadeiros voando em casal pelos babaçuais
-          const papX = ((time * 0.065) % (NATIVE_W + 80)) - 40;
-          drawAnimatedFlockBird(ctx, papX + p2, 42, "#38b000", "#ffd166", "#e63946", frame);
-          drawAnimatedFlockBird(ctx, papX - 14 + p2, 48, "#38b000", "#ffd166", "#e63946", frame + 1);
+          // --- BANCA DE ROUPAS ---
+          const rouX = Math.round(272 + p3);
+          ctx.fillStyle = "#e63946";              // toldo vermelho/branco
+          ctx.fillRect(rouX - 6, 96, 52, 7);
+          ctx.fillStyle = "#ffffff";
+          ctx.fillRect(rouX - 2, 96, 5, 7);
+          ctx.fillRect(rouX + 11, 96, 5, 7);
+          ctx.fillRect(rouX + 24, 96, 5, 7);
+          ctx.fillRect(rouX + 37, 96, 5, 7);
+          ctx.fillStyle = "#5b3a1e";              // letreiro
+          ctx.fillRect(rouX + 6, 90, 30, 6);
+          ctx.fillStyle = "#fff3d6";
+          ctx.font = "bold 6px monospace";
+          ctx.fillText("ROUPAS", rouX + 21, 94);
+          // varal com roupas coloridas
+          ctx.fillStyle = "#5b3a1e";
+          ctx.fillRect(rouX, 99, 40, 1);
+          const roupasCores = ["#e63946", "#1982c4", "#ffd166", "#2a9d8f", "#b5179e", "#f4a261"];
+          for (let ri = 0; ri < 6; ri++) {
+            ctx.fillStyle = roupasCores[ri];
+            ctx.fillRect(rouX + 2 + ri * 6, 100, 4, 7);
+          }
+          ctx.fillStyle = "#8a5a2b";              // bancada
+          ctx.fillRect(rouX - 2, 110, 44, 4);
+          ctx.fillStyle = "#6e4420";
+          ctx.fillRect(rouX - 2, 114, 44, 2);
+          ctx.fillStyle = "#5b3a1e";
+          ctx.fillRect(rouX + 2, 116, 3, 5);
+          ctx.fillRect(rouX + 37, 116, 3, 5);
+          // vendedor atrás do varal
+          ctx.fillStyle = "#ffe0b2"; ctx.fillRect(rouX + 18, 88, 5, 4);
+          ctx.fillStyle = "#1d4ed8"; ctx.fillRect(rouX + 17, 85, 7, 3);
+          ctx.fillStyle = "#3a7ca5"; ctx.fillRect(rouX + 17, 92, 7, 7);
+          ctx.fillStyle = "#ffe0b2";
+          ctx.fillRect(rouX + 16, 90 + Math.round(vWave), 2, 5);
+          ctx.fillRect(rouX + 22, 90, 2, 5);
 
+          // ========== CAMADA 5 (p4) — FRENTE DA FEIRA: BANCAS MENORES + MULTIDÃO ==========
+          // Mini banca 1 (coco gelado)
+          const mini1X = Math.round(68 + p4);
+          ctx.fillStyle = "#e63946"; ctx.fillRect(mini1X - 4, 124, 20, 4);
+          ctx.fillStyle = "#ffffff";
+          ctx.fillRect(mini1X, 124, 3, 4);
+          ctx.fillRect(mini1X + 8, 124, 3, 4);
+          ctx.fillStyle = "#8a5a2b"; ctx.fillRect(mini1X - 2, 128, 16, 8);
+          ctx.fillStyle = "#6e4420"; ctx.fillRect(mini1X - 2, 136, 16, 2);
+          ctx.fillStyle = "#5b3a1e";
+          ctx.fillRect(mini1X, 138, 2, 6);
+          ctx.fillRect(mini1X + 12, 138, 2, 6);
+          ctx.fillStyle = "#5c2b11";
+          ctx.fillRect(mini1X + 1, 132, 3, 3);
+          ctx.fillRect(mini1X + 6, 132, 3, 3);
+          ctx.fillRect(mini1X + 11, 132, 3, 3);
+
+          // Mini banca 2 (água/refresco) com balões amarrados
+          const mini2X = Math.round(235 + p4);
+          ctx.fillStyle = "#1982c4"; ctx.fillRect(mini2X - 4, 124, 20, 4);
+          ctx.fillStyle = "#ffffff";
+          ctx.fillRect(mini2X, 124, 3, 4);
+          ctx.fillRect(mini2X + 8, 124, 3, 4);
+          ctx.fillStyle = "#8a5a2b"; ctx.fillRect(mini2X - 2, 128, 16, 8);
+          ctx.fillStyle = "#6e4420"; ctx.fillRect(mini2X - 2, 136, 16, 2);
+          ctx.fillStyle = "#5b3a1e";
+          ctx.fillRect(mini2X, 138, 2, 6);
+          ctx.fillRect(mini2X + 12, 138, 2, 6);
+          ctx.fillStyle = "#7fb3d5";
+          ctx.fillRect(mini2X + 2, 132, 3, 3);
+          ctx.fillRect(mini2X + 7, 132, 3, 3);
+          ctx.fillRect(mini2X + 12, 132, 3, 3);
+          // balões flutuando
+          const balY = 56 + Math.sin(time * 0.01) * 3;
+          ctx.fillStyle = "#e63946"; ctx.fillRect(mini2X + 5, balY, 4, 5);
+          ctx.fillStyle = "#ffd166"; ctx.fillRect(mini2X + 11, balY - 2, 4, 5);
+          ctx.fillStyle = "#1982c4"; ctx.fillRect(mini2X + 17, balY + 1, 4, 5);
+          ctx.strokeStyle = "rgba(255,255,255,0.4)";
+          ctx.beginPath();
+          ctx.moveTo(mini2X + 7, balY + 5);
+          ctx.lineTo(mini2X + 6, 124);
+          ctx.moveTo(mini2X + 13, balY + 3);
+          ctx.lineTo(mini2X + 12, 124);
+          ctx.moveTo(mini2X + 19, balY + 6);
+          ctx.lineTo(mini2X + 18, 124);
+          ctx.stroke();
+
+          // Lixeiras inteligentes
+          const lix1X = Math.round(95 + p4);
+          ctx.fillStyle = "#1e3a5f"; ctx.fillRect(lix1X + 1, 126, 5, 3);
+          if ((Math.floor(time * 0.1) % 2) === 0) {
+            ctx.fillStyle = "#4ade80";
+            ctx.fillRect(lix1X + 2, 124, 2, 2);
+          }
+          ctx.fillStyle = "#2b8a3e"; ctx.fillRect(lix1X, 129, 7, 8);
+          ctx.fillStyle = "#1b6b2a"; ctx.fillRect(lix1X, 136, 7, 1);
+          ctx.fillStyle = "#ffffff";
+          ctx.fillRect(lix1X + 2, 131, 3, 1);
+          ctx.fillRect(lix1X + 3, 130, 1, 3);
+
+          const lix2X = Math.round(258 + p4);
+          ctx.fillStyle = "#1e3a5f"; ctx.fillRect(lix2X + 1, 128, 5, 3);
+          if ((Math.floor(time * 0.1 + 1) % 2) === 0) {
+            ctx.fillStyle = "#4ade80";
+            ctx.fillRect(lix2X + 2, 126, 2, 2);
+          }
+          ctx.fillStyle = "#2b8a3e"; ctx.fillRect(lix2X, 131, 7, 7);
+          ctx.fillStyle = "#1b6b2a"; ctx.fillRect(lix2X, 137, 7, 1);
+          ctx.fillStyle = "#ffffff";
+          ctx.fillRect(lix2X + 2, 133, 3, 1);
+          ctx.fillRect(lix2X + 3, 132, 1, 3);
+
+          // Policiais em monociclos elétricos cortando a multidão
+          const pol1X = Math.round(140 + p4 + Math.sin(time * 0.02) * 28);
+          ctx.fillStyle = "#1d3557"; ctx.fillRect(pol1X, 126, 5, 6);
+          ctx.fillStyle = "#ffe0b2"; ctx.fillRect(pol1X + 1, 123, 3, 3);
+          ctx.fillStyle = "#14213d"; ctx.fillRect(pol1X, 121, 5, 2);
+          ctx.fillStyle = "#4a4e69"; ctx.fillRect(pol1X + 1, 132, 1, 3);
+          ctx.fillStyle = "#4a4e69"; ctx.fillRect(pol1X + 3, 132, 1, 3);
+          ctx.fillStyle = "#222";
+          ctx.beginPath(); ctx.arc(pol1X + 2, 136, 2, 0, 7); ctx.fill();
+          ctx.fillStyle = "#555"; ctx.fillRect(pol1X, 137, 5, 1);
+          ctx.fillStyle = "#888"; ctx.fillRect(pol1X + 4, 123, 1, 8);
+          ctx.fillRect(pol1X + 3, 123, 3, 1);
+          if ((Math.floor(time * 0.08) % 2) === 0) {
+            ctx.fillStyle = "#e63946";
+            ctx.fillRect(pol1X + 2, 119, 2, 2);
+          } else {
+            ctx.fillStyle = "#4ade80";
+            ctx.fillRect(pol1X + 2, 119, 2, 2);
+          }
+
+          const pol2X = Math.round(305 + p4 - Math.sin(time * 0.02 + 1) * 24);
+          ctx.fillStyle = "#2a6f97"; ctx.fillRect(pol2X, 128, 5, 6);
+          ctx.fillStyle = "#ffe0b2"; ctx.fillRect(pol2X + 1, 125, 3, 3);
+          ctx.fillStyle = "#14213d"; ctx.fillRect(pol2X, 123, 5, 2);
+          ctx.fillStyle = "#4a4e69"; ctx.fillRect(pol2X + 1, 134, 1, 3);
+          ctx.fillStyle = "#4a4e69"; ctx.fillRect(pol2X + 3, 134, 1, 3);
+          ctx.fillStyle = "#222";
+          ctx.beginPath(); ctx.arc(pol2X + 2, 138, 2, 0, 7); ctx.fill();
+          ctx.fillStyle = "#555"; ctx.fillRect(pol2X, 139, 5, 1);
+          ctx.fillStyle = "#888"; ctx.fillRect(pol2X + 4, 125, 1, 8);
+          ctx.fillRect(pol2X + 3, 125, 3, 1);
+          if ((Math.floor(time * 0.08 + 1) % 2) === 0) {
+            ctx.fillStyle = "#e63946";
+            ctx.fillRect(pol2X + 2, 121, 2, 2);
+          } else {
+            ctx.fillStyle = "#4ade80";
+            ctx.fillRect(pol2X + 2, 121, 2, 2);
+          }
+
+          // Multidão caótica: clientes andando com pernas animadas
+          for (let cli = 0; cli < 6; cli++) {
+            const cliX = Math.round(10 + cli * 24 + p4 * 1.3 + Math.sin(time * 0.012 + cli * 1.7) * 3);
+            const cliPasso = Math.floor(time * 0.05 + cli) % 2;
+            const camisa = ["#e63946", "#1982c4", "#ffd166", "#2a9d8f", "#b5179e", "#f4a261"][cli % 6];
+            ctx.fillStyle = "#3a2410"; ctx.fillRect(cliX + 1, 138, 3, 2);
+            ctx.fillStyle = "#ffe0b2"; ctx.fillRect(cliX + 1, 140, 3, 2);
+            ctx.fillStyle = camisa;    ctx.fillRect(cliX, 142, 4, 5);
+            ctx.fillStyle = "#2c2c34"; ctx.fillRect(cliX + 1, 147, 1, 3);
+            if (cliPasso === 0) { ctx.fillRect(cliX + 2, 147, 1, 3); }
+            else { ctx.fillRect(cliX + 2, 147, 1, 2); ctx.fillRect(cliX + 3, 148, 1, 2); }
+          }
+
+          // Cliente olhando a banca de frutas (parado)
+          const cliFruX = Math.round(46 + p4);
+          ctx.fillStyle = "#3a2410"; ctx.fillRect(cliFruX + 1, 136, 3, 2);
+          ctx.fillStyle = "#ffe0b2"; ctx.fillRect(cliFruX + 1, 138, 3, 2);
+          ctx.fillStyle = "#5b8a40"; ctx.fillRect(cliFruX, 140, 4, 5);
+          ctx.fillStyle = "#2c2c34"; ctx.fillRect(cliFruX + 1, 145, 1, 3);
+          ctx.fillRect(cliFruX + 2, 145, 1, 3);
+
+          // Criança com sacola de compras correndo
+          const kidFeiraX = Math.round(210 + p4 + Math.sin(time * 0.014) * 5);
+          const kidPasso = Math.floor(time * 0.06) % 2;
+          ctx.fillStyle = "#3a2410"; ctx.fillRect(kidFeiraX + 1, 140, 3, 2);
+          ctx.fillStyle = "#ffe0b2"; ctx.fillRect(kidFeiraX + 1, 142, 3, 2);
+          ctx.fillStyle = "#ff8fab"; ctx.fillRect(kidFeiraX, 144, 4, 4);
+          ctx.fillStyle = "#e63946"; ctx.fillRect(kidFeiraX - 2, 146, 2, 2); // sacola
+          ctx.fillStyle = "#2c2c34"; ctx.fillRect(kidFeiraX + 1, 148, 1, 3);
+          if (kidPasso === 0) { ctx.fillRect(kidFeiraX + 2, 148, 1, 3); }
+          else { ctx.fillRect(kidFeiraX + 2, 148, 1, 2); ctx.fillRect(kidFeiraX + 3, 149, 1, 2); }
+
+          // ========== CAMADA 6 (p5) — OUTDOOR ELETRÔNICO GRANDE + LETREIRO + 1º PLANO ==========
+          // Outdoor eletrônico grande com propaganda da feira
+          const outX = Math.round(320 + p5);
+          ctx.fillStyle = "#555";
+          ctx.fillRect(outX + 6, 78, 2, 40);
+          ctx.fillRect(outX + 32, 78, 2, 40);
+          ctx.fillStyle = "#111";
+          ctx.fillRect(outX - 2, 62, 44, 20);
+          ctx.fillStyle = "#0a1e3f";
+          ctx.fillRect(outX, 64, 40, 16);
+          const adFrame = Math.floor(time * 0.15) % 2;
+          ctx.fillStyle = adFrame === 0 ? "#ffca28" : "#4ade80";
+          ctx.font = "bold 6px monospace";
+          ctx.textAlign = "center";
+          ctx.fillText(adFrame === 0 ? "FEIRA" : "OFERTA", outX + 20, 69);
+          ctx.fillStyle = adFrame === 0 ? "#4ade80" : "#ffca28";
+          ctx.font = "bold 5px monospace";
+          ctx.fillText("SAO BENTO", outX + 20, 75);
+          if ((Math.floor(time * 0.12) % 2) === 0) {
+            ctx.fillStyle = "#e63946";
+            ctx.fillRect(outX + 38, 64, 2, 2);
+          }
+
+          // Arco de entrada da feira com o letreiro
+          const arcoX = Math.round(95 + p5);
+          ctx.fillStyle = "#6b4a2f";
+          ctx.fillRect(arcoX + 8, 40, 8, 30);
+          ctx.fillRect(arcoX + 108, 40, 8, 30);
+          ctx.fillStyle = "#4a2f12";
+          ctx.fillRect(arcoX + 8, 64, 8, 6);
+          ctx.fillRect(arcoX + 108, 64, 8, 6);
+          ctx.fillStyle = "#8a5a2b";
+          ctx.fillRect(arcoX - 10, 24, 144, 30);
+          ctx.fillStyle = "#a06a33";
+          ctx.fillRect(arcoX - 10, 24, 144, 4);
+          ctx.fillStyle = "#6e4420";
+          ctx.fillRect(arcoX - 10, 48, 144, 6);
+          ctx.fillStyle = "#5b3a1e";
+          ctx.fillRect(arcoX - 10, 24, 4, 30);
+          ctx.fillRect(arcoX + 130, 24, 4, 30);
+          ctx.fillStyle = "#e63946";
+          ctx.fillRect(arcoX - 6, 30, 136, 3);
+          ctx.fillStyle = "#ffd166";
+          ctx.fillRect(arcoX - 6, 33, 136, 3);
+          ctx.fillStyle = "#2a9d8f";
+          ctx.fillRect(arcoX - 6, 36, 136, 3);
+          ctx.fillStyle = "rgba(0,0,0,0.5)";
+          ctx.font = "bold 13px 'Courier New', monospace";
+          ctx.fillText("FEIRA DE", arcoX + 63, 40);
+          ctx.fillStyle = "#ffffff";
+          ctx.fillText("FEIRA DE", arcoX + 62, 39);
+          ctx.fillStyle = "rgba(0,0,0,0.5)";
+          ctx.font = "bold 17px 'Courier New', monospace";
+          ctx.fillText("SAO BENTO", arcoX + 64, 51);
+          ctx.fillStyle = "#ffca28";
+          ctx.fillText("SAO BENTO", arcoX + 63, 50);
+          ctx.textAlign = "left";
+
+          // Camada 6: Silhuetas de primeiro plano
           drawCinematicForeground(ctx, 8, time, p5);
           break;
         }
