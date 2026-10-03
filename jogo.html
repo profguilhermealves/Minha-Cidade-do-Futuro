@@ -6407,12 +6407,24 @@ case 3: {
           ctx.fillStyle = "#ffffff";
           ctx.fillRect(inflX + 8, 130, 2, 2);
           ctx.fillRect(inflX + 16, 130, 2, 2);
-          // Criança pulando dentro
+           // Criança pulando dentro
           const jumpKidY = Math.round(118 - Math.abs(Math.sin(time * 0.02)) * 5);
           ctx.fillStyle = "#e8b89a";
           ctx.fillRect(inflX + 12, jumpKidY, 3, 3);
           ctx.fillStyle = "#3a2410";
           ctx.fillRect(inflX + 12, jumpKidY - 2, 3, 2);
+
+           // Criança pulando dentro (maior e mais lenta)
+          const jumpKidY = Math.round(120 - Math.abs(Math.sin(time * 0.008)) * 8);
+          ctx.fillStyle = "#3a2410";
+          ctx.fillRect(inflX + 11, jumpKidY - 2, 4, 2);   // cabelo
+          ctx.fillStyle = "#e8b89a";
+          ctx.fillRect(inflX + 11, jumpKidY, 4, 3);        // rosto
+          ctx.fillStyle = "#e63946";
+          ctx.fillRect(inflX + 10, jumpKidY + 3, 6, 4);    // corpo
+          ctx.fillStyle = "#2c2c34";
+          ctx.fillRect(inflX + 11, jumpKidY + 7, 2, 3);    // pernas
+          ctx.fillRect(inflX + 14, jumpKidY + 7, 2, 3);
 
           // Crianças brincando na praça (velocidade normal)
           const bolaX = Math.round(218 + p4 + Math.sin(time * 0.012) * 8);
@@ -6435,47 +6447,47 @@ case 3: {
             else { ctx.fillRect(kidX + 2, 152, 1, 2); ctx.fillRect(kidX + 3, 153, 1, 2); }
           }
 
-          // Adultos conversando (lado esquerdo)
+                   // Adultos conversando (lado esquerdo)
           const adL1X = Math.round(136 + p4);
-          ctx.fillStyle = "#3a2410"; ctx.fillRect(adL1X + 1, 138, 3, 2);
-          ctx.fillStyle = "#d7a86e"; ctx.fillRect(adL1X + 1, 140, 3, 3);
-          ctx.fillStyle = "#5a7a9a"; ctx.fillRect(adL1X, 143, 5, 6);
-          ctx.fillStyle = "#2c2c34"; ctx.fillRect(adL1X + 1, 149, 1, 3);
-          ctx.fillRect(adL1X + 3, 149, 1, 3);
+          ctx.fillStyle = "#3a2410"; ctx.fillRect(adL1X + 1, 128, 3, 2);
+          ctx.fillStyle = "#d7a86e"; ctx.fillRect(adL1X + 1, 130, 3, 3);
+          ctx.fillStyle = "#5a7a9a"; ctx.fillRect(adL1X, 133, 5, 6);
+          ctx.fillStyle = "#2c2c34"; ctx.fillRect(adL1X + 1, 139, 1, 3);
+          ctx.fillRect(adL1X + 3, 139, 1, 3);
           const falaL1 = Math.round(Math.sin(time * 0.008) * 2);
           ctx.fillStyle = "#d7a86e";
-          ctx.fillRect(adL1X + 5, 143 + falaL1, 1, 3);
+          ctx.fillRect(adL1X + 5, 133 + falaL1, 1, 3);
 
           const adL2X = Math.round(144 + p4);
-          ctx.fillStyle = "#3a2410"; ctx.fillRect(adL2X + 1, 138, 3, 2);
-          ctx.fillStyle = "#e8b89a"; ctx.fillRect(adL2X + 1, 140, 3, 3);
-          ctx.fillStyle = "#b5179e"; ctx.fillRect(adL2X, 143, 5, 6);
-          ctx.fillStyle = "#2c2c34"; ctx.fillRect(adL2X + 1, 149, 1, 3);
-          ctx.fillRect(adL2X + 3, 149, 1, 3);
+          ctx.fillStyle = "#3a2410"; ctx.fillRect(adL2X + 1, 128, 3, 2);
+          ctx.fillStyle = "#e8b89a"; ctx.fillRect(adL2X + 1, 130, 3, 3);
+          ctx.fillStyle = "#b5179e"; ctx.fillRect(adL2X, 133, 5, 6);
+          ctx.fillStyle = "#2c2c34"; ctx.fillRect(adL2X + 1, 139, 1, 3);
+          ctx.fillRect(adL2X + 3, 139, 1, 3);
           const falaL2 = Math.round(-Math.sin(time * 0.008) * 2);
           ctx.fillStyle = "#e8b89a";
-          ctx.fillRect(adL2X - 1, 143 + falaL2, 1, 3);
+          ctx.fillRect(adL2X - 1, 133 + falaL2, 1, 3);
 
           // Adultos conversando (lado direito)
           const adR1X = Math.round(336 + p4);
-          ctx.fillStyle = "#3a2410"; ctx.fillRect(adR1X + 1, 138, 3, 2);
-          ctx.fillStyle = "#d7a86e"; ctx.fillRect(adR1X + 1, 140, 3, 3);
-          ctx.fillStyle = "#2a9d8f"; ctx.fillRect(adR1X, 143, 5, 6);
-          ctx.fillStyle = "#2c2c34"; ctx.fillRect(adR1X + 1, 149, 1, 3);
-          ctx.fillRect(adR1X + 3, 149, 1, 3);
+          ctx.fillStyle = "#3a2410"; ctx.fillRect(adR1X + 1, 128, 3, 2);
+          ctx.fillStyle = "#d7a86e"; ctx.fillRect(adR1X + 1, 130, 3, 3);
+          ctx.fillStyle = "#2a9d8f"; ctx.fillRect(adR1X, 133, 5, 6);
+          ctx.fillStyle = "#2c2c34"; ctx.fillRect(adR1X + 1, 139, 1, 3);
+          ctx.fillRect(adR1X + 3, 139, 1, 3);
           const falaR1 = Math.round(Math.sin(time * 0.008 + 1) * 2);
           ctx.fillStyle = "#d7a86e";
-          ctx.fillRect(adR1X + 5, 143 + falaR1, 1, 3);
+          ctx.fillRect(adR1X + 5, 133 + falaR1, 1, 3);
 
           const adR2X = Math.round(344 + p4);
-          ctx.fillStyle = "#3a2410"; ctx.fillRect(adR2X + 1, 138, 3, 2);
-          ctx.fillStyle = "#e8b89a"; ctx.fillRect(adR2X + 1, 140, 3, 3);
-          ctx.fillStyle = "#e63946"; ctx.fillRect(adR2X, 143, 5, 6);
-          ctx.fillStyle = "#2c2c34"; ctx.fillRect(adR2X + 1, 149, 1, 3);
-          ctx.fillRect(adR2X + 3, 149, 1, 3);
+          ctx.fillStyle = "#3a2410"; ctx.fillRect(adR2X + 1, 128, 3, 2);
+          ctx.fillStyle = "#e8b89a"; ctx.fillRect(adR2X + 1, 130, 3, 3);
+          ctx.fillStyle = "#e63946"; ctx.fillRect(adR2X, 133, 5, 6);
+          ctx.fillStyle = "#2c2c34"; ctx.fillRect(adR2X + 1, 139, 1, 3);
+          ctx.fillRect(adR2X + 3, 139, 1, 3);
           const falaR2 = Math.round(-Math.sin(time * 0.008 + 1) * 2);
           ctx.fillStyle = "#e8b89a";
-          ctx.fillRect(adR2X - 1, 143 + falaR2, 1, 3);
+          ctx.fillRect(adR2X - 1, 133 + falaR2, 1, 3);
 
           // Vendedor de algodão-doce
           const algX = Math.round(48 + p4);
